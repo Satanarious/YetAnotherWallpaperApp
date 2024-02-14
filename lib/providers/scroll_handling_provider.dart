@@ -15,13 +15,13 @@ class ScrollHandlingProvider with ChangeNotifier {
         _scrollLastOffset = _scrollCurrentOffset;
         return;
       }
-      pillOffset -= 5;
+      pillOffset -= 2;
     } else {
       if (pillOffset == 20) {
         _scrollLastOffset = _scrollCurrentOffset;
         return;
       }
-      pillOffset += 5;
+      pillOffset += 2;
     }
     _scrollLastOffset = _scrollCurrentOffset;
     notifyListeners();
