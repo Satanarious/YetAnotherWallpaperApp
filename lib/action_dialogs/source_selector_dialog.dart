@@ -4,74 +4,43 @@ import 'package:provider/provider.dart';
 
 class SourceSelectorDialog extends StatelessWidget {
   const SourceSelectorDialog({super.key});
-  static const sources = [
-    {
-      "name": "Reddit",
-      "icon": Icons.reddit,
-      "color": Colors.deepOrange,
-      "value": Sources.reddit,
-    },
-    {
-      "name": "Wallpaper Haven",
-      "icon": Icons.landscape,
-      "color": Colors.purple,
-      "value": Sources.wallhaven,
-    },
-    {
-      "name": "Lemmy",
-      "icon": Icons.book,
-      "color": Colors.green,
-      "value": Sources.lemmy,
-    },
-    {
-      "name": "OWalls",
-      "icon": Icons.air,
-      "color": Colors.red,
-      "value": Sources.oWalls,
-    },
-    {
-      "name": "Google Pixel",
-      "icon": Icons.grid_view_rounded,
-      "color": Colors.pink,
-      "value": Sources.googlePixel,
-    },
-    {
-      "name": "Bing Daily",
-      "icon": Icons.search,
-      "color": Colors.blue,
-      "value": Sources.bingDaily,
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
+    final size = MediaQuery.of(context).size;
     final sourceProvider = Provider.of<SourceProvider>(context, listen: false);
     final queryProvider = Provider.of<QueryProvider>(context, listen: false);
+    final wallpaperListProvider =
+        Provider.of<WallpaperListProvider>(context, listen: false);
+    final isVertical = size.height > size.width;
 
     return Dialog(
         child: ClipRRect(
       borderRadius: BorderRadius.circular(20),
       child: Container(
         color: const Color.fromRGBO(50, 50, 50, 1),
-        height: height * 0.5,
+        height: size.height * 0.4,
+        width: size.width * 0.7,
         child: ListView(
+          scrollDirection: isVertical ? Axis.vertical : Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          children: sources.map((source) {
+          children: sourceMaps.map((source) {
             final isSelected = source['value'] == sourceProvider.source;
             return GestureDetector(
               onTap: () {
-                sourceProvider.changeSource(source['value'] as Sources);
                 queryProvider.emptyQuery();
+                wallpaperListProvider.emptyWallpaperList();
+                sourceProvider.changeSource(source['value'] as Sources);
                 Navigator.of(context).pop();
               },
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Container(
                   color: isSelected ? Colors.white : null,
+                  width: isVertical ? double.infinity : 120,
                   padding: const EdgeInsets.all(0.2),
                   child: Card(
-                      color: source['color'] as Color,
+                      color: source['colour'] as Color,
                       elevation: 5,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),

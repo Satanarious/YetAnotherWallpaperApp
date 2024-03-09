@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wallpaper_app/enums/purity.dart';
+import '../providers/source_provider.dart';
 
 enum WallhavenCategory { general, anime, people }
 
@@ -23,6 +24,82 @@ enum WallhavenTopRange {
 }
 
 enum WallhavenAspectRatioType { portrait, landscape, all }
+
+enum RedditSortType { top, new_, hot, rising }
+
+enum RedditSortRange { all, year, month, week, day, hour }
+
+enum LemmySortType {
+  active,
+  new_,
+  hot,
+  old,
+  topHour,
+  topDay,
+  topWeek,
+  topMonth,
+  topYear,
+  topAll
+}
+
+class LemmyEnumToValue {
+  static String sortType(LemmySortType sorting) {
+    switch (sorting) {
+      case LemmySortType.active:
+        return "Active";
+      case LemmySortType.hot:
+        return "Hot";
+      case LemmySortType.new_:
+        return "New";
+      case LemmySortType.old:
+        return "Old";
+      case LemmySortType.topHour:
+        return "TopHour";
+      case LemmySortType.topDay:
+        return "TopDay";
+      case LemmySortType.topWeek:
+        return "TopWeek";
+      case LemmySortType.topMonth:
+        return "TopMonth";
+      case LemmySortType.topYear:
+        return "TopYear";
+      case LemmySortType.topAll:
+        return "TopAll";
+    }
+  }
+}
+
+class RedditEnumToValue {
+  static String sortType(RedditSortType sorting) {
+    switch (sorting) {
+      case RedditSortType.top:
+        return "top";
+      case RedditSortType.new_:
+        return "new";
+      case RedditSortType.hot:
+        return "hot";
+      case RedditSortType.rising:
+        return "rising";
+    }
+  }
+
+  static String sortRange(RedditSortRange range) {
+    switch (range) {
+      case RedditSortRange.all:
+        return "all";
+      case RedditSortRange.year:
+        return "year";
+      case RedditSortRange.month:
+        return "month";
+      case RedditSortRange.week:
+        return "week";
+      case RedditSortRange.day:
+        return "day";
+      case RedditSortRange.hour:
+        return "hour";
+    }
+  }
+}
 
 class WallhavenEnumToValue {
   static String ratio(WallhavenAspectRatioType ratioType) {
@@ -109,6 +186,7 @@ class WallhavenEnumToValue {
 
 class QueryProvider with ChangeNotifier {
   Map<String, dynamic> _query = {};
+  bool blurNSFW = true;
 
   Map<String, dynamic> get query {
     return {..._query};
@@ -126,19 +204,89 @@ class QueryProvider with ChangeNotifier {
     _query = {};
   }
 
-  void checkAndSetWallhavenInitialQuery() {
+  void setInitialQuery(Sources source) {
     if (_query.isEmpty) {
-      const categories = [
-        WallhavenCategory.general,
-        WallhavenCategory.anime,
-        WallhavenCategory.people,
-      ];
-      const purities = [PurityType.general];
-      const sorting = WallhavenSortingType.toplist;
+      switch (source) {
+        case Sources.wallhaven:
+          setWallhavenQuery();
+          break;
+        case Sources.reddit:
+          setRedditQuery();
+          break;
+        case Sources.lemmy:
+          setLemmyQuery();
+          break;
+        case Sources.deviantArt:
+          setDeviantArtQuery();
+        default:
+          throw Exception("Source not supported yet!!");
+      }
+    }
+  }
 
-      _query['categories'] = WallhavenEnumToValue.category(categories);
-      _query['purity'] = WallhavenEnumToValue.purity(purities);
-      _query['sorting'] = WallhavenEnumToValue.sorting(sorting);
+  void setDeviantArtQuery({
+    String? tag,
+    String? topic,
+    String searchQuery = "superhero",
+    bool isPopular = true,
+    bool matureContent = true,
+  }) {
+    Map<String, String> query = {};
+    if (tag != null) {
+      query['tag'] = tag;
+      query['path'] = '/api/v1/oauth2/browse/tags';
+    } else if (topic != null) {
+      query['topic'] = topic;
+      query['path'] = '/api/v1/oauth2/browse/topic';
+    } else {
+      query['q'] = searchQuery;
+      query['path'] = isPopular
+          ? '/api/v1/oauth2/browse/popular'
+          : '/api/v1/oauth2/browse/newest';
+    }
+    query['with_session'] = 'false';
+    query['mature_content'] = matureContent.toString();
+    query['limit'] = '20';
+
+    if (_query.isEmpty) {
+      _query = query;
+    } else {
+      _setQuery(query);
+    }
+  }
+
+  void setLemmyQuery({
+    String communityName = "mobilewallpaper@lemmy.world",
+    LemmySortType sortType = LemmySortType.topAll,
+    int limit = 20,
+  }) {
+    Map<String, String> query = {};
+    query['community_name'] = communityName;
+    query['sort'] = LemmyEnumToValue.sortType(sortType);
+    query['limit'] = limit.toString();
+
+    if (_query.isEmpty) {
+      _query = query;
+    } else {
+      _setQuery(query);
+    }
+  }
+
+  void setRedditQuery({
+    String subredditName = "Verticalwallpapers",
+    RedditSortType sortType = RedditSortType.top,
+    RedditSortRange sortRange = RedditSortRange.all,
+  }) {
+    Map<String, String> query = {};
+    query['subreddit'] = subredditName;
+    query['sort'] = RedditEnumToValue.sortType(sortType);
+    query['t'] = RedditEnumToValue.sortRange(sortRange);
+    query['raw_json'] = "1";
+
+    if (_query.isEmpty) {
+      _query = query;
+    } else {
+      _setQuery(query);
     }
   }
 
@@ -147,6 +295,7 @@ class QueryProvider with ChangeNotifier {
     String? tag2,
     bool includeTag1 = true,
     bool includeTag2 = true,
+    String? tagId,
     String? wallpaperId,
     List<WallhavenCategory> categories = const [
       WallhavenCategory.general,
@@ -162,21 +311,26 @@ class QueryProvider with ChangeNotifier {
   }) {
     Map<String, String> query = {};
 
-    if (tag1 != null || tag2 != null || wallpaperId != null) {
+    if (tag1 != null || tag2 != null || wallpaperId != null || tagId != null) {
       query['q'] = "";
     }
 
     // Tags and ID (Query Params)
     if (tag1 != null) {
-      query['q'] = "${query['q']}${(includeTag1 ? "+" : "-")}$tag1}";
+      query['q'] = "${query['q']}${includeTag1 ? '+' : '-'}$tag1";
     }
 
     if (tag2 != null) {
-      query['q'] = "${query['q']}${(includeTag2 ? "+" : "-")}$tag2}";
+      query['q'] =
+          "${query['q']}${tag1 != null ? " " : ""}${includeTag2 ? "+" : "-"}$tag2";
     }
 
     if (wallpaperId != null) {
       query['q'] = "like:$wallpaperId"; // * Generally accessible through image
+    }
+
+    if (tagId != null) {
+      query['q'] = "id:$tagId";
     }
 
     // Mandatory Params
@@ -197,6 +351,11 @@ class QueryProvider with ChangeNotifier {
     if (pageIndex != null) {
       query['page'] = pageIndex;
     }
-    _setQuery(query);
+
+    if (_query.isEmpty) {
+      _query = query;
+    } else {
+      _setQuery(query);
+    }
   }
 }

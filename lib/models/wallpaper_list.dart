@@ -44,15 +44,28 @@ class WallpaperList extends Equatable {
         meta: meta,
       );
 
+  factory WallpaperList.fromDeviantArtJson(
+          Map<String, dynamic> json, Meta meta) =>
+      WallpaperList(
+          data: json['results'] == null
+              ? []
+              : (json['results'] as List<dynamic>).map((dynamic e) {
+                  return Wallpaper.fromDeviantArtJson(
+                      e as Map<String, dynamic>);
+                }).toList(),
+          meta: meta);
+
   final List<Wallpaper> data;
   final Meta meta;
 
   static const empty = WallpaperList(data: [], meta: Meta.empty);
 
   void addWallpaper(Wallpaper wallpaper) {
-    if (!data.contains(wallpaper)) {
-      data.add(wallpaper);
-    }
+    data.add(wallpaper);
+  }
+
+  void removeWallpaper(Wallpaper wallpaper) {
+    data.remove(wallpaper);
   }
 
   Map<String, dynamic> toJson() => {

@@ -16,21 +16,15 @@ class Thumbs extends Equatable {
     final length = previewImages.length;
     if (length < 3) {
       return Thumbs(
-        original: (previewImages[length - 1]['url'] as String)
-            .replaceAll("&amp;", "&"),
-        large: (previewImages[length - 1]['url'] as String)
-            .replaceAll("&amp;", "&"),
-        small: (previewImages[length - 1]['url'] as String)
-            .replaceAll("&amp;", "&"),
+        original: (previewImages[length - 1]['url'] as String),
+        large: (previewImages[length - 1]['url'] as String),
+        small: (previewImages[length - 1]['url'] as String),
       );
     } else {
       return Thumbs(
-        original: (previewImages[length - 1]['url'] as String)
-            .replaceAll("&amp;", "&"),
-        large: (previewImages[length - 2]['url'] as String)
-            .replaceAll("&amp;", "&"),
-        small: (previewImages[length - 3]['url'] as String)
-            .replaceAll("&amp;", "&"),
+        original: (previewImages[length - 1]['url'] as String),
+        large: (previewImages[length - 2]['url'] as String),
+        small: (previewImages[length - 3]['url'] as String),
       );
     }
   }
@@ -49,6 +43,12 @@ class Thumbs extends Equatable {
     original: '',
     small: '',
   );
+
+  factory Thumbs.fromDeviantArtJson(List thumbImages) => Thumbs(
+        original: thumbImages[2]['src'],
+        large: thumbImages[1]['src'],
+        small: thumbImages[0]['src'],
+      );
 
   Map<String, dynamic> toJson() => {
         'large': large,

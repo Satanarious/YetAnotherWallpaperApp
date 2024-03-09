@@ -1,0 +1,88 @@
+TODO:
+    Features:
+        Local Filters:
+            ☐ Resolution Filter
+            ☐ Orientation Filter
+        Settings Screen:
+            ☐ Blur NSFW/Sketchy wallpapers
+            ☐ Change default source
+            ☐ Add to favourites on download (Downloads folder)
+            ☐ Wallhaven API key
+            ☐ Rounder Corner
+            ☐ History Limit
+            ☐ Cache Management
+            ☐ Grid layout settings (Wallflow)
+            ☐ Auto wallpaper
+            ☐ Mark as viewed
+                ☐ For Session/ Thoughout sessions
+                ☐ Mark Type (Wallflow)
+        Auto Wallpaper:
+            ☐ Constraints: Wifi/ Charging/ Idle, Roaming
+            ☐ Interval: Hours/ Minutes
+            ☐ Day/Night: Theme based/ Time based
+            ☐ Source: Saved Query/ Favourites/ Local
+            ☐ Notification of wallpaper change
+            ☐ Add to favorites on change (Auto-Wallpaper)
+        History Screen:
+            ✔ Add Delete Button @done(24-03-09 10:33)
+            ✔ Create history screen @done(24-03-06 21:37)
+            ✔ Maintain history in a provider @done(24-03-06 21:51)
+            ✔ Limit history to x wallpapers @done(24-03-06 21:51)
+        Favourites Screen:
+            ✔ Add All folder for all favourites @done(24-03-02 05:23)
+            ☐ Share folder as json
+            ☐ Import/Export folder
+            Open Favourite Folder Screen:
+                ✔ Create favourites folder screen @started(24-03-03 06:57) @done(24-03-03 07:20) @lasted(23m29s)
+        Wallpaper Action Widget:
+            ✔ Show/Hide widget on touch @started(24-03-01 07:26) @done(24-03-01 13:16) @lasted(5h50m12s)
+            ✔ Remove draggability @done(24-03-01 08:17)
+            ☐ Add Share Wallpaper Button
+            Favourites Button:
+                ✔ Multi-Gesture response @done(24-03-02 06:41)
+                ✔ Single-tap to add to "All" folder @done(24-03-01 13:50)
+                ✔ Hold to open favourites dialog @done(24-03-02 11:17)
+            Edit Wallpaper Button: 
+                ☐ Blur
+                ☐ Vigenette
+                ☐ Contrast
+                ☐ Brightness
+                ☐ Grayscale
+                ☐ Saturation
+            Wallpaper Info Button: 
+                ✔ Create Bottom Sheet @done(24-03-04 09:01)
+                ✔ Source @done(24-03-05 12:54)
+                ✔ Title @done(24-03-05 12:53)
+                ✔ Colours (Click to search) @done(24-03-05 12:54)
+                ✔ Post URL (Click to open) @done(24-03-05 12:54)
+                ✔ Image URL (Click to open) @done(24-03-05 12:54)
+                ✔ Resolution @done(24-03-05 12:56)
+                ✔ Size @done(24-03-05 13:13)
+                ✔ Tags @done(24-03-06 21:03)
+                ✘ Uploader Info (Click to search) @started(24-03-06 21:04) @cancelled(24-03-06 21:14) @wasted(10m19s)
+                ☐ Others...
+
+    Chores:
+        ☐ Add subreddits with gifs
+        ☐ Add reset button in all filter dialogs.
+        ☐ Shift Buttons to Top in filters
+        ☐ Add Logs
+        ✘ Make app bar scrollable in History/Favourites @started(24-03-09 10:37) @cancelled(24-03-09 10:55) @wasted(18m45s)
+        ✔ Add Favourite Button on Grid Item @done(24-03-09 00:05)
+        ✔ Change masonry grid view to display list without network @started(24-03-03 05:55) @done(24-03-03 06:37) @lasted(42m58s)
+
+FIXME:
+    ☐ Tags loading on info sheet eveytime sheet is opened.
+    ☐ Unfavouriting wallpaper from folder shows "Attention: Remove wallpaper from all folders".
+    Bug:
+        ✔ On wallpaper unfavourite, wallpaper appears in grid & folder (Favourite Screen) @started(24-03-03 08:13) @done(24-03-03 08:23) @lasted(10m3s)
+        ✔ Favourites Dialog Ok/Remove button not animating @done(24-03-05 18:42)
+        ✔ Clear All button is favourites not working. @done(24-03-05 18:35)
+    Responsiveness:
+        ☐ Grid layout responsiveness @low
+        ☐ Favourites folder icon responsiveness @low
+        ☐ Make widget and dialog sizes responsive @low
+    
+
+
+Archive:

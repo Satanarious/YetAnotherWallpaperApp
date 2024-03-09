@@ -8,21 +8,20 @@ class WallpaperGridScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final wallpaperProvider =
+    final wallpaperListProvider =
         Provider.of<WallpaperListProvider>(context, listen: false);
     final source = Provider.of<SourceProvider>(context).source;
     final queryProvider = Provider.of<QueryProvider>(context);
-    Map<String, dynamic>? query;
-    if (source == Sources.wallhaven) {
-      queryProvider.checkAndSetWallhavenInitialQuery();
-      query = queryProvider.query;
-    }
+    queryProvider.setInitialQuery(source);
+
     return FutureBuilder(
-        future: wallpaperProvider.loadMoreWallpapers(
-            newSource: source, query: query),
+        future: wallpaperListProvider.loadMoreWallpapers(
+          newSource: source,
+          query: queryProvider.query,
+        ),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return wallpaperProvider.wallpapers.isEmpty
+            return wallpaperListProvider.wallpapers.data.isEmpty
                 ? Center(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,

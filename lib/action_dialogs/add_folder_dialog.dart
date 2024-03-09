@@ -15,6 +15,8 @@ class _AddFolderDialogState extends State<AddFolderDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final favouritesProvider =
+        Provider.of<FavouritesProvider>(context, listen: false);
     return Dialog(
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
@@ -32,10 +34,17 @@ class _AddFolderDialogState extends State<AddFolderDialog> {
                   child: TextFormField(
                     autofocus: true,
                     validator: (value) {
-                      name = value;
-                      return value == null || value.isEmpty
-                          ? "Enter a valid name"
-                          : null;
+                      if (value == null || value.isEmpty) {
+                        // Validate for empty string
+                        return "Enter a valid name";
+                      } else if (favouritesProvider.favouriteFolders.keys
+                          .contains(value)) {
+                        // Validate for folder duplicate
+                        return "Folder already exists";
+                      } else {
+                        name = value;
+                        return null;
+                      }
                     },
                     decoration: const InputDecoration(
                       label: Text("Folder Name"),
@@ -46,8 +55,7 @@ class _AddFolderDialogState extends State<AddFolderDialog> {
                 FilledButton.icon(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        Provider.of<FavouritesProvider>(context, listen: false)
-                            .createFolder(name!);
+                        favouritesProvider.createFolder(name!);
                         Navigator.of(context).pop();
                       }
                     },

@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'package:wallpaper_app/providers/deviant_art_provider.dart';
 import '../models/models.dart';
 import '../providers/source_provider.dart';
-import 'package:http/http.dart' as http;
 
 class ApiClient {
   Map<String, dynamic> getHttpParams(Sources source) {
@@ -10,47 +12,24 @@ class ApiClient {
         return {
           "baseUrl": "www.wallhaven.cc",
           "path": "/api/v1/search",
-          "defaultQuery": {
-            "sorting": "toplist",
-            "page": "1",
-          },
         };
       case Sources.reddit:
         return {
           "baseUrl": "www.reddit.com",
           "path": "/r/Verticalwallpapers/top.json",
-          "defaultQuery": {
-            "sort": "top",
-            "t": "month",
-          },
         };
       case Sources.lemmy:
         return {
           "baseUrl": "lemmy.ml",
           "path": "/api/v3/post/list",
-          "defaultQuery": {
-            "community_name": "apocalypticart@feddit.de",
-            "sort": "Active"
-          },
         };
-      case Sources.oWalls:
+      case Sources.deviantArt:
         return {
-          "baseUrl": "www.lemmy.com",
-          "path": "",
-          "defaultQuery": "",
+          "baseUrl": "www.deviantart.com",
+          "path": "/api/v1/oauth2/browse/popular",
         };
-      case Sources.googlePixel:
-        return {
-          "baseUrl": "www.pixel.com",
-          "path": "",
-          "defaultQuery": "",
-        };
-      case Sources.bingDaily:
-        return {
-          "baseUrl": "www.bing.com",
-          "path": "",
-          "defaultQuery": "",
-        };
+      default:
+        throw Exception("Source not supported yet!!");
     }
   }
 
@@ -59,33 +38,55 @@ class ApiClient {
     Map<String, dynamic>? query,
     String? pageIndex,
     String? pageId,
+    String? offset,
   }) async {
     final httpsParams = getHttpParams(source);
+    String? deviantArtToken;
 
+    // Nullify query in case where it is an empty map
+    if (query != null && query.isEmpty) {
+      query = null;
+    }
+
+    // Modify query and call other methods before wallpaper search
     switch (source) {
       case Sources.wallhaven:
         query!['page'] = pageIndex ?? "1";
         break;
       case Sources.reddit:
-        httpsParams['defaultQuery']['after'] = pageId ?? "";
+        if (pageId != null) {
+          query!['after'] = pageId;
+        }
+        httpsParams['path'] = "/r/${query!['subreddit']}/${query['sort']}.json";
+        query.remove("subreddit");
+        break;
       case Sources.lemmy:
-        httpsParams['defaultQuery']['page'] = pageIndex ?? "1";
+        query!['page'] = pageIndex ?? "1";
         break;
-      case Sources.googlePixel:
+      case Sources.deviantArt:
+        deviantArtToken =
+            await DeviantArtProvider().checkAndRefreshDeviantArtToken();
+
+        if (offset != null) {
+          query!['offset'] = offset;
+        }
+        httpsParams['path'] = query!['path'];
+        query.remove('path');
         break;
-      case Sources.bingDaily:
-        break;
-      case Sources.oWalls:
-        break;
+      default:
+        throw Exception("Source not supported yet!!");
     }
 
-    //Create URI
+    //Create Wallpaper API URI from baseURl, path and query
     final request = Uri.https(
       httpsParams['baseUrl'] as String,
       httpsParams['path'] as String,
-      query ?? httpsParams['defaultQuery'],
+      query,
     );
-    final response = await http.get(request);
+    final response = await http.get(request,
+        headers: source == Sources.deviantArt
+            ? {HttpHeaders.authorizationHeader: 'Bearer $deviantArtToken'}
+            : null);
 
     if (response.statusCode != 200) {
       throw Exception(
@@ -116,8 +117,13 @@ class ApiClient {
 
         final children = wallpaperListJson['data']['children'] as List;
         final validChildren = children
-            .where((child) => child['data']['post_hint'] == 'image')
-            .toList();
+            .where((child) => (child['data']['post_hint'] == 'image' ||
+                    child['data']['post_hint'] == 'link')
+                //     &&
+                // child['data']['preview']['images'][0]['source']['width'] <
+                //     child['data']['preview']['images'][0]['source']['height']
+                )
+            .toList(); // Filter children where data has image
         wallpaperListJson['data']['children'] = validChildren;
 
         return WallpaperList.fromRedditJson(
@@ -135,19 +141,26 @@ class ApiClient {
         final children = wallpaperListJson['posts'] as List;
         final validChildren = children
             .where((child) => child['post']['thumbnail_url'] != null)
-            .toList();
+            .toList(); // Filter children where data has image
         wallpaperListJson['posts'] = validChildren;
         return WallpaperList.fromLemmyJson(
           wallpaperListJson,
           Meta.fromLemmyJson(wallpaperListJson),
         );
 
-      case Sources.googlePixel:
-        return WallpaperList.fromWallhavenJson(wallpaperListJson);
-      case Sources.bingDaily:
-        return WallpaperList.fromWallhavenJson(wallpaperListJson);
-      case Sources.oWalls:
-        return WallpaperList.fromWallhavenJson(wallpaperListJson);
+      case Sources.deviantArt:
+        if (!wallpaperListJson.containsKey('results')) {
+          throw Exception(
+            'Wallpaper not found. Please check your query.',
+          );
+        }
+        return WallpaperList.fromDeviantArtJson(
+          wallpaperListJson,
+          Meta.fromDeviantArtJson(wallpaperListJson),
+        );
+
+      default:
+        throw Exception("Source not supported yet!!");
     }
   }
 }

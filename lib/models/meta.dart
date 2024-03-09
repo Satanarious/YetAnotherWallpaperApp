@@ -6,6 +6,8 @@ class Meta extends Equatable {
     this.lastPage,
     required this.perPage,
     this.after,
+    this.hasMore,
+    this.offset,
   });
 
   factory Meta.fromJson(Map<String, dynamic> json) => Meta(
@@ -22,11 +24,18 @@ class Meta extends Equatable {
         after: json['next_page'],
         perPage: (json['posts'] as List<dynamic>).length,
       );
+  factory Meta.fromDeviantArtJson(Map<String, dynamic> json) => Meta(
+        offset: json['next_offset'] as int,
+        hasMore: json['has_more'] as bool,
+        perPage: (json['results'] as List<dynamic>).length,
+      );
 
   final int? currentPage;
   final int? lastPage;
   final int perPage;
   final String? after;
+  final bool? hasMore;
+  final int? offset;
 
   static const empty = Meta(perPage: 0);
 
@@ -35,6 +44,8 @@ class Meta extends Equatable {
         'last_page': lastPage,
         'per_page': perPage,
         'after': after,
+        'has_more': hasMore,
+        'offset': offset,
       };
 
   @override
@@ -44,11 +55,13 @@ class Meta extends Equatable {
       lastPage,
       perPage,
       after,
+      hasMore,
+      offset,
     ];
   }
 
   @override
   String toString() {
-    return 'Meta(currentPage: $currentPage, lastPage: $lastPage, perPage: $perPage, after: $after)';
+    return 'Meta(currentPage: $currentPage, lastPage: $lastPage, perPage: $perPage, after: $after, has_more: $hasMore, offset: $offset)';
   }
 }

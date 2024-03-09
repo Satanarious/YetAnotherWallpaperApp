@@ -1,14 +1,22 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
+import 'package:wallpaper_app/enums/file_type.dart';
 import '../models/models.dart';
 import '../widgets/wallpaper_action_widget.dart';
 import '../providers/source_provider.dart';
 
-class OpenImageScreen extends StatelessWidget {
+class OpenImageScreen extends StatefulWidget {
   const OpenImageScreen({super.key});
   static const String routeName = "/OpenImageScreen";
 
+  @override
+  State<OpenImageScreen> createState() => _OpenImageScreenState();
+}
+
+class _OpenImageScreenState extends State<OpenImageScreen> {
+  var isInteracting = false;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -16,13 +24,24 @@ class OpenImageScreen extends StatelessWidget {
     final Wallpaper wallpaper =
         ModalRoute.of(context)!.settings.arguments as Wallpaper;
     final source = Provider.of<SourceProvider>(context, listen: false).source;
+    var progressString = '';
 
     return Scaffold(
-        backgroundColor: Colors.black87,
-        body: Stack(children: [
+      backgroundColor: Colors.black87,
+      body: Stack(
+        children: [
           PhotoView(
             imageProvider: NetworkImage(wallpaper.url),
             initialScale: PhotoViewComputedScale.covered,
+            onTapDown: (context, details, controllerValue) => setState(() {
+              isInteracting = !isInteracting;
+            }),
+            errorBuilder: (context, error, stackTrace) => const Center(
+              child: Text(
+                "Error loading image!",
+                style: TextStyle(color: Colors.white, fontSize: 30),
+              ),
+            ),
             loadingBuilder: (context, loadingProgress) {
               double? progress = loadingProgress?.expectedTotalBytes != null
                   ? loadingProgress!.cumulativeBytesLoaded /
@@ -34,16 +53,24 @@ class OpenImageScreen extends StatelessWidget {
               final double totalFileSize = double.parse(
                   (wallpaper.fileSize / 1048567).toStringAsFixed(2));
 
-              if (progress == 0 && source == Sources.lemmy) {
+              if (progress == 0 && source != Sources.wallhaven) {
                 progress = null;
+                progressString = "Fetching...";
+              } else {
+                progressString = wallpaper.fileSize != 0
+                    ? "$fileSizeDownloaded MB / $totalFileSize MB"
+                    : "Loading...";
               }
               return Stack(
                 children: [
-                  Image.network(
-                    wallpaper.thumbs.original,
+                  CachedNetworkImage(
+                    imageUrl: wallpaper.fileType == FileType.gif
+                        ? wallpaper.thumbs.large
+                        : wallpaper.thumbs.original,
                     fit: BoxFit.cover,
                     height: size.height,
                     width: size.width,
+                    errorWidget: (context, url, error) => Container(),
                   ),
                   SizedBox(
                     height: double.infinity,
@@ -56,11 +83,13 @@ class OpenImageScreen extends StatelessWidget {
                         Stack(
                           children: [
                             CircularProgressIndicator(
+                              strokeCap: StrokeCap.round,
                               value: progress,
-                              color: Colors.black87,
+                              color: Colors.black.withAlpha(210),
                               strokeWidth: 6,
                             ),
                             CircularProgressIndicator(
+                              strokeCap: StrokeCap.round,
                               value: progress,
                               color: Colors.white,
                               strokeWidth: 3,
@@ -70,10 +99,7 @@ class OpenImageScreen extends StatelessWidget {
                         const SizedBox(
                           height: 10,
                         ),
-                        wallpaper.fileSize == 0
-                            ? Container()
-                            : Text(
-                                "$fileSizeDownloaded MB / $totalFileSize MB"),
+                        Text(progressString),
                       ],
                     ),
                   ),
@@ -81,13 +107,15 @@ class OpenImageScreen extends StatelessWidget {
               );
             },
           ),
-          Positioned(
+          AnimatedPositioned(
+            curve: Curves.fastOutSlowIn,
+            duration: const Duration(milliseconds: 200),
             top: statusBarHeight + 10,
-            left: 10,
+            left: isInteracting ? -60 : 10,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(30),
               child: Container(
-                color: Colors.black87,
+                color: Colors.black.withAlpha(210),
                 child: IconButton(
                     onPressed: () => Navigator.of(context).pop(),
                     icon: const Icon(
@@ -97,7 +125,15 @@ class OpenImageScreen extends StatelessWidget {
               ),
             ),
           ),
-          WallpaperActionsWidget(wallpaper)
-        ]));
+          AnimatedPositioned(
+              curve: Curves.fastOutSlowIn,
+              duration: const Duration(milliseconds: 200),
+              left: 0,
+              right: 0,
+              bottom: isInteracting ? -80 : 0,
+              child: WallpaperActionsWidget(wallpaper)),
+        ],
+      ),
+    );
   }
 }

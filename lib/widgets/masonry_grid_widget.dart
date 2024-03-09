@@ -1,43 +1,30 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
-import '../providers/providers.dart';
+import 'package:wallpaper_app/enums/file_type.dart';
+import 'package:wallpaper_app/enums/purity.dart';
+import 'package:wallpaper_app/models/wallpaper_list.dart';
+import 'package:wallpaper_app/providers/history_provider.dart';
 import 'image_preview_grid_item.dart';
+import '../providers/providers.dart';
 import '../screens/open_image_screen.dart';
 
 class MasonryGridWidget extends StatefulWidget {
-  const MasonryGridWidget({super.key});
+  const MasonryGridWidget(
+      {this.wallpaperList,
+      this.listNeedsNetworkLoading = true,
+      this.showDeleteButton = false,
+      super.key});
+  final bool listNeedsNetworkLoading;
+  final WallpaperList? wallpaperList;
+  final bool showDeleteButton;
+
   @override
   State<MasonryGridWidget> createState() => _MasonryGridWidgetState();
 }
 
-class _MasonryGridWidgetState extends State<MasonryGridWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final BoxConstraints layoutConstraints = constraints;
-        return Container(
-          color: const Color.fromRGBO(50, 50, 50, 1),
-          child: CustomGridView(layoutConstraints: layoutConstraints),
-        );
-      },
-    );
-  }
-}
-
-class CustomGridView extends StatefulWidget {
-  const CustomGridView({
-    required this.layoutConstraints,
-    super.key,
-  });
-  final BoxConstraints layoutConstraints;
-
-  @override
-  State<CustomGridView> createState() => _CustomGridViewState();
-}
-
-class _CustomGridViewState extends State<CustomGridView>
+class _MasonryGridWidgetState extends State<MasonryGridWidget>
     with AutomaticKeepAliveClientMixin {
   final _scrollController = ScrollController();
   @override
@@ -51,9 +38,11 @@ class _CustomGridViewState extends State<CustomGridView>
 
   bool _loading = false;
 
-  void _loadWallpapers(WallpaperListProvider wallpaperListProvider) async {
+  void _loadWallpapers() async {
     final source = Provider.of<SourceProvider>(context, listen: false).source;
     final query = Provider.of<QueryProvider>(context, listen: false).query;
+    final wallpaperListProvider =
+        Provider.of<WallpaperListProvider>(context, listen: false);
     setState(() {
       _loading = true;
     });
@@ -67,60 +56,121 @@ class _CustomGridViewState extends State<CustomGridView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final wallpaperListProvider = Provider.of<WallpaperListProvider>(context);
-    final wallpapers = wallpaperListProvider.wallpapers;
-    return NotificationListener<ScrollUpdateNotification>(
-      onNotification: (notification) {
-        if (notification.metrics.pixels ==
-            notification.metrics.maxScrollExtent) {
-          _loadWallpapers(wallpaperListProvider);
-        }
-        Provider.of<ScrollHandlingProvider>(context, listen: false)
-            .setScrollOffset(notification.metrics.pixels);
 
-        return true;
-      },
-      child: Stack(
-        children: [
-          MasonryGridView.builder(
-              padding: const EdgeInsets.only(top: 0),
-              controller: _scrollController,
-              gridDelegate:
-                  const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-              ),
-              crossAxisSpacing: 2,
-              mainAxisSpacing: 2,
-              itemCount: wallpapers.length,
-              itemBuilder: (context, index) {
-                final height = calculateHeight(
-                  wallpapers[index].dimensionY ?? [1920, 1600][index % 2],
-                  wallpapers[index].dimensionX ?? [1080, 800][index % 2],
-                  widget.layoutConstraints.maxWidth / 2,
-                );
+    final wallpapers = widget.listNeedsNetworkLoading
+        ? Provider.of<WallpaperListProvider>(context).wallpapers.data
+        : widget.wallpaperList!.data;
+    final blurNSFW =
+        Provider.of<QueryProvider>(context, listen: false).blurNSFW;
 
-                return GestureDetector(
-                  onTap: () => Navigator.of(context).pushNamed(
-                      OpenImageScreen.routeName,
-                      arguments: wallpapers[index]),
-                  child: ImagePreviewGridItem(
-                    wallpapers[index].thumbs.original,
-                    height,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final BoxConstraints layoutConstraints = constraints;
+        final crossAxisCount = layoutConstraints.maxWidth ~/ 150;
+        final masonryGrid = MasonryGridView.builder(
+            padding: const EdgeInsets.only(top: 0),
+            controller: _scrollController,
+            gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount,
+            ),
+            crossAxisSpacing: 2,
+            mainAxisSpacing: 2,
+            itemCount: wallpapers.length,
+            itemBuilder: (context, index) {
+              final height = calculateHeight(
+                wallpapers[index].dimensionY ?? [1920, 1600][index % 2],
+                wallpapers[index].dimensionX ?? [1080, 800][index % 2],
+                layoutConstraints.maxWidth / 2,
+              ).clamp(0, layoutConstraints.maxHeight * 0.7).toDouble();
+
+              // return blurNSFW && wallpapers[index].purity == PurityType.adult
+              //     ? Stack(
+              //         alignment: Alignment.center,
+              //         children: [
+              //           Image.asset(
+              //             "assets/blur.png",
+              //             height: height,
+              //             width: double.infinity,
+              //             fit: BoxFit.cover,
+              //           ),
+              //           Transform.rotate(
+              //             angle: -pi / 12,
+              //             child: ClipRRect(
+              //               borderRadius: BorderRadius.circular(10),
+              //               child: Container(
+              //                 padding:
+              //                     const EdgeInsets.symmetric(horizontal: 8),
+              //                 decoration: BoxDecoration(
+              //                   border: Border.all(
+              //                       width: 5, color: Colors.black54),
+              //                 ),
+              //                 child: const Text(
+              //                   "NSFW",
+              //                   style: TextStyle(
+              //                       color: Colors.black54,
+              //                       fontWeight: FontWeight.bold,
+              //                       fontSize: 30),
+              //                 ),
+              //               ),
+              //             ),
+              //           )
+              //         ],
+              //       )
+              //     :
+              return GestureDetector(
+                onTap: () {
+                  if (wallpapers[index].url.isEmpty) return;
+                  if (widget.listNeedsNetworkLoading) {
+                    Provider.of<HistoryProvider>(context, listen: false)
+                        .addToHistory(wallpapers[index]);
+                  }
+                  Navigator.of(context).pushNamed(
+                    OpenImageScreen.routeName,
+                    arguments: wallpapers[index],
+                  );
+                },
+                child: ImagePreviewGridItem(
+                  wallpaper: wallpapers[index],
+                  height: height,
+                  showDeletButton: widget.showDeleteButton,
+                ),
+              );
+            });
+
+        return Container(
+          color: const Color.fromRGBO(50, 50, 50, 1),
+          child: widget.listNeedsNetworkLoading
+              ? NotificationListener<ScrollUpdateNotification>(
+                  onNotification: (notification) {
+                    if (notification.metrics.pixels ==
+                        notification.metrics.maxScrollExtent) {
+                      _loadWallpapers();
+                    }
+                    Provider.of<ScrollHandlingProvider>(context, listen: false)
+                        .setScrollOffset(notification.metrics.pixels);
+
+                    return true;
+                  },
+                  child: Stack(
+                    children: [
+                      masonryGrid,
+                      _loading
+                          ? Positioned(
+                              bottom: 0,
+                              right: 0,
+                              left: 0,
+                              child: LinearProgressIndicator(
+                                backgroundColor:
+                                    const Color.fromRGBO(50, 50, 50, 1),
+                                color: Theme.of(context).primaryColor,
+                              ))
+                          : Container(),
+                    ],
                   ),
-                );
-              }),
-          _loading
-              ? Positioned(
-                  bottom: 0,
-                  right: 0,
-                  left: 0,
-                  child: LinearProgressIndicator(
-                    backgroundColor: const Color.fromRGBO(50, 50, 50, 1),
-                    color: Theme.of(context).primaryColor,
-                  ))
-              : Container(),
-        ],
-      ),
+                )
+              : masonryGrid,
+        );
+      },
     );
   }
 }

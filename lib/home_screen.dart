@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:wallpaper_app/action_dialogs/source_selector_dialog.dart';
-import 'package:wallpaper_app/filter_dialogs/wallhaven_filter_dialog.dart';
-import 'package:wallpaper_app/screens/favourites_screen.dart';
-import 'package:wallpaper_app/screens/wallpaper_grid_screen.dart';
+import 'package:wallpaper_app/screens/screens.dart';
 import 'providers/providers.dart';
+import '../action_dialogs/source_selector_dialog.dart';
+import './filter_dialogs/filter_dialogs.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -12,12 +12,30 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Color.fromRGBO(50, 50, 50, 1),
-      body: Stack(children: [
-        WallpaperGridScreen(),
-        PillTabBar(),
-      ]),
+    DateTime? currentBackPressTime;
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        final now = DateTime.now();
+        if (currentBackPressTime == null ||
+            DateTime.now().difference(currentBackPressTime!) >
+                const Duration(seconds: 2)) {
+          currentBackPressTime = now;
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Press back again to exit'),
+            duration: Duration(seconds: 2),
+          ));
+        } else {
+          SystemNavigator.pop();
+        }
+      },
+      child: const Scaffold(
+        backgroundColor: Color.fromRGBO(50, 50, 50, 1),
+        body: Stack(children: [
+          WallpaperGridScreen(),
+          PillTabBar(),
+        ]),
+      ),
     );
   }
 }
@@ -32,10 +50,31 @@ class PillTabBar extends StatefulWidget {
 class _PillTabBarState extends State<PillTabBar> {
   void filterButtonAction() {
     final source = Provider.of<SourceProvider>(context, listen: false).source;
-    if (source == Sources.wallhaven) {
-      showDialog(
+    switch (source) {
+      case Sources.wallhaven:
+        showDialog(
           context: context,
-          builder: (context) => const WallhavenFilterDialog());
+          builder: (context) => const WallhavenFilterDialog(),
+        );
+        break;
+      case Sources.reddit:
+        showDialog(
+          context: context,
+          builder: (context) => const RedditFilterDialog(),
+        );
+        break;
+      case Sources.lemmy:
+        showDialog(
+          context: context,
+          builder: (context) => const LemmyFilterDialog(),
+        );
+      case Sources.deviantArt:
+        showDialog(
+          context: context,
+          builder: (context) => const DeviantArtFilterDialog(),
+        );
+      default:
+        throw Exception("Source not supported yet!!");
     }
   }
 
@@ -47,6 +86,9 @@ class _PillTabBarState extends State<PillTabBar> {
             builder: (context) => const SourceSelectorDialog());
         break;
       case 1:
+        Navigator.of(context).pushNamed(HistoryScreen.routeName);
+        break;
+      case 2:
         Navigator.of(context).pushNamed(FavouritesScreen.routeName);
         break;
     }
@@ -65,14 +107,14 @@ class _PillTabBarState extends State<PillTabBar> {
           ClipRRect(
             borderRadius: BorderRadius.circular(25),
             child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.40,
+              width: 180,
               height: scrollHandlingProvider.pillHeight,
               child: BottomNavigationBar(
                 type: BottomNavigationBarType.fixed,
                 showSelectedLabels: false,
                 showUnselectedLabels: false,
                 elevation: 10,
-                backgroundColor: Colors.black.withAlpha(220),
+                backgroundColor: Colors.black.withAlpha(210),
                 unselectedItemColor: Colors.grey,
                 selectedItemColor: Colors.grey,
                 onTap: (index) {
@@ -83,6 +125,11 @@ class _PillTabBarState extends State<PillTabBar> {
                     tooltip: "Change Source",
                     icon: Icon(Icons.wallpaper),
                     label: "Source",
+                  ),
+                  BottomNavigationBarItem(
+                    tooltip: "History",
+                    icon: Icon(Icons.history),
+                    label: "History",
                   ),
                   BottomNavigationBarItem(
                     tooltip: "Favourites",

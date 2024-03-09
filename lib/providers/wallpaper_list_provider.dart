@@ -4,24 +4,28 @@ import '../apis/api_client.dart';
 import '../providers/source_provider.dart';
 
 class WallpaperListProvider with ChangeNotifier {
-  final List<Wallpaper> _wallpapers = [];
+  // ignore: prefer_const_constructors, prefer_const_literals_to_create_immutables
+  final _wallpapers = WallpaperList(data: [], meta: Meta.empty);
   final ApiClient _apiClient = ApiClient();
-  Sources source = Sources.wallhaven;
+  Sources source = Sources.reddit;
+
+  int? offset;
   int? currentPage;
   int? lastPage;
   String? after;
   String? before;
 
-  List<Wallpaper> get wallpapers {
-    return [..._wallpapers];
+  WallpaperList get wallpapers {
+    return _wallpapers;
   }
 
   int getLength() {
-    return _wallpapers.length;
+    return _wallpapers.data.length;
   }
 
   void emptyWallpaperList() {
-    _wallpapers.clear();
+    _wallpapers.data.clear();
+    offset = 0;
     currentPage = null;
     lastPage = null;
     before = null;
@@ -56,7 +60,7 @@ class WallpaperListProvider with ChangeNotifier {
                   query: query,
                   pageIndex: (currentPage! + 1).toString());
 
-          _wallpapers.addAll(wallpaperList.data);
+          _wallpapers.data.addAll(wallpaperList.data);
           currentPage = wallpaperList
               .meta.currentPage; // Update currentPage to value from api
           lastPage =
@@ -65,6 +69,9 @@ class WallpaperListProvider with ChangeNotifier {
 
         case Sources.reddit:
           // Check for last page on Reddit
+          // do {
+          // print("is less than 20 ---------------");
+          // print(after);
           if (after == null && before != null) {
             return;
           }
@@ -74,10 +81,16 @@ class WallpaperListProvider with ChangeNotifier {
               : await _apiClient.wallpaperSearch(
                   source: source, query: query, pageId: after);
 
-          before = after; // Update before to the last value of after
-          _wallpapers.addAll(wallpaperList.data);
+          if (after == null) {
+            before = "NA"; // Set $before to non-null to avoid single page loop
+          } else {
+            before =
+                after; // Otherwise, update $before to the last value of $after
+          }
+          _wallpapers.data.addAll(wallpaperList.data);
           after = wallpaperList
-              .meta.after; // Update after to the value recieved from api
+              .meta.after; // Update $after to the value recieved from api
+          // } while (wallpapers.data.length < 20);
           break;
 
         case Sources.lemmy:
@@ -93,18 +106,33 @@ class WallpaperListProvider with ChangeNotifier {
                   query: query,
                   pageIndex: (currentPage! + 1).toString());
           currentPage = currentPage ?? 1;
-          _wallpapers.addAll(wallpaperList.data);
+          _wallpapers.data.addAll(wallpaperList.data);
           currentPage = currentPage! + 1;
 
           after = wallpaperList
               .meta.after; // Update after to the value recieved from api
           break;
 
+        case Sources.deviantArt:
+          final wallpaperList = offset == null
+              ? await _apiClient.wallpaperSearch(
+                  source: source,
+                  query: query,
+                )
+              : await _apiClient.wallpaperSearch(
+                  source: source,
+                  query: query,
+                  offset: offset.toString(),
+                );
+
+          _wallpapers.data.addAll(wallpaperList.data);
+          offset = wallpaperList.meta.offset;
+
         default:
           throw Exception("Source Not supported yet");
       }
     } catch (e) {
-      print("!!!Error: $e");
+      rethrow;
     }
   }
 }

@@ -1,7 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/action_dialogs/add_folder_dialog.dart';
 import 'package:wallpaper_app/providers/favourites_provider.dart';
+import 'package:wallpaper_app/screens/favourite_wallpaper_grid_screen.dart';
+
+import '../models/wallpaper_list.dart';
 
 class FavouritesScreen extends StatelessWidget {
   const FavouritesScreen({super.key});
@@ -10,8 +14,10 @@ class FavouritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final favouritesProvider = Provider.of<FavouritesProvider>(context);
-    final Iterable<String> favouriteFolders =
-        favouritesProvider.favouriteFolders.keys;
+    final favouriteFolders = favouritesProvider.favouriteFolders;
+    final Iterable<String> favouritefolderTitles = favouriteFolders.keys;
+    final size = MediaQuery.of(context).size;
+    final crossAxisCount = size.width ~/ 200;
 
     return Scaffold(
       backgroundColor: const Color.fromRGBO(50, 50, 50, 1),
@@ -26,7 +32,7 @@ class FavouritesScreen extends StatelessWidget {
             Icons.arrow_back,
             color: Colors.white,
           ),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: Navigator.of(context).pop,
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -34,7 +40,8 @@ class FavouritesScreen extends StatelessWidget {
             context: context, builder: (context) => const AddFolderDialog()),
         child: const Icon(Icons.add),
       ),
-      body: favouriteFolders.isEmpty
+      body: favouriteFolders.isEmpty &&
+              favouritesProvider.allFavourites.data.isEmpty
           ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -57,84 +64,89 @@ class FavouritesScreen extends StatelessWidget {
               padding: const EdgeInsets.all(10),
               child: GridView.count(
                 mainAxisSpacing: 10,
-                crossAxisCount: 2,
-                children: favouriteFolders
-                    .map((folderName) => GestureDetector(
-                          onTap: () => null,
-                          child: SizedBox(
-                            height: 200,
-                            child: LayoutBuilder(
-                              builder: (context, constraints) => Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  SizedBox(
-                                    height: 170,
-                                    child: Stack(
-                                      children: [
-                                        FolderImagePreview(
-                                          top: 0,
-                                          right: constraints.maxWidth / 4,
-                                          url: favouritesProvider
-                                                      .favouriteFolders[
-                                                          folderName]!
-                                                      .data
-                                                      .length >
-                                                  2
-                                              ? favouritesProvider
-                                                  .favouriteFolders[folderName]!
-                                                  .data[2]
-                                                  .thumbs
-                                                  .small
-                                              : null,
-                                        ),
-                                        FolderImagePreview(
-                                          top: 15,
-                                          right:
-                                              (constraints.maxWidth / 4) - 15,
-                                          url: favouritesProvider
-                                                      .favouriteFolders[
-                                                          folderName]!
-                                                      .data
-                                                      .length >
-                                                  1
-                                              ? favouritesProvider
-                                                  .favouriteFolders[folderName]!
-                                                  .data[1]
-                                                  .thumbs
-                                                  .small
-                                              : null,
-                                        ),
-                                        FolderImagePreview(
-                                          top: 30,
-                                          right:
-                                              (constraints.maxWidth / 4) - 30,
-                                          url: favouritesProvider
-                                                  .favouriteFolders[folderName]!
-                                                  .data
-                                                  .isEmpty
-                                              ? null
-                                              : favouritesProvider
-                                                  .favouriteFolders[folderName]!
-                                                  .data[0]
-                                                  .thumbs
-                                                  .small,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Text(
-                                    folderName,
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ))
-                    .toList(),
+                crossAxisCount: crossAxisCount,
+                children: [
+                      FavouriteFolderWidget(
+                        crossAxisCount: crossAxisCount,
+                        wallpapersList: favouritesProvider.allFavourites,
+                        folderTitle: "System | All",
+                      ),
+                    ] +
+                    favouritefolderTitles
+                        .map((folderTitle) => FavouriteFolderWidget(
+                              crossAxisCount: crossAxisCount,
+                              wallpapersList: favouriteFolders[folderTitle]!,
+                              folderTitle: folderTitle,
+                            ))
+                        .toList(),
               ),
             ),
+    );
+  }
+}
+
+class FavouriteFolderWidget extends StatelessWidget {
+  const FavouriteFolderWidget({
+    super.key,
+    required this.crossAxisCount,
+    required this.wallpapersList,
+    required this.folderTitle,
+  });
+
+  final int crossAxisCount;
+  final WallpaperList wallpapersList;
+  final String folderTitle;
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    return GestureDetector(
+      onTap: () => Navigator.of(context).pushNamed(
+          FavouriteWallpaperGridScreen.routeName,
+          arguments: folderTitle),
+      child: SizedBox(
+        height: size.width / crossAxisCount,
+        child: LayoutBuilder(
+          builder: (context, constraints) => Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                height: (size.width / crossAxisCount) - 45,
+                child: Stack(
+                  children: [
+                    FolderImagePreview(
+                      top: 0,
+                      right: constraints.maxWidth / 4,
+                      url: wallpapersList.data.length > 2
+                          ? wallpapersList.data[2].thumbs.large
+                          : null,
+                    ),
+                    FolderImagePreview(
+                      top: 15,
+                      right: (constraints.maxWidth / 4) - 15,
+                      url: wallpapersList.data.length > 1
+                          ? wallpapersList.data[1].thumbs.large
+                          : null,
+                    ),
+                    FolderImagePreview(
+                      top: 30,
+                      right: (constraints.maxWidth / 4) - 30,
+                      url: wallpapersList.data.isEmpty
+                          ? null
+                          : wallpapersList.data[0].thumbs.large,
+                    ),
+                  ],
+                ),
+              ),
+              Text(
+                folderTitle,
+                style: const TextStyle(color: Colors.white),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -152,21 +164,25 @@ class FolderImagePreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final itemWidth = (screenWidth / 2) - (screenWidth / 5);
+    final media = MediaQuery.of(context);
+    final size = media.size;
+    final isVertical = size.height > size.width;
+    final itemHeight = isVertical
+        ? (size.width * size.width / size.height) - 70
+        : (size.height * size.height / size.width) - 45;
     return Positioned(
       top: top,
       left: right,
       child: ClipRRect(
-          borderRadius: BorderRadius.circular(itemWidth / 5),
+          borderRadius: BorderRadius.circular(20),
           child: Container(
-            height: itemWidth,
-            width: itemWidth,
+            height: itemHeight,
+            width: itemHeight,
             color: Colors.white60,
             child: url == null
                 ? Container()
-                : Image.network(
-                    url!,
+                : CachedNetworkImage(
+                    imageUrl: url!,
                     fit: BoxFit.cover,
                   ),
           )),
