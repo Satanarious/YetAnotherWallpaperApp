@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:wallpaper_app/home_screen.dart';
 import 'package:wallpaper_app/providers/providers.dart';
 import 'package:wallpaper_app/providers/wallhaven_provider.dart';
 
@@ -89,8 +90,10 @@ class _WallpaperInfoSheetState extends State<WallpaperInfoSheet> {
                                                   .emptyWallpaperList();
                                               scrollHandlingProvider
                                                   .resetOffsets();
-                                              Navigator.of(context).pop();
-                                              Navigator.of(context).pop();
+                                              Navigator.of(context).popUntil(
+                                                  (route) =>
+                                                      route.settings.name ==
+                                                      HomeScreen.routeName);
                                             },
                                             child: ClipRRect(
                                               borderRadius:

@@ -67,6 +67,7 @@ TODO:
         ☐ Add reset button in all filter dialogs.
         ☐ Shift Buttons to Top in filters
         ☐ Add Logs
+        ☐ Search for random endpoints.
         ✘ Make app bar scrollable in History/Favourites @started(24-03-09 10:37) @cancelled(24-03-09 10:55) @wasted(18m45s)
         ✔ Add Favourite Button on Grid Item @done(24-03-09 00:05)
         ✔ Change masonry grid view to display list without network @started(24-03-03 05:55) @done(24-03-03 06:37) @lasted(42m58s)
@@ -78,6 +79,7 @@ FIXME:
         ✔ On wallpaper unfavourite, wallpaper appears in grid & folder (Favourite Screen) @started(24-03-03 08:13) @done(24-03-03 08:23) @lasted(10m3s)
         ✔ Favourites Dialog Ok/Remove button not animating @done(24-03-05 18:42)
         ✔ Clear All button is favourites not working. @done(24-03-05 18:35)
+        ✔ Clicking a tag in history or favourite screen doesn't return to home screen. @done(24-03-10 00:50)
     Responsiveness:
         ☐ Grid layout responsiveness @low
         ☐ Favourites folder icon responsiveness @low
