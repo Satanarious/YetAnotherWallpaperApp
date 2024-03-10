@@ -344,98 +344,106 @@ class _TagTabState extends State<TagTab> {
             const SizedBox(
               height: 5,
             ),
-            TextField(
-              controller: tagController,
-              style: const TextStyle(color: Colors.white, fontSize: 14),
-              onChanged: _onSearchChanged,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.label),
-                hintText: "3 or more characters without spaces",
-                contentPadding: const EdgeInsetsDirectional.symmetric(
-                    horizontal: 10, vertical: 2),
-                hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
+            Expanded(
+              child: TextField(
+                controller: tagController,
+                style: const TextStyle(color: Colors.white, fontSize: 14),
+                onChanged: _onSearchChanged,
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.label),
+                  hintText: "3 or more characters without spaces",
+                  contentPadding: const EdgeInsetsDirectional.symmetric(
+                      horizontal: 10, vertical: 2),
+                  hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                 ),
               ),
             ),
-            const SizedBox(
-              height: 2,
-            ),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Or",
-                  style: TextStyle(color: Colors.white, fontSize: 14),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 2,
-            ),
-            const Text(
-              "Predefined Tags",
-              style: TextStyle(color: Colors.white, fontSize: 14),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            tagController.text.length < 3
-                ? const DottedContainer(
-                    "Similar tags will load as you start writing in the tag field.")
-                : Expanded(
-                    child: FutureBuilder(
-                      future: deviantArtProvider
-                          .getDeviantArtSeachTags(tagController.text),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          final tags = snapshot.data!
-                            ..sort(
-                              (a, b) => (a['name'] as String)
-                                  .length
-                                  .compareTo((b['name'] as String).length),
-                            );
-                          final tagsSelected =
-                              List.generate(tags.length, (index) => false);
-                          return tags.isEmpty
-                              ? const DottedContainer(
-                                  "No similar tags found for the corresponding tag")
-                              : SingleChildScrollView(
-                                  child: TogglableButtons(
-                                  buttonList: tags,
-                                  selected: tagsSelected,
-                                  controller: tagController,
-                                  selectOnlyOne: true,
-                                  wrapChildren: true,
-                                ));
-                        } else {
-                          return Wrap(
-                            children: List.generate(7, (index) => index)
-                                .map(
-                                  (e) => Padding(
-                                    padding: const EdgeInsets.all(3),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Shimmer.fromColors(
-                                        enabled: true,
-                                        baseColor: Colors.grey,
-                                        highlightColor: Colors.white70,
-                                        child: Container(
-                                          height: 35,
-                                          width: 60,
-                                          color: Colors.black,
+            Expanded(
+              flex: 3,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Or",
+                        style: TextStyle(color: Colors.white, fontSize: 14),
+                      ),
+                    ],
+                  ),
+                  const Text(
+                    "Predefined Tags",
+                    style: TextStyle(color: Colors.white, fontSize: 14),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  tagController.text.length < 3
+                      ? const DottedContainer(
+                          "Similar tags will load as you start writing in the tag field.")
+                      : FutureBuilder(
+                          future: deviantArtProvider
+                              .getDeviantArtSeachTags(tagController.text),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final tags = snapshot.data!
+                                ..sort(
+                                  (a, b) => (a['name'] as String)
+                                      .length
+                                      .compareTo((b['name'] as String).length),
+                                );
+                              final tagsSelected =
+                                  List.generate(tags.length, (index) => false);
+                              return tags.isEmpty
+                                  ? const DottedContainer(
+                                      "No similar tags found for the corresponding tag")
+                                  : Expanded(
+                                      child: SingleChildScrollView(
+                                          child: TogglableButtons(
+                                        buttonList: tags,
+                                        selected: tagsSelected,
+                                        controller: tagController,
+                                        selectOnlyOne: true,
+                                        wrapChildren: true,
+                                      )),
+                                    );
+                            } else {
+                              return Wrap(
+                                children: List.generate(7, (index) => index)
+                                    .map(
+                                      (e) => Padding(
+                                        padding: const EdgeInsets.all(3),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: Shimmer.fromColors(
+                                            enabled: true,
+                                            baseColor: Colors.grey,
+                                            highlightColor: Colors.white70,
+                                            child: Container(
+                                              height: 35,
+                                              width: 60,
+                                              color: Colors.black,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                )
-                                .toList(),
-                          );
-                        }
-                      },
-                    ),
-                  ),
+                                    )
+                                    .toList(),
+                              );
+                            }
+                          },
+                        ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
