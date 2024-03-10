@@ -24,7 +24,7 @@ class _AddFolderDialogState extends State<AddFolderDialog> {
           padding: const EdgeInsets.all(20),
           height: 180,
           width: 300,
-          color: Colors.grey,
+          color: const Color.fromRGBO(50, 50, 50, 1),
           child: Form(
             key: _formKey,
             child: Column(
@@ -33,13 +33,17 @@ class _AddFolderDialogState extends State<AddFolderDialog> {
                 Expanded(
                   child: TextFormField(
                     autofocus: true,
+                    style: const TextStyle(color: Colors.white),
                     validator: (value) {
+                      // Check for empty string
                       if (value == null || value.isEmpty) {
-                        // Validate for empty string
                         return "Enter a valid name";
+                        // Check for system folder name
+                      } else if (value == "System | All") {
+                        return "This name is prohibited";
+                        // Check for duplicate folder names
                       } else if (favouritesProvider.favouriteFolders.keys
                           .contains(value)) {
-                        // Validate for folder duplicate
                         return "Folder already exists";
                       } else {
                         name = value;

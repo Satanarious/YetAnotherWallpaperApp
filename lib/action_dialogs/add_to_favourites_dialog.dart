@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/models/models.dart';
+import 'package:wallpaper_app/screens/favourites_screen.dart';
 import '../providers/favourites_provider.dart';
 
 class AddToFavouritesDialog extends StatefulWidget {
@@ -65,12 +66,30 @@ class _AddToFavouritesDialogState extends State<AddToFavouritesDialog> {
                   ),
                 ),
                 favourites.keys.isEmpty
-                    ? const Expanded(
+                    ? Expanded(
                         child: Center(
-                          child: Text(
-                            "Add folders in the favourites screen to proceed",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.grey, fontSize: 15),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Text(
+                                "Add folders in the favourites screen to proceed",
+                                textAlign: TextAlign.center,
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 15),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.of(context)
+                                    .pushNamed(FavouritesScreen.routeName),
+                                child: Text(
+                                  "Goto Favourites",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       )

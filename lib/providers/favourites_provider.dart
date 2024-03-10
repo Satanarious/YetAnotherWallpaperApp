@@ -14,14 +14,23 @@ class FavouritesProvider with ChangeNotifier {
     return _favouriteFolders;
   }
 
+  void removeWallpaperFromFolder(String folderName, Wallpaper wallpaper) {
+    _favouriteFolders[folderName]!.removeWallpaper(wallpaper);
+    notifyListeners();
+  }
+
   void addWallpaperToAllFolder(Wallpaper wallpaper) {
     _allFavourites.addWallpaper(wallpaper);
     notifyListeners();
   }
 
   bool removeWallpaperFromAllFolder(Wallpaper wallpaper) {
-    if (foldersWhereWallpaperExists(wallpaper).isEmpty) {
+    final folders = foldersWhereWallpaperExists(wallpaper);
+    if (folders.length < 2) {
       _allFavourites.removeWallpaper(wallpaper);
+      if (folders.isNotEmpty) {
+        _favouriteFolders[folders[0] as String]!.removeWallpaper(wallpaper);
+      }
       notifyListeners();
       return false;
     } else {
@@ -55,17 +64,18 @@ class FavouritesProvider with ChangeNotifier {
     if (foldersNeedWallpaper.isNotEmpty &&
         initialSelection.isEmpty &&
         !_allFavourites.data.contains(wallpaper)) {
-      _allFavourites.addWallpaper(wallpaper);
+      addWallpaperToAllFolder(wallpaper);
     }
-    // Add wallpaper to favourites folders
+
     for (var folderName in favouriteFolders.keys) {
+      // Add wallpaper to favourites folders
       if (foldersNeedWallpaper.contains(folderName)) {
         _favouriteFolders[folderName]!.addWallpaper(wallpaper);
       }
       // Remove wallpaper from favourites folders
       else if (initialSelection.contains(folderName) &&
-          !foldersNeedWallpaper.contains(folderName)) {
-        _favouriteFolders[folderName]!.removeWallpaper(wallpaper);
+          !selectedFavouriteFolders.contains(folderName)) {
+        removeWallpaperFromFolder(folderName, wallpaper);
       }
     }
     notifyListeners();

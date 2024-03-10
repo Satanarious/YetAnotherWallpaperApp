@@ -30,6 +30,7 @@ TODO:
             ✔ Limit history to x wallpapers @done(24-03-06 21:51)
         Favourites Screen:
             ✔ Add All folder for all favourites @done(24-03-02 05:23)
+            ☐ Add remove folder button
             ☐ Share folder as json
             ☐ Import/Export folder
             Open Favourite Folder Screen:
@@ -63,11 +64,12 @@ TODO:
                 ☐ Others...
 
     Chores:
-        ☐ Add subreddits with gifs
+        ☐ Add subreddits with gifs.
         ☐ Add reset button in all filter dialogs.
-        ☐ Shift Buttons to Top in filters
-        ☐ Add Logs
-        ☐ Search for random endpoints.
+        ☐ Shift Buttons to Top in filters.
+        ☐ Add Logs.
+        ☐ Add Undo snackbars.
+        ✘ Search for random endpoints. @cancelled(24-03-10 20:05)
         ✘ Make app bar scrollable in History/Favourites @started(24-03-09 10:37) @cancelled(24-03-09 10:55) @wasted(18m45s)
         ✔ Add Favourite Button on Grid Item @done(24-03-09 00:05)
         ✔ Change masonry grid view to display list without network @started(24-03-03 05:55) @done(24-03-03 06:37) @lasted(42m58s)

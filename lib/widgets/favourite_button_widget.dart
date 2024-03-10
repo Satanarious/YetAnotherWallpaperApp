@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallpaper_app/screens/favourite_wallpaper_grid_screen.dart';
 
 import '../action_dialogs/add_to_favourites_dialog.dart';
 import '../models/models.dart';
@@ -36,13 +37,28 @@ class _FavouriteButtonState extends State<FavouriteButton> {
             if (!isFavourite) {
               favouritesProvider.addWallpaperToAllFolder(widget.wallpaper);
             } else {
+              // Check and remove wallpaper in a single folder
               final cannotRemove = favouritesProvider
                   .removeWallpaperFromAllFolder(widget.wallpaper);
+              // When wallpaper exists in multiple folders
               if (cannotRemove) {
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content:
-                        Text("Attention:Remove from all folders to proceed")));
+                final folderName =
+                    ModalRoute.of(context)!.settings.arguments as String;
+                // When trying to remove from a favourites folder
+                if (ModalRoute.of(context)!.settings.name ==
+                        FavouriteWallpaperGridScreen.routeName &&
+                    folderName != "System | All") {
+                  favouritesProvider.removeWallpaperFromFolder(
+                      folderName, widget.wallpaper);
+                } else {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                          "Attention: Remove wallpaper from all folders to proceed"),
+                    ),
+                  );
+                }
               }
             }
             setState(() {});
