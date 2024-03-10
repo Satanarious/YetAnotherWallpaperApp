@@ -27,7 +27,9 @@ class _WallpaperActionsWidgetState extends State<WallpaperActionsWidget>
       ActionWidget(
         label: "Info",
         child: IconButton(
-          onPressed: () => showBottomSheet(
+          onPressed: () => showModalBottomSheet(
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
             context: context,
             builder: (context) => WallpaperInfoSheet(widget.wallpaper),
           ),
@@ -91,110 +93,6 @@ class _WallpaperActionsWidgetState extends State<WallpaperActionsWidget>
       height: 80,
       child: Column(
         children: [
-          // const Icon(
-          //   Icons.keyboard_arrow_down_sharp,
-          //   color: Colors.white,
-          // ),
-          // source == Sources.wallhaven
-          //     ? Padding(
-          //         padding: const EdgeInsets.symmetric(horizontal: 15),
-          //         child: Row(
-          //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //           mainAxisSize: MainAxisSize.max,
-          //           children: widget.wallpaper.colors!.map((color) {
-          //             final r =
-          //                 int.parse(color.substring(1, 3), radix: 16);
-          //             final g =
-          //                 int.parse(color.substring(3, 5), radix: 16);
-          //             final b =
-          //                 int.parse(color.substring(5), radix: 16);
-          //             return GestureDetector(
-          //               onTap: () {
-          //                 queryProvider.setWallhavenQuery(
-          //                     color: color.substring(1));
-          //                 wallpaperListProvider.emptyWallpaperList();
-          //                 scrollHandlingProvider.resetOffsets();
-          //                 Navigator.of(context).pop();
-          //               },
-          //               child: CircleAvatar(
-          //                 radius: 17,
-          //                 backgroundColor: Colors.white,
-          //                 child: CircleAvatar(
-          //                   radius: 15,
-          //                   backgroundColor:
-          //                       Color.fromRGBO(r, g, b, 1),
-          //                 ),
-          //               ),
-          //             );
-          //           }).toList(),
-          //         ),
-          //       )
-          //     : Expanded(
-          //         child: Padding(
-          //           padding:
-          //               const EdgeInsets.symmetric(horizontal: 5),
-          //           child: Column(
-          //             mainAxisSize: MainAxisSize.max,
-          //             mainAxisAlignment:
-          //                 MainAxisAlignment.spaceEvenly,
-          //             children: [
-          //               Text(
-          //                 widget.wallpaper.title!,
-          //                 textAlign: TextAlign.center,
-          //                 style: const TextStyle(
-          //                   color: Color.fromRGBO(255, 255, 255, 1),
-          //                   fontSize: 13,
-          //                 ),
-          //                 maxLines: 2,
-          //                 overflow: TextOverflow.ellipsis,
-          //               ),
-          //               Row(
-          //                 mainAxisSize: MainAxisSize.max,
-          //                 mainAxisAlignment:
-          //                     MainAxisAlignment.spaceEvenly,
-          //                 children: [
-          //                   SizedBox(
-          //                     width: 100,
-          //                     child: Text(
-          //                       "${widget.wallpaper.author}",
-          //                       textAlign: TextAlign.right,
-          //                       overflow: TextOverflow.ellipsis,
-          //                       style: const TextStyle(
-          //                         color: Colors.white,
-          //                         fontSize: 13,
-          //                       ),
-          //                     ),
-          //                   ),
-          //                   const Text(
-          //                     "  |  ",
-          //                     textAlign: TextAlign.center,
-          //                     style: TextStyle(
-          //                       color: Colors.white,
-          //                       fontSize: 13,
-          //                     ),
-          //                   ),
-          //                   GestureDetector(
-          //                     onTap: () => launchUrlString(
-          //                         widget.wallpaper.postUrl!),
-          //                     child: const SizedBox(
-          //                       width: 110,
-          //                       child: Text(
-          //                         "Open in Browser",
-          //                         textAlign: TextAlign.center,
-          //                         style: TextStyle(
-          //                           color: Colors.cyan,
-          //                           fontSize: 13,
-          //                         ),
-          //                       ),
-          //                     ),
-          //                   )
-          //                 ],
-          //               ),
-          //             ],
-          //           ),
-          //         ),
-          //       ),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: validButtons,
