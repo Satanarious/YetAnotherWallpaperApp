@@ -12,13 +12,9 @@ import '../screens/open_image_screen.dart';
 
 class MasonryGridWidget extends StatefulWidget {
   const MasonryGridWidget(
-      {this.wallpaperList,
-      this.listNeedsNetworkLoading = true,
-      this.showDeleteButton = false,
-      super.key});
+      {this.wallpaperList, this.listNeedsNetworkLoading = true, super.key});
   final bool listNeedsNetworkLoading;
   final WallpaperList? wallpaperList;
-  final bool showDeleteButton;
 
   @override
   State<MasonryGridWidget> createState() => _MasonryGridWidgetState();
@@ -132,7 +128,6 @@ class _MasonryGridWidgetState extends State<MasonryGridWidget>
                 child: ImagePreviewGridItem(
                   wallpaper: wallpapers[index],
                   height: height,
-                  showDeletButton: widget.showDeleteButton,
                 ),
               );
             });

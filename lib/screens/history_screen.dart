@@ -48,7 +48,6 @@ class HistoryScreen extends StatelessWidget {
           : MasonryGridWidget(
               listNeedsNetworkLoading: false,
               wallpaperList: history,
-              showDeleteButton: true,
             ),
     );
   }

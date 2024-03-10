@@ -30,7 +30,7 @@ TODO:
             ✔ Limit history to x wallpapers @done(24-03-06 21:51)
         Favourites Screen:
             ✔ Add All folder for all favourites @done(24-03-02 05:23)
-            ☐ Add remove folder button
+            ☐ Add 'Remove folder' button
             ☐ Share folder as json
             ☐ Import/Export folder
             Open Favourite Folder Screen:
@@ -76,7 +76,7 @@ TODO:
 
 FIXME:
     ☐ Tags loading on info sheet eveytime sheet is opened.
-    ☐ Unfavouriting wallpaper from folder shows "Attention: Remove wallpaper from all folders".
+    ✔ Unfavouriting wallpaper from folder shows "Attention: Remove wallpaper from all folders". @done(24-03-10 20:48)
     Bug:
         ✔ On wallpaper unfavourite, wallpaper appears in grid & folder (Favourite Screen) @started(24-03-03 08:13) @done(24-03-03 08:23) @lasted(10m3s)
         ✔ Favourites Dialog Ok/Remove button not animating @done(24-03-05 18:42)

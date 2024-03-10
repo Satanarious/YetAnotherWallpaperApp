@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/enums/file_type.dart';
 import 'package:wallpaper_app/providers/history_provider.dart';
+import 'package:wallpaper_app/screens/screens.dart';
 import 'package:wallpaper_app/widgets/favourite_button_widget.dart';
 
 import '../models/wallpaper.dart';
@@ -11,12 +12,10 @@ class ImagePreviewGridItem extends StatefulWidget {
   const ImagePreviewGridItem({
     required this.wallpaper,
     required this.height,
-    this.showDeletButton = false,
     super.key,
   });
   final Wallpaper wallpaper;
   final double height;
-  final bool showDeletButton;
 
   @override
   State<ImagePreviewGridItem> createState() => _ImagePreviewGridItemState();
@@ -41,6 +40,8 @@ class _ImagePreviewGridItemState extends State<ImagePreviewGridItem>
   late AnimationController _controller;
   @override
   Widget build(BuildContext context) {
+    final showDeletButton =
+        ModalRoute.of(context)!.settings.name == HistoryScreen.routeName;
     final isGif = widget.wallpaper.fileType == FileType.gif;
     return AnimatedBuilder(
       animation: _controller,
@@ -89,8 +90,8 @@ class _ImagePreviewGridItemState extends State<ImagePreviewGridItem>
               ),
             ),
             Positioned(
-              bottom: widget.showDeletButton ? null : 5,
-              top: widget.showDeletButton ? 5 : null,
+              bottom: showDeletButton ? null : 5,
+              top: showDeletButton ? 5 : null,
               right: 5,
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(25),
@@ -98,7 +99,7 @@ class _ImagePreviewGridItemState extends State<ImagePreviewGridItem>
                       width: 30,
                       height: 30,
                       color: Colors.black87,
-                      child: widget.showDeletButton
+                      child: showDeletButton
                           ? IconButton(
                               padding: const EdgeInsets.all(1),
                               onPressed: () => Provider.of<HistoryProvider>(
