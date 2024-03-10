@@ -248,8 +248,6 @@ class _RedditFilterDialogState extends State<RedditFilterDialog>
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isVertical = size.height > size.width;
     return Dialog(
         child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
@@ -257,7 +255,7 @@ class _RedditFilterDialogState extends State<RedditFilterDialog>
               color: const Color.fromRGBO(50, 50, 50, 1),
               padding: const EdgeInsetsDirectional.symmetric(
                   horizontal: 14, vertical: 10),
-              height: isVertical ? 380 : 340,
+              height: 360,
               width: 350,
               child: Column(
                 children: [

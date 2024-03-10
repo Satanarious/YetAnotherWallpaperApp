@@ -7,22 +7,23 @@ class SourceSelectorDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final orientation = MediaQuery.of(context).orientation;
     final sourceProvider = Provider.of<SourceProvider>(context, listen: false);
     final queryProvider = Provider.of<QueryProvider>(context, listen: false);
     final wallpaperListProvider =
         Provider.of<WallpaperListProvider>(context, listen: false);
-    final isVertical = size.height > size.width;
 
     return Dialog(
         child: ClipRRect(
       borderRadius: BorderRadius.circular(20),
       child: Container(
         color: const Color.fromRGBO(50, 50, 50, 1),
-        height: size.height * 0.4,
-        width: size.width * 0.7,
+        height: orientation == Orientation.portrait ? 400 : 200,
+        width: orientation == Orientation.portrait ? 300 : 600,
         child: ListView(
-          scrollDirection: isVertical ? Axis.vertical : Axis.horizontal,
+          scrollDirection: orientation == Orientation.portrait
+              ? Axis.vertical
+              : Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           children: sourceMaps.map((source) {
             final isSelected = source['value'] == sourceProvider.source;
@@ -37,7 +38,9 @@ class SourceSelectorDialog extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 child: Container(
                   color: isSelected ? Colors.white : null,
-                  width: isVertical ? double.infinity : 120,
+                  width: orientation == Orientation.portrait
+                      ? double.infinity
+                      : 120,
                   padding: const EdgeInsets.all(0.2),
                   child: Card(
                       color: source['colour'] as Color,

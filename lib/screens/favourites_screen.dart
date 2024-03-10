@@ -162,14 +162,9 @@ class FolderImagePreview extends StatelessWidget {
   final double right;
   final String? url;
 
+  static const itemHeight = 120.0;
   @override
   Widget build(BuildContext context) {
-    final media = MediaQuery.of(context);
-    final size = media.size;
-    final isVertical = size.height > size.width;
-    final itemHeight = isVertical
-        ? (size.width * size.width / size.height) - 70
-        : (size.height * size.height / size.width) - 45;
     return Positioned(
       top: top,
       left: right,

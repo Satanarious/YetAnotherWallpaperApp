@@ -95,8 +95,6 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
     final queryProvider = Provider.of<QueryProvider>(context, listen: false);
     final wallpaperListProvider =
         Provider.of<WallpaperListProvider>(context, listen: false);
-    final size = MediaQuery.of(context).size;
-    final isVertical = size.height > size.width;
     return Dialog(
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
@@ -104,7 +102,7 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
           color: const Color.fromRGBO(50, 50, 50, 1),
           padding: const EdgeInsetsDirectional.symmetric(
               horizontal: 14, vertical: 10),
-          height: isVertical ? 480 : 340,
+          height: 500,
           width: 350,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -66,7 +66,7 @@ TODO:
     Chores:
         ☐ Add subreddits with gifs.
         ☐ Add reset button in all filter dialogs.
-        ☐ Shift Buttons to Top in filters.
+        ☐ Shift Buttons to Top in filters(use icon buttons).
         ☐ Add Logs.
         ☐ Add Undo snackbars.
         ✘ Search for random endpoints. @cancelled(24-03-10 20:05)
@@ -78,14 +78,15 @@ FIXME:
     ☐ Tags loading on info sheet eveytime sheet is opened.
     ✔ Unfavouriting wallpaper from folder shows "Attention: Remove wallpaper from all folders". @done(24-03-10 20:48)
     Bug:
+        ☐ If images don't fill screen, load more doesn't work.
         ✔ On wallpaper unfavourite, wallpaper appears in grid & folder (Favourite Screen) @started(24-03-03 08:13) @done(24-03-03 08:23) @lasted(10m3s)
         ✔ Favourites Dialog Ok/Remove button not animating @done(24-03-05 18:42)
         ✔ Clear All button is favourites not working. @done(24-03-05 18:35)
         ✔ Clicking a tag in history or favourite screen doesn't return to home screen. @done(24-03-10 00:50)
     Responsiveness:
-        ☐ Grid layout responsiveness @low
-        ☐ Favourites folder icon responsiveness @low
-        ☐ Make widget and dialog sizes responsive @low
+        ✔ Grid layout responsiveness @done(24-03-11 01:08)
+        ✔ Favourites folder icon responsiveness @done(24-03-11 01:23)
+        ✘ Make widget and dialog sizes responsive @cancelled(24-03-11 01:08)
     
 
 

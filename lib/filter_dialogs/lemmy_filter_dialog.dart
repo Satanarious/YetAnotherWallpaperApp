@@ -130,8 +130,6 @@ class _LemmyFilterDialogState extends State<LemmyFilterDialog>
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isVertical = size.height > size.width;
     return Dialog(
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
@@ -139,7 +137,7 @@ class _LemmyFilterDialogState extends State<LemmyFilterDialog>
           color: const Color.fromRGBO(50, 50, 50, 1),
           padding: const EdgeInsetsDirectional.symmetric(
               horizontal: 14, vertical: 10),
-          height: isVertical ? 380 : 340,
+          height: 380,
           width: 350,
           child: Column(
             children: [

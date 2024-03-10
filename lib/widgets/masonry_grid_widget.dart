@@ -23,16 +23,17 @@ class MasonryGridWidget extends StatefulWidget {
 class _MasonryGridWidgetState extends State<MasonryGridWidget>
     with AutomaticKeepAliveClientMixin {
   final _scrollController = ScrollController();
+
   @override
   bool get wantKeepAlive => true;
+  static const targetWidth = 200.0;
+  bool _loading = false;
 
   double calculateHeight(int imageHeight, int imageWidth, double targetWidth) {
     final aspectRatio = imageWidth / imageHeight;
     final targetHeight = targetWidth / aspectRatio;
     return targetHeight;
   }
-
-  bool _loading = false;
 
   void _loadWallpapers() async {
     final source = Provider.of<SourceProvider>(context, listen: false).source;
@@ -62,8 +63,9 @@ class _MasonryGridWidgetState extends State<MasonryGridWidget>
     return LayoutBuilder(
       builder: (context, constraints) {
         final BoxConstraints layoutConstraints = constraints;
-        final crossAxisCount = layoutConstraints.maxWidth ~/ 150;
+        final crossAxisCount = layoutConstraints.maxWidth ~/ targetWidth;
         final masonryGrid = MasonryGridView.builder(
+            physics: const ScrollPhysics(),
             padding: const EdgeInsets.only(top: 0),
             controller: _scrollController,
             gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
@@ -76,7 +78,7 @@ class _MasonryGridWidgetState extends State<MasonryGridWidget>
               final height = calculateHeight(
                 wallpapers[index].dimensionY ?? [1920, 1600][index % 2],
                 wallpapers[index].dimensionX ?? [1080, 800][index % 2],
-                layoutConstraints.maxWidth / 2,
+                targetWidth,
               ).clamp(0, layoutConstraints.maxHeight * 0.7).toDouble();
 
               // return blurNSFW && wallpapers[index].purity == PurityType.adult
