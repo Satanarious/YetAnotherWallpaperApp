@@ -70,6 +70,7 @@ TODO:
         ☐ Shift Buttons to Top in filters(use icon buttons). @today
         ☐ Add Logs.
         ☐ Add Undo snackbars.
+        ☐ Save Filters/Query/History/Favourites. @today
         ✔ Increase favourite button size @started(24-03-11 11:05) @done(24-03-11 11:12) @lasted(7m19s)
         ✔ Change Delete button icon @started(24-03-11 11:12) @done(24-03-11 11:26) @lasted(14m11s)
         ✔ Create clear all history button @started(24-03-11 11:26) @done(24-03-11 11:36) @lasted(10m37s)
@@ -82,7 +83,7 @@ FIXME:
     ☐ Tags loading on info sheet eveytime sheet is opened. @today
     ✔ Unfavouriting wallpaper from folder shows "Attention: Remove wallpaper from all folders". @done(24-03-10 20:48)
     Bug:
-        ☐ If images don't fill screen, load more doesn't work. @today
+        ✔ If images don't fill screen, load more doesn't work. @done(24-03-11 21:00)
         ✔ On wallpaper unfavourite, wallpaper appears in grid & folder (Favourite Screen) @started(24-03-03 08:13) @done(24-03-03 08:23) @lasted(10m3s)
         ✔ Favourites Dialog Ok/Remove button not animating @done(24-03-05 18:42)
         ✔ Clear All button is favourites not working. @done(24-03-05 18:35)

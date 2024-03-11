@@ -53,6 +53,7 @@ class _MasonryGridWidgetState extends State<MasonryGridWidget>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
     final wallpapers = widget.listNeedsNetworkLoading
         ? Provider.of<WallpaperListProvider>(context).wallpapers.data
         : widget.wallpaperList!.data;
@@ -64,8 +65,8 @@ class _MasonryGridWidgetState extends State<MasonryGridWidget>
         final BoxConstraints layoutConstraints = constraints;
         final crossAxisCount = layoutConstraints.maxWidth ~/ targetWidth;
         final masonryGrid = MasonryGridView.builder(
-            physics: const ScrollPhysics(),
             padding: const EdgeInsets.only(top: 0),
+            physics: const AlwaysScrollableScrollPhysics(),
             controller: _scrollController,
             gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: crossAxisCount,
@@ -136,14 +137,18 @@ class _MasonryGridWidgetState extends State<MasonryGridWidget>
         return Container(
           color: const Color.fromRGBO(50, 50, 50, 1),
           child: widget.listNeedsNetworkLoading
-              ? NotificationListener<ScrollUpdateNotification>(
+              ? NotificationListener<ScrollNotification>(
                   onNotification: (notification) {
-                    if (notification.metrics.pixels ==
-                        notification.metrics.maxScrollExtent) {
+                    if (notification is ScrollEndNotification &&
+                        notification.metrics.pixels ==
+                            notification.metrics.maxScrollExtent) {
                       _loadWallpapers();
                     }
-                    Provider.of<ScrollHandlingProvider>(context, listen: false)
-                        .setScrollOffset(notification.metrics.pixels);
+                    if (notification is ScrollUpdateNotification) {
+                      Provider.of<ScrollHandlingProvider>(context,
+                              listen: false)
+                          .setScrollOffset(notification.metrics.pixels);
+                    }
 
                     return true;
                   },
