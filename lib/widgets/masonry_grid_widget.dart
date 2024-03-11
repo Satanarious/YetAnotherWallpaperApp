@@ -53,7 +53,6 @@ class _MasonryGridWidgetState extends State<MasonryGridWidget>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
     final wallpapers = widget.listNeedsNetworkLoading
         ? Provider.of<WallpaperListProvider>(context).wallpapers.data
         : widget.wallpaperList!.data;

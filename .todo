@@ -3,6 +3,7 @@ TODO:
         Local Filters:
             ☐ Resolution Filter
             ☐ Orientation Filter
+            ☐ Gif filter
         Settings Screen:
             ☐ Blur NSFW/Sketchy wallpapers
             ☐ Change default source
@@ -61,24 +62,27 @@ TODO:
                 ✔ Size @done(24-03-05 13:13)
                 ✔ Tags @done(24-03-06 21:03)
                 ✘ Uploader Info (Click to search) @started(24-03-06 21:04) @cancelled(24-03-06 21:14) @wasted(10m19s)
-                ☐ Others...
+                ☐ Dynamic minimum width @today
 
     Chores:
         ☐ Add subreddits with gifs.
         ☐ Add reset button in all filter dialogs.
-        ☐ Shift Buttons to Top in filters(use icon buttons).
+        ☐ Shift Buttons to Top in filters(use icon buttons). @today
         ☐ Add Logs.
         ☐ Add Undo snackbars.
+        ✔ Increase favourite button size @started(24-03-11 11:05) @done(24-03-11 11:12) @lasted(7m19s)
+        ✔ Change Delete button icon @started(24-03-11 11:12) @done(24-03-11 11:26) @lasted(14m11s)
+        ✔ Create clear all history button @started(24-03-11 11:26) @done(24-03-11 11:36) @lasted(10m37s)
         ✘ Search for random endpoints. @cancelled(24-03-10 20:05)
         ✘ Make app bar scrollable in History/Favourites @started(24-03-09 10:37) @cancelled(24-03-09 10:55) @wasted(18m45s)
         ✔ Add Favourite Button on Grid Item @done(24-03-09 00:05)
         ✔ Change masonry grid view to display list without network @started(24-03-03 05:55) @done(24-03-03 06:37) @lasted(42m58s)
 
 FIXME:
-    ☐ Tags loading on info sheet eveytime sheet is opened.
+    ☐ Tags loading on info sheet eveytime sheet is opened. @today
     ✔ Unfavouriting wallpaper from folder shows "Attention: Remove wallpaper from all folders". @done(24-03-10 20:48)
     Bug:
-        ☐ If images don't fill screen, load more doesn't work.
+        ☐ If images don't fill screen, load more doesn't work. @today
         ✔ On wallpaper unfavourite, wallpaper appears in grid & folder (Favourite Screen) @started(24-03-03 08:13) @done(24-03-03 08:23) @lasted(10m3s)
         ✔ Favourites Dialog Ok/Remove button not animating @done(24-03-05 18:42)
         ✔ Clear All button is favourites not working. @done(24-03-05 18:35)

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/screens/favourite_wallpaper_grid_screen.dart';
+import 'package:wallpaper_app/screens/open_image_screen.dart';
 
 import '../action_dialogs/add_to_favourites_dialog.dart';
 import '../models/models.dart';
@@ -9,12 +10,10 @@ import '../providers/favourites_provider.dart';
 class FavouriteButton extends StatefulWidget {
   const FavouriteButton({
     required this.wallpaper,
-    required this.size,
     super.key,
   });
 
   final Wallpaper wallpaper;
-  final double size;
 
   @override
   State<FavouriteButton> createState() => _FavouriteButtonState();
@@ -26,9 +25,11 @@ class _FavouriteButtonState extends State<FavouriteButton> {
     final favouritesProvider = Provider.of<FavouritesProvider>(context);
     final isFavourite =
         favouritesProvider.allFavourites.data.contains(widget.wallpaper);
+    final isOpenImageScreen =
+        ModalRoute.of(context)!.settings.name == OpenImageScreen.routeName;
     return SizedBox(
-      width: widget.size == 20 ? 30 : 46,
-      height: widget.size == 20 ? 30 : 46,
+      width: isOpenImageScreen ? 46 : 40,
+      height: isOpenImageScreen ? 46 : 40,
       child: Material(
         color: Colors.transparent,
         child: InkWell(
@@ -42,14 +43,13 @@ class _FavouriteButtonState extends State<FavouriteButton> {
                   .removeWallpaperFromAllFolder(widget.wallpaper);
               // When wallpaper exists in multiple folders
               if (cannotRemove) {
-                final folderName =
-                    ModalRoute.of(context)!.settings.arguments as String;
+                final folderName = ModalRoute.of(context)!.settings.arguments;
                 // When trying to remove from a favourites folder
                 if (ModalRoute.of(context)!.settings.name ==
                         FavouriteWallpaperGridScreen.routeName &&
                     folderName != "System | All") {
                   favouritesProvider.removeWallpaperFromFolder(
-                      folderName, widget.wallpaper);
+                      folderName as String, widget.wallpaper);
                 } else {
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -71,7 +71,7 @@ class _FavouriteButtonState extends State<FavouriteButton> {
           },
           child: Icon(
             isFavourite ? Icons.favorite : Icons.favorite_outline,
-            size: widget.size,
+            size: isOpenImageScreen ? 30 : 25,
             color: Colors.white,
           ),
         ),

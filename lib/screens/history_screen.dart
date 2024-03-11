@@ -10,7 +10,7 @@ class HistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final history = Provider.of<HistoryProvider>(context).history;
+    final historyProvider = Provider.of<HistoryProvider>(context);
     return Scaffold(
       backgroundColor: const Color.fromRGBO(50, 50, 50, 1),
       appBar: AppBar(
@@ -18,6 +18,37 @@ class HistoryScreen extends StatelessWidget {
           "History",
           style: TextStyle(color: Colors.white),
         ),
+        actions: [
+          IconButton(
+              onPressed: () => showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      backgroundColor: const Color.fromRGBO(50, 50, 50, 1),
+                      title: const Text(
+                        "Clear History",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      content: const Text(
+                        "Are you sure you want to clear the history?",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: Navigator.of(context).pop,
+                          child: const Text("No"),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            historyProvider.clearAllHistory();
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("Yes"),
+                        ),
+                      ],
+                    ),
+                  ),
+              icon: const Icon(Icons.clear_all_rounded, color: Colors.white))
+        ],
         backgroundColor: const Color.fromRGBO(50, 50, 50, 1),
         leading: IconButton(
           icon: const Icon(
@@ -27,7 +58,7 @@ class HistoryScreen extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: history.data.isEmpty
+      body: historyProvider.history.data.isEmpty
           ? Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -47,7 +78,7 @@ class HistoryScreen extends StatelessWidget {
             )
           : MasonryGridWidget(
               listNeedsNetworkLoading: false,
-              wallpaperList: history,
+              wallpaperList: historyProvider.history,
             ),
     );
   }

@@ -9,6 +9,11 @@ class HistoryProvider with ChangeNotifier {
     return _history;
   }
 
+  void clearAllHistory() {
+    _history.data.clear();
+    notifyListeners();
+  }
+
   void addToHistory(Wallpaper wallpaper) {
     // Ignore if wallpaper already exists in history
     if (_history.data.contains(wallpaper)) return;

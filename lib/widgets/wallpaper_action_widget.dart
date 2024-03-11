@@ -69,11 +69,9 @@ class _WallpaperActionsWidgetState extends State<WallpaperActionsWidget>
       ),
       ActionWidget(label: "Download", child: DownloadButton(widget.wallpaper)),
       ActionWidget(
-          label: "Favourite",
-          child: FavouriteButton(
-            wallpaper: widget.wallpaper,
-            size: 30,
-          )),
+        label: "Favourite",
+        child: FavouriteButton(wallpaper: widget.wallpaper),
+      ),
     ];
     late List<Widget> validButtons;
     if (source == Sources.wallhaven) {

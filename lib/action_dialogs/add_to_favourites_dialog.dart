@@ -40,14 +40,13 @@ class _AddToFavouritesDialogState extends State<AddToFavouritesDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final favouritesProvider =
-        Provider.of<FavouritesProvider>(context, listen: false);
+    final favouritesProvider = Provider.of<FavouritesProvider>(context);
     final favourites = favouritesProvider.favouriteFolders;
 
     return Dialog(
       child: SizedBox(
-        height: height / 3,
+        height: 270,
+        width: 360,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
           child: Container(

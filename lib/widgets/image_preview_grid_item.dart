@@ -94,27 +94,25 @@ class _ImagePreviewGridItemState extends State<ImagePreviewGridItem>
               top: showDeletButton ? 5 : null,
               right: 5,
               child: ClipRRect(
-                  borderRadius: BorderRadius.circular(25),
-                  child: Container(
-                      width: 30,
-                      height: 30,
-                      color: Colors.black87,
-                      child: showDeletButton
-                          ? IconButton(
-                              padding: const EdgeInsets.all(1),
-                              onPressed: () => Provider.of<HistoryProvider>(
-                                      context,
-                                      listen: false)
-                                  .removeFromHistory(widget.wallpaper),
-                              icon: const Icon(
-                                Icons.cancel_outlined,
-                                color: Colors.white,
-                                size: 20,
-                              ))
-                          : FavouriteButton(
-                              wallpaper: widget.wallpaper,
-                              size: 20,
-                            ))),
+                borderRadius: BorderRadius.circular(25),
+                child: Container(
+                  width: showDeletButton ? 25 : 40,
+                  height: showDeletButton ? 25 : 40,
+                  color: Colors.black87,
+                  child: showDeletButton
+                      ? IconButton(
+                          padding: const EdgeInsets.all(1),
+                          onPressed: () => Provider.of<HistoryProvider>(context,
+                                  listen: false)
+                              .removeFromHistory(widget.wallpaper),
+                          icon: const Icon(
+                            Icons.close,
+                            color: Colors.white,
+                            size: 15,
+                          ))
+                      : FavouriteButton(wallpaper: widget.wallpaper),
+                ),
+              ),
             ),
             Positioned(
               bottom: 2,
