@@ -23,13 +23,17 @@ class _WallpaperActionsWidgetState extends State<WallpaperActionsWidget>
     final source = Provider.of<SourceProvider>(context, listen: false).source;
     final scrollHandlingProvider =
         Provider.of<ScrollHandlingProvider>(context, listen: false);
+    final size = MediaQuery.of(context).size;
     final buttons = <ActionWidget>[
       ActionWidget(
         label: "Info",
         child: IconButton(
-          onPressed: () => showModalBottomSheet(
-            isScrollControlled: true,
+          onPressed: () => showBottomSheet(
             backgroundColor: Colors.transparent,
+            constraints: BoxConstraints(
+              maxHeight: size.height * 0.9,
+              maxWidth: 500,
+            ),
             context: context,
             builder: (context) => WallpaperInfoSheet(widget.wallpaper),
           ),
