@@ -23,6 +23,7 @@ class HomeScreen extends StatelessWidget {
           currentBackPressTime = now;
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text('Press back again to exit'),
+            backgroundColor: Color.fromRGBO(50, 50, 50, 1),
             duration: Duration(seconds: 2),
           ));
         } else {

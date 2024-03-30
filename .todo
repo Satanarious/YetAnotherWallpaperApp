@@ -62,12 +62,12 @@ TODO:
                 ✔ Size @done(24-03-05 13:13)
                 ✔ Tags @done(24-03-06 21:03)
                 ✘ Uploader Info (Click to search) @started(24-03-06 21:04) @cancelled(24-03-06 21:14) @wasted(10m19s)
-                ☐ Dynamic minimum width @today
+                ✔ Dynamic minimum width @done(24-03-11 21:42)
 
     Chores:
         ☐ Add subreddits with gifs.
         ☐ Add reset button in all filter dialogs.
-        ☐ Shift Buttons to Top in filters(use icon buttons). @today
+        ✘ Shift Buttons to Top in filters(use icon buttons). @cancelled(24-03-11 21:56)
         ☐ Add Logs.
         ☐ Add Undo snackbars.
         ☐ Save Filters/Query/History/Favourites. @today
@@ -80,7 +80,7 @@ TODO:
         ✔ Change masonry grid view to display list without network @started(24-03-03 05:55) @done(24-03-03 06:37) @lasted(42m58s)
 
 FIXME:
-    ☐ Tags loading on info sheet eveytime sheet is opened. @today
+    ☐ Tags loading on info sheet eveytime sheet is opened.
     ✔ Unfavouriting wallpaper from folder shows "Attention: Remove wallpaper from all folders". @done(24-03-10 20:48)
     Bug:
         ✔ If images don't fill screen, load more doesn't work. @done(24-03-11 21:00)

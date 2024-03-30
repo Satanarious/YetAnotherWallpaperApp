@@ -19,6 +19,22 @@ class CommunityListWidget extends StatefulWidget {
 
 class _CommunityListWidgetState extends State<CommunityListWidget> {
   var searchQuery = '';
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    _scrollController = ScrollController();
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Scroll animation after list builds
+      _scrollController.jumpTo(100);
+      _scrollController.animateTo(
+        -100,
+        duration: const Duration(milliseconds: 800),
+        curve: Curves.decelerate,
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +76,7 @@ class _CommunityListWidgetState extends State<CommunityListWidget> {
             Expanded(
               child: ListView.builder(
                 itemCount: filteredList.length,
+                controller: _scrollController,
                 itemBuilder: (context, index) => Card(
                   color: Colors.black54,
                   elevation: 6,

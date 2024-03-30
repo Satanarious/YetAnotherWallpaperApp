@@ -84,14 +84,11 @@ class _DeviantArtFilterDialogState extends State<DeviantArtFilterDialog> {
                               ),
                               SizedBox(
                                 height: 290,
-                                child: TabBarView(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    children: [
-                                      TagTab(matureContent),
-                                      TopicTab(matureContent),
-                                      QueryTab(matureContent),
-                                    ]),
+                                child: TabBarView(children: [
+                                  TagTab(matureContent),
+                                  TopicTab(matureContent),
+                                  QueryTab(matureContent),
+                                ]),
                               )
                             ],
                           ),
