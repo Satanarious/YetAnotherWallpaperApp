@@ -37,6 +37,12 @@ class _CommunityListWidgetState extends State<CommunityListWidget> {
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var filteredList = searchQuery.isEmpty
         ? widget.communityList

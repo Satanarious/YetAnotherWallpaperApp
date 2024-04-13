@@ -85,9 +85,17 @@ class _DeviantArtFilterDialogState extends State<DeviantArtFilterDialog> {
                               SizedBox(
                                 height: 290,
                                 child: TabBarView(children: [
-                                  TagTab(matureContent),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: TagTab(matureContent),
+                                  ),
                                   TopicTab(matureContent),
-                                  QueryTab(matureContent),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: QueryTab(matureContent),
+                                  ),
                                 ]),
                               )
                             ],
@@ -125,6 +133,13 @@ class _TopicTabState extends State<TopicTab>
     topicController = TextEditingController();
     tabController = TabController(length: 2, vsync: this);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    topicController.dispose();
+    super.dispose();
   }
 
   @override
@@ -313,6 +328,12 @@ class _TagTabState extends State<TagTab> {
   void initState() {
     tagController = TextEditingController();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    tagController.dispose();
+    super.dispose();
   }
 
   void _onSearchChanged(String value) {

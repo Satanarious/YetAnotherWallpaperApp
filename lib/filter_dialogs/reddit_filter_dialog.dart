@@ -247,6 +247,12 @@ class _RedditFilterDialogState extends State<RedditFilterDialog>
   }
 
   @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Dialog(
         child: ClipRRect(

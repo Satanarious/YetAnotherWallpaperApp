@@ -51,6 +51,12 @@ class _MasonryGridWidgetState extends State<MasonryGridWidget>
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
 

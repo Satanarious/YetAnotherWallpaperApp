@@ -129,6 +129,12 @@ class _LemmyFilterDialogState extends State<LemmyFilterDialog>
   }
 
   @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Dialog(
       child: ClipRRect(

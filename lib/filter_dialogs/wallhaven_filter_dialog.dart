@@ -91,6 +91,12 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
   }
 
   @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final queryProvider = Provider.of<QueryProvider>(context, listen: false);
     final wallpaperListProvider =
