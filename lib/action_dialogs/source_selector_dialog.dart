@@ -2,8 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:wallpaper_app/providers/providers.dart';
 import 'package:provider/provider.dart';
 
-class SourceSelectorDialog extends StatelessWidget {
+class SourceSelectorDialog extends StatefulWidget {
   const SourceSelectorDialog({super.key});
+
+  @override
+  State<SourceSelectorDialog> createState() => _SourceSelectorDialogState();
+}
+
+class _SourceSelectorDialogState extends State<SourceSelectorDialog> {
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    _scrollController = ScrollController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Scroll animation after list builds
+      _scrollController.jumpTo(100);
+      _scrollController.animateTo(
+        -100,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.decelerate,
+      );
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +49,7 @@ class SourceSelectorDialog extends StatelessWidget {
         height: orientation == Orientation.portrait ? 400 : 200,
         width: orientation == Orientation.portrait ? 300 : 600,
         child: ListView(
+          controller: _scrollController,
           scrollDirection: orientation == Orientation.portrait
               ? Axis.vertical
               : Axis.horizontal,

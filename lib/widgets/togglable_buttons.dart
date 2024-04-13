@@ -21,6 +21,33 @@ class TogglableButtons extends StatefulWidget {
 }
 
 class _TogglableButtonsState extends State<TogglableButtons> {
+  late ScrollController? _scrollController;
+
+  @override
+  void initState() {
+    if (widget.buttonList.length > 3 && !widget.wrapChildren) {
+      _scrollController = ScrollController();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        // Scroll animation after list builds
+        _scrollController!.jumpTo(50);
+        _scrollController!.animateTo(
+          -50,
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.decelerate,
+        );
+      });
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (widget.buttonList.length > 3 && !widget.wrapChildren) {
+      _scrollController!.dispose();
+    }
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final children =
@@ -97,7 +124,9 @@ class _TogglableButtonsState extends State<TogglableButtons> {
           );
     return widget.buttonList.length > 3 && !widget.wrapChildren
         ? SingleChildScrollView(
-            scrollDirection: Axis.horizontal, child: toggleButtons)
+            controller: _scrollController,
+            scrollDirection: Axis.horizontal,
+            child: toggleButtons)
         : toggleButtons;
   }
 }

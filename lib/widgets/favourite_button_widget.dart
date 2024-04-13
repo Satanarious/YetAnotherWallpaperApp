@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/screens/favourite_wallpaper_grid_screen.dart';
@@ -19,9 +21,28 @@ class FavouriteButton extends StatefulWidget {
   State<FavouriteButton> createState() => _FavouriteButtonState();
 }
 
-class _FavouriteButtonState extends State<FavouriteButton> {
+class _FavouriteButtonState extends State<FavouriteButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  @override
+  void initState() {
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final Animation<double> rotationAnimation =
+        Tween<double>(begin: 0, end: pi * 0.3).animate(_controller);
     final favouritesProvider = Provider.of<FavouritesProvider>(context);
     final isFavourite =
         favouritesProvider.allFavourites.data.contains(widget.wallpaper);
@@ -35,6 +56,7 @@ class _FavouriteButtonState extends State<FavouriteButton> {
         child: InkWell(
           borderRadius: BorderRadius.circular(25),
           onTap: () {
+            _controller.forward(from: 0);
             if (!isFavourite) {
               favouritesProvider.addWallpaperToAllFolder(widget.wallpaper);
             } else {
@@ -69,10 +91,17 @@ class _FavouriteButtonState extends State<FavouriteButton> {
               builder: (context) => AddToFavouritesDialog(widget.wallpaper),
             );
           },
-          child: Icon(
-            isFavourite ? Icons.favorite : Icons.favorite_outline,
-            size: isOpenImageScreen ? 30 : 25,
-            color: Colors.white,
+          child: AnimatedBuilder(
+            animation: rotationAnimation,
+            builder: (context, child) => Transform(
+              transform: Matrix4.rotationY(rotationAnimation.value * 2 * pi),
+              alignment: Alignment.center,
+              child: Icon(
+                isFavourite ? Icons.favorite : Icons.favorite_outline,
+                size: isOpenImageScreen ? 30 : 25,
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
       ),
