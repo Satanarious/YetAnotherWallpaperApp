@@ -3,10 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:wallpaper_app/home_screen.dart';
+import 'package:wallpaper_app/models/wallpaper.dart';
 import 'package:wallpaper_app/providers/providers.dart';
 import 'package:wallpaper_app/providers/wallhaven_provider.dart';
-
-import '../models/wallpaper.dart';
 
 class WallpaperInfoSheet extends StatefulWidget {
   const WallpaperInfoSheet(this.wallpaper, {super.key});

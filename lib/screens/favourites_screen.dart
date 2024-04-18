@@ -2,10 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/action_dialogs/add_folder_dialog.dart';
+import 'package:wallpaper_app/models/wallpaper_list.dart';
 import 'package:wallpaper_app/providers/favourites_provider.dart';
 import 'package:wallpaper_app/screens/favourite_wallpaper_grid_screen.dart';
-
-import '../models/wallpaper_list.dart';
 
 class FavouritesScreen extends StatelessWidget {
   const FavouritesScreen({super.key});

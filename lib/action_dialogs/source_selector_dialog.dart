@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wallpaper_app/providers/providers.dart';
 import 'package:provider/provider.dart';
+import 'package:wallpaper_app/providers/providers.dart';
 
 class SourceSelectorDialog extends StatefulWidget {
   const SourceSelectorDialog({super.key});

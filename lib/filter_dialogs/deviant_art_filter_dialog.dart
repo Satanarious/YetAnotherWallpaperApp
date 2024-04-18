@@ -4,10 +4,9 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:wallpaper_app/providers/providers.dart';
 import 'package:wallpaper_app/widgets/community_list_widget.dart';
 import 'package:wallpaper_app/widgets/togglable_buttons.dart';
-
-import '../providers/providers.dart';
 
 class DeviantArtFilterDialog extends StatefulWidget {
   const DeviantArtFilterDialog({super.key});

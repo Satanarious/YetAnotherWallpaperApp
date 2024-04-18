@@ -1,14 +1,18 @@
+// ignore: unused_import
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
+// ignore: unused_import
 import 'package:wallpaper_app/enums/file_type.dart';
+// ignore: unused_import
 import 'package:wallpaper_app/enums/purity.dart';
 import 'package:wallpaper_app/models/wallpaper_list.dart';
 import 'package:wallpaper_app/providers/history_provider.dart';
-import 'image_preview_grid_item.dart';
-import '../providers/providers.dart';
-import '../screens/open_image_screen.dart';
+import 'package:wallpaper_app/providers/providers.dart';
+import 'package:wallpaper_app/screens/open_image_screen.dart';
+import 'package:wallpaper_app/widgets/image_preview_grid_item.dart';
 
 class MasonryGridWidget extends StatefulWidget {
   const MasonryGridWidget(

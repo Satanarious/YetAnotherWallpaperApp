@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:wallpaper_app/widgets/togglable_buttons.dart';
 import 'package:provider/provider.dart';
-import '../providers/query_provider.dart';
-import '../providers/wallpaper_list_provider.dart';
-import '../widgets/community_list_widget.dart';
+import 'package:wallpaper_app/providers/query_provider.dart';
+import 'package:wallpaper_app/providers/wallpaper_list_provider.dart';
+import 'package:wallpaper_app/widgets/community_list_widget.dart';
+import 'package:wallpaper_app/widgets/togglable_buttons.dart';
 
 class RedditFilterDialog extends StatefulWidget {
   const RedditFilterDialog({super.key});

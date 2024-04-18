@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 
 class Thumbs extends Equatable {
@@ -50,16 +52,42 @@ class Thumbs extends Equatable {
         small: thumbImages[0]['src'],
       );
 
-  Map<String, dynamic> toJson() => {
-        'large': large,
-        'original': original,
-        'small': small,
-      };
-
   @override
-  List<Object?> get props => [large, original, small];
+  List<Object> get props => [large, original, small];
 
   @override
   String toString() =>
       'Thumbs(large: $large, original: $original, small: $small)';
+
+  Thumbs copyWith({
+    String? large,
+    String? original,
+    String? small,
+  }) {
+    return Thumbs(
+      large: large ?? this.large,
+      original: original ?? this.original,
+      small: small ?? this.small,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'large': large,
+      'original': original,
+      'small': small,
+    };
+  }
+
+  factory Thumbs.fromMap(Map<String, dynamic> map) {
+    return Thumbs(
+      large: map['large'] ?? '',
+      original: map['original'] ?? '',
+      small: map['small'] ?? '',
+    );
+  }
+
+  factory Thumbs.fromJson(String source) => Thumbs.fromMap(json.decode(source));
+
+  String toJson() => json.encode(toMap());
 }

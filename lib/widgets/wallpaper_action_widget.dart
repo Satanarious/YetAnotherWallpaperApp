@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallpaper_app/models/wallpaper.dart';
+import 'package:wallpaper_app/providers/providers.dart';
+import 'package:wallpaper_app/widgets/favourite_button_widget.dart';
 import 'package:wallpaper_app/widgets/wallpaper_info_sheet.dart';
-import '../providers/providers.dart';
-import '../models/wallpaper.dart';
-import 'favourite_button_widget.dart';
 
 class WallpaperActionsWidget extends StatefulWidget {
   const WallpaperActionsWidget(this.wallpaper, {super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../models/models.dart';
-import '../apis/api_client.dart';
-import '../providers/source_provider.dart';
+import 'package:wallpaper_app/apis/api_client.dart';
+import 'package:wallpaper_app/models/models.dart';
+import 'package:wallpaper_app/providers/source_provider.dart';
 
 class WallpaperListProvider with ChangeNotifier {
   // ignore: prefer_const_constructors, prefer_const_literals_to_create_immutables

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:wallpaper_app/action_dialogs/source_selector_dialog.dart';
+import 'package:wallpaper_app/filter_dialogs/filter_dialogs.dart';
+import 'package:wallpaper_app/providers/providers.dart';
 import 'package:wallpaper_app/screens/screens.dart';
-import 'providers/providers.dart';
-import '../action_dialogs/source_selector_dialog.dart';
-import './filter_dialogs/filter_dialogs.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

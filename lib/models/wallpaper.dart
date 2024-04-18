@@ -1,27 +1,30 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
+import 'package:gal/gal.dart';
+import 'package:http/http.dart' as http;
+import 'package:uuid/uuid.dart';
 import 'package:wallpaper_app/enums/file_type.dart';
 import 'package:wallpaper_app/enums/purity.dart';
-import '../providers/source_provider.dart';
-import './models.dart';
-import 'package:gal/gal.dart';
-import 'package:uuid/uuid.dart';
-import 'package:http/http.dart' as http;
+import 'package:wallpaper_app/models/thumbs.dart';
+import 'package:wallpaper_app/providers/source_provider.dart';
 
 class Wallpaper extends Equatable {
   const Wallpaper({
     this.title,
     this.author,
-    this.postUrl,
-    this.dimensionX,
-    this.dimensionY,
-    this.colors,
-    this.source,
     required this.id,
     required this.url,
+    this.postUrl,
     required this.purity,
+    this.dimensionX,
+    this.dimensionY,
     required this.fileSize,
     required this.fileType,
+    this.colors,
     required this.thumbs,
+    this.source,
   });
 
   factory Wallpaper.fromWallhavenJson(Map<String, dynamic> json) => Wallpaper(
@@ -173,21 +176,99 @@ class Wallpaper extends Equatable {
       fileType: FileType.invalid,
       thumbs: Thumbs.empty);
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'url': url,
-        'purity': purity,
-        'dimension_x': dimensionX,
-        'dimension_y': dimensionY,
-        'file_size': fileSize,
-        'file_type': fileType,
-        'thumbs': thumbs.toJson(),
-      };
+  @override
+  List<Object?> get props {
+    return [
+      title,
+      author,
+      id,
+      url,
+      postUrl,
+      purity,
+      dimensionX,
+      dimensionY,
+      fileSize,
+      fileType,
+      colors,
+      thumbs,
+      source,
+    ];
+  }
 
   @override
-  List<Object?> get props => [id];
+  String toString() {
+    return 'Wallpaper(title: $title, author: $author, id: $id, url: $url, postUrl: $postUrl, purity: $purity, dimensionX: $dimensionX, dimensionY: $dimensionY, fileSize: $fileSize, fileType: $fileType, colors: $colors, thumbs: $thumbs, source: $source)';
+  }
 
-  @override
-  String toString() =>
-      'Wallpaper(id: $id, url: $url, purity: $purity, dimensionX: $dimensionX, dimensionY: $dimensionY, fileSize: $fileSize, fileType: $fileType, colors: $colors, thumbs: $thumbs)';
+  Wallpaper copyWith({
+    ValueGetter<String?>? title,
+    ValueGetter<String?>? author,
+    String? id,
+    String? url,
+    ValueGetter<String?>? postUrl,
+    PurityType? purity,
+    ValueGetter<int?>? dimensionX,
+    ValueGetter<int?>? dimensionY,
+    int? fileSize,
+    FileType? fileType,
+    ValueGetter<List<String>?>? colors,
+    Thumbs? thumbs,
+    ValueGetter<Sources?>? source,
+  }) {
+    return Wallpaper(
+      title: title != null ? title() : this.title,
+      author: author != null ? author() : this.author,
+      id: id ?? this.id,
+      url: url ?? this.url,
+      postUrl: postUrl != null ? postUrl() : this.postUrl,
+      purity: purity ?? this.purity,
+      dimensionX: dimensionX != null ? dimensionX() : this.dimensionX,
+      dimensionY: dimensionY != null ? dimensionY() : this.dimensionY,
+      fileSize: fileSize ?? this.fileSize,
+      fileType: fileType ?? this.fileType,
+      colors: colors != null ? colors() : this.colors,
+      thumbs: thumbs ?? this.thumbs,
+      source: source != null ? source() : this.source,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'author': author,
+      'id': id,
+      'url': url,
+      'postUrl': postUrl,
+      'purity': purity.index,
+      'dimensionX': dimensionX,
+      'dimensionY': dimensionY,
+      'fileSize': fileSize,
+      'fileType': fileType.index,
+      'colors': colors,
+      'thumbs': thumbs.toMap(),
+      'source': source?.index,
+    };
+  }
+
+  factory Wallpaper.fromMap(Map<String, dynamic> map) {
+    return Wallpaper(
+      title: map['title'],
+      author: map['author'],
+      id: map['id'] ?? '',
+      url: map['url'] ?? '',
+      postUrl: map['postUrl'],
+      purity: Purity.fromString(map['purity']),
+      dimensionX: map['dimensionX']?.toInt(),
+      dimensionY: map['dimensionY']?.toInt(),
+      fileSize: map['fileSize']?.toInt() ?? 0,
+      fileType: FileType.values[map['fileType']],
+      colors: List<String>.from(map['colors']),
+      thumbs: Thumbs.fromMap(map['thumbs']),
+      source: map['source'] != null ? Sources.values[map['source']] : null,
+    );
+  }
+  String toJson() => json.encode(toMap());
+
+  factory Wallpaper.fromJson(String source) =>
+      Wallpaper.fromMap(json.decode(source));
 }

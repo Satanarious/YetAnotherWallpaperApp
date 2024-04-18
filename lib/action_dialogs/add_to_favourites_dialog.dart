@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/models/models.dart';
+import 'package:wallpaper_app/providers/favourites_provider.dart';
 import 'package:wallpaper_app/screens/favourites_screen.dart';
-import '../providers/favourites_provider.dart';
 
 class AddToFavouritesDialog extends StatefulWidget {
   const AddToFavouritesDialog(this.wallpaper, {super.key});

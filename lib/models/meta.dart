@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
 
 class Meta extends Equatable {
   const Meta({
@@ -10,12 +13,6 @@ class Meta extends Equatable {
     this.offset,
   });
 
-  factory Meta.fromJson(Map<String, dynamic> json) => Meta(
-        currentPage:
-            json['current_page'] == null ? 0 : json['current_page'] as int,
-        lastPage: json['last_page'] == null ? 0 : json['last_page'] as int,
-        perPage: json['per_page'] == null ? 0 : json['per_page'] as int,
-      );
   factory Meta.fromRedditJson(Map<String, dynamic> json) => Meta(
         after: json['after'],
         perPage: json['dist'] as int,
@@ -39,15 +36,6 @@ class Meta extends Equatable {
 
   static const empty = Meta(perPage: 0);
 
-  Map<String, dynamic> toJson() => {
-        'current_page': currentPage,
-        'last_page': lastPage,
-        'per_page': perPage,
-        'after': after,
-        'has_more': hasMore,
-        'offset': offset,
-      };
-
   @override
   List<Object?> get props {
     return [
@@ -62,6 +50,50 @@ class Meta extends Equatable {
 
   @override
   String toString() {
-    return 'Meta(currentPage: $currentPage, lastPage: $lastPage, perPage: $perPage, after: $after, has_more: $hasMore, offset: $offset)';
+    return 'Meta(currentPage: $currentPage, lastPage: $lastPage, perPage: $perPage, after: $after, hasMore: $hasMore, offset: $offset)';
   }
+
+  Meta copyWith({
+    ValueGetter<int?>? currentPage,
+    ValueGetter<int?>? lastPage,
+    int? perPage,
+    ValueGetter<String?>? after,
+    ValueGetter<bool?>? hasMore,
+    ValueGetter<int?>? offset,
+  }) {
+    return Meta(
+      currentPage: currentPage != null ? currentPage() : this.currentPage,
+      lastPage: lastPage != null ? lastPage() : this.lastPage,
+      perPage: perPage ?? this.perPage,
+      after: after != null ? after() : this.after,
+      hasMore: hasMore != null ? hasMore() : this.hasMore,
+      offset: offset != null ? offset() : this.offset,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'currentPage': currentPage,
+      'lastPage': lastPage,
+      'perPage': perPage,
+      'after': after,
+      'hasMore': hasMore,
+      'offset': offset,
+    };
+  }
+
+  factory Meta.fromMap(Map<String, dynamic> map) {
+    return Meta(
+      currentPage: map['currentPage']?.toInt(),
+      lastPage: map['lastPage']?.toInt(),
+      perPage: map['perPage']?.toInt() ?? 0,
+      after: map['after'],
+      hasMore: map['hasMore'],
+      offset: map['offset']?.toInt(),
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Meta.fromJson(String source) => Meta.fromMap(json.decode(source));
 }

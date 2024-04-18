@@ -1,5 +1,7 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
-import './models.dart';
+import 'package:wallpaper_app/models/models.dart';
 
 class WallpaperList extends Equatable {
   const WallpaperList({required this.data, required this.meta});
@@ -16,7 +18,7 @@ class WallpaperList extends Equatable {
                 .toList(),
         meta: json['meta'] == null
             ? Meta.empty
-            : Meta.fromJson(json['meta'] as Map<String, dynamic>),
+            : Meta.fromMap(json['meta'] as Map<String, dynamic>),
       );
 
   factory WallpaperList.fromRedditJson(Map<String, dynamic> json, Meta meta) {
@@ -68,14 +70,38 @@ class WallpaperList extends Equatable {
     data.remove(wallpaper);
   }
 
-  Map<String, dynamic> toJson() => {
-        'data': data.map((Wallpaper e) => e.toJson()).toList(),
-        'meta': meta.toJson(),
-      };
-
   @override
-  List<Object?> get props => [data, meta];
+  List<Object> get props => [data, meta];
 
   @override
   String toString() => 'WallpaperList(data: $data, meta: $meta)';
+
+  WallpaperList copyWith({
+    List<Wallpaper>? data,
+    Meta? meta,
+  }) {
+    return WallpaperList(
+      data: data ?? this.data,
+      meta: meta ?? this.meta,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'data': data.map((x) => x.toMap()).toList(),
+      'meta': meta.toMap(),
+    };
+  }
+
+  factory WallpaperList.fromMap(Map<String, dynamic> map) {
+    return WallpaperList(
+      data: List<Wallpaper>.from(map['data']?.map((x) => Wallpaper.fromMap(x))),
+      meta: Meta.fromMap(map['meta']),
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory WallpaperList.fromJson(String source) =>
+      WallpaperList.fromMap(json.decode(source));
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wallpaper_app/enums/purity.dart';
-import '../providers/source_provider.dart';
+import 'package:wallpaper_app/providers/source_provider.dart';
 
 enum WallhavenCategory { general, anime, people }
 

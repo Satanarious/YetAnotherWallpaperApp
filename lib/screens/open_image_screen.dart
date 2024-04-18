@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/enums/file_type.dart';
-import '../models/models.dart';
-import '../widgets/wallpaper_action_widget.dart';
-import '../providers/source_provider.dart';
+import 'package:wallpaper_app/models/models.dart';
+import 'package:wallpaper_app/providers/source_provider.dart';
+import 'package:wallpaper_app/widgets/wallpaper_action_widget.dart';
 
 class OpenImageScreen extends StatefulWidget {
   const OpenImageScreen({super.key});

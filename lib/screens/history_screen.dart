@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/providers/history_provider.dart';
-
-import '../widgets/masonry_grid_widget.dart';
+import 'package:wallpaper_app/widgets/masonry_grid_widget.dart';
 
 class HistoryScreen extends StatelessWidget {
   const HistoryScreen({super.key});

@@ -2,11 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/enums/file_type.dart';
+import 'package:wallpaper_app/models/wallpaper.dart';
 import 'package:wallpaper_app/providers/history_provider.dart';
 import 'package:wallpaper_app/screens/screens.dart';
 import 'package:wallpaper_app/widgets/favourite_button_widget.dart';
-
-import '../models/wallpaper.dart';
 
 class ImagePreviewGridItem extends StatefulWidget {
   const ImagePreviewGridItem({

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../providers/providers.dart';
-import '../widgets/masonry_grid_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:wallpaper_app/providers/providers.dart';
+import 'package:wallpaper_app/widgets/masonry_grid_widget.dart';
 
 class WallpaperGridScreen extends StatelessWidget {
   const WallpaperGridScreen({super.key});

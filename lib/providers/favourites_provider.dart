@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/models.dart';
+import 'package:wallpaper_app/models/models.dart';
 
 class FavouritesProvider with ChangeNotifier {
   final Map<String, WallpaperList> _favouriteFolders = {};

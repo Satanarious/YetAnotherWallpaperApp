@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:wallpaper_app/enums/purity.dart';
-import '../providers/wallhaven_provider.dart';
-import '../widgets/togglable_buttons.dart';
-import '../providers/providers.dart';
+import 'package:wallpaper_app/providers/providers.dart';
+import 'package:wallpaper_app/providers/wallhaven_provider.dart';
+import 'package:wallpaper_app/widgets/togglable_buttons.dart';
 
 class WallhavenFilterDialog extends StatefulWidget {
   const WallhavenFilterDialog({super.key});
