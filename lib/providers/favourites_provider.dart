@@ -3,8 +3,7 @@ import 'package:wallpaper_app/models/models.dart';
 
 class FavouritesProvider with ChangeNotifier {
   final Map<String, WallpaperList> _favouriteFolders = {};
-  // ignore: prefer_const_constructors, prefer_const_literals_to_create_immutables
-  final _allFavourites = WallpaperList(data: [], meta: Meta.empty);
+  final _allFavourites = WallpaperList.emptyList();
 
   WallpaperList get allFavourites {
     return _allFavourites;
@@ -89,8 +88,7 @@ class FavouritesProvider with ChangeNotifier {
   }
 
   void createFolder(String folderName) {
-    // ignore: prefer_const_constructors, prefer_const_literals_to_create_immutables
-    _favouriteFolders[folderName] = WallpaperList(data: [], meta: Meta.empty);
+    _favouriteFolders[folderName] = WallpaperList.emptyList();
     notifyListeners();
   }
 

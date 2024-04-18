@@ -12,6 +12,7 @@ import 'package:wallpaper_app/models/wallpaper_list.dart';
 import 'package:wallpaper_app/providers/history_provider.dart';
 import 'package:wallpaper_app/providers/providers.dart';
 import 'package:wallpaper_app/screens/open_image_screen.dart';
+import 'package:wallpaper_app/storage/history_storage_provider.dart';
 import 'package:wallpaper_app/widgets/image_preview_grid_item.dart';
 
 class MasonryGridWidget extends StatefulWidget {
@@ -129,8 +130,14 @@ class _MasonryGridWidgetState extends State<MasonryGridWidget>
                 onTap: () {
                   if (wallpapers[index].url.isEmpty) return;
                   if (widget.listNeedsNetworkLoading) {
-                    Provider.of<HistoryProvider>(context, listen: false)
-                        .addToHistory(wallpapers[index]);
+                    final added =
+                        Provider.of<HistoryProvider>(context, listen: false)
+                            .addToHistory(wallpapers[index]);
+                    if (added) {
+                      Provider.of<HistoryStorageProvider>(context,
+                              listen: false)
+                          .addWallpaperToHistory(wallpapers[index]);
+                    }
                   }
                   Navigator.of(context).pushNamed(
                     OpenImageScreen.routeName,

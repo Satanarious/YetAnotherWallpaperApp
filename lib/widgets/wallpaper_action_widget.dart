@@ -64,7 +64,7 @@ class _WallpaperActionsWidgetState extends State<WallpaperActionsWidget>
       ActionWidget(
         label: "Set",
         child: IconButton(
-            onPressed: () => null,
+            onPressed: () => 1,
             icon: const Icon(
               Icons.landscape,
               size: 30,

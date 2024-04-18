@@ -5,6 +5,7 @@ import 'package:wallpaper_app/enums/file_type.dart';
 import 'package:wallpaper_app/models/wallpaper.dart';
 import 'package:wallpaper_app/providers/history_provider.dart';
 import 'package:wallpaper_app/screens/screens.dart';
+import 'package:wallpaper_app/storage/history_storage_provider.dart';
 import 'package:wallpaper_app/widgets/favourite_button_widget.dart';
 
 class ImagePreviewGridItem extends StatefulWidget {
@@ -101,9 +102,13 @@ class _ImagePreviewGridItemState extends State<ImagePreviewGridItem>
                   child: showDeletButton
                       ? IconButton(
                           padding: const EdgeInsets.all(1),
-                          onPressed: () => Provider.of<HistoryProvider>(context,
-                                  listen: false)
-                              .removeFromHistory(widget.wallpaper),
+                          onPressed: () {
+                            Provider.of<HistoryProvider>(context, listen: false)
+                                .removeFromHistory(widget.wallpaper);
+                            Provider.of<HistoryStorageProvider>(context,
+                                    listen: false)
+                                .removeWallpaperFromHistory(widget.wallpaper);
+                          },
                           icon: const Icon(
                             Icons.close,
                             color: Colors.white,

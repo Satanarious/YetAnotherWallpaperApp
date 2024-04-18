@@ -5,6 +5,7 @@ import 'package:wallpaper_app/home_screen.dart';
 import 'package:wallpaper_app/providers/history_provider.dart';
 import 'package:wallpaper_app/providers/providers.dart';
 import 'package:wallpaper_app/screens/screens.dart';
+import 'package:wallpaper_app/storage/storage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +25,9 @@ class WallpaperApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: SourceProvider()),
         ChangeNotifierProvider.value(value: QueryProvider()),
         ChangeNotifierProvider.value(value: HistoryProvider()),
+        ChangeNotifierProvider.value(value: HistoryStorageProvider()),
+        ChangeNotifierProvider.value(value: FavouritesStorageProvider()),
+        ChangeNotifierProvider.value(value: FiltersStorageProvider()),
       ],
       child: MaterialApp(
         routes: {

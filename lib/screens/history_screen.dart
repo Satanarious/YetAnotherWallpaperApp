@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/providers/history_provider.dart';
+import 'package:wallpaper_app/storage/history_storage_provider.dart';
 import 'package:wallpaper_app/widgets/masonry_grid_widget.dart';
 
 class HistoryScreen extends StatelessWidget {
@@ -40,6 +41,9 @@ class HistoryScreen extends StatelessWidget {
                         TextButton(
                           onPressed: () {
                             historyProvider.clearAllHistory();
+                            Provider.of<HistoryStorageProvider>(context,
+                                    listen: false)
+                                .emptyHistory();
                             Navigator.of(context).pop();
                           },
                           child: const Text("Yes"),

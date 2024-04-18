@@ -57,6 +57,11 @@ class WallpaperList extends Equatable {
                 }).toList(),
           meta: meta);
 
+  factory WallpaperList.emptyList() {
+    // ignore: prefer_const_constructors, prefer_const_literals_to_create_immutables
+    return WallpaperList(data: [], meta: Meta(perPage: 0));
+  }
+
   final List<Wallpaper> data;
   final Meta meta;
 

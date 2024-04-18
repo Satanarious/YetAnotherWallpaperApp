@@ -4,8 +4,7 @@ import 'package:wallpaper_app/models/models.dart';
 import 'package:wallpaper_app/providers/source_provider.dart';
 
 class WallpaperListProvider with ChangeNotifier {
-  // ignore: prefer_const_constructors, prefer_const_literals_to_create_immutables
-  final _wallpapers = WallpaperList(data: [], meta: Meta.empty);
+  final _wallpapers = WallpaperList.emptyList();
   final ApiClient _apiClient = ApiClient();
   Sources source = Sources.reddit;
 

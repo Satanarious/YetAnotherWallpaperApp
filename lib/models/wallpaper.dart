@@ -178,21 +178,7 @@ class Wallpaper extends Equatable {
 
   @override
   List<Object?> get props {
-    return [
-      title,
-      author,
-      id,
-      url,
-      postUrl,
-      purity,
-      dimensionX,
-      dimensionY,
-      fileSize,
-      fileType,
-      colors,
-      thumbs,
-      source,
-    ];
+    return [id];
   }
 
   @override
@@ -254,17 +240,17 @@ class Wallpaper extends Equatable {
     return Wallpaper(
       title: map['title'],
       author: map['author'],
-      id: map['id'] ?? '',
-      url: map['url'] ?? '',
+      id: map['id'],
+      url: map['url'],
       postUrl: map['postUrl'],
-      purity: Purity.fromString(map['purity']),
+      purity: PurityType.values[map['purity']],
       dimensionX: map['dimensionX']?.toInt(),
       dimensionY: map['dimensionY']?.toInt(),
       fileSize: map['fileSize']?.toInt() ?? 0,
       fileType: FileType.values[map['fileType']],
-      colors: List<String>.from(map['colors']),
+      colors: map['colors'] == null ? null : List<String>.from(map['colors']),
       thumbs: Thumbs.fromMap(map['thumbs']),
-      source: map['source'] != null ? Sources.values[map['source']] : null,
+      source: map['source'] == null ? null : Sources.values[map['source']],
     );
   }
   String toJson() => json.encode(toMap());

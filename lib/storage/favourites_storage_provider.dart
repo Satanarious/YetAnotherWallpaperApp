@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
-class LocalStorageProvider with ChangeNotifier {
+class FavouritesStorageProvider with ChangeNotifier {
+  Future<void> fetchFavourites() {
+    // TODO: Implement fetching all favourites at the beginning
+    return Future(() => null);
+  }
+
   Future<void> addFavouriteWallpaper() {
     // TODO: Implement saving new wallpaper to favourite folder
     return Future(() => null);
@@ -13,21 +18,6 @@ class LocalStorageProvider with ChangeNotifier {
 
   Future<void> removeFavouriteFolder() {
     // TODO: Implement removing favourites folder
-    return Future(() => null);
-  }
-
-  Future<void> addWallpaperToHistory(wallpaperAsJson) {
-    // TODO: Implement saving new wallpaper to history
-    return Future(() => null);
-  }
-
-  Future<void> removeWallpaperFromHistory() {
-    // TODO: Implement removing wallpaper from history
-    return Future(() => null);
-  }
-
-  Future<void> emptyHistory() {
-    // TODO: Implement emptying history
     return Future(() => null);
   }
 }

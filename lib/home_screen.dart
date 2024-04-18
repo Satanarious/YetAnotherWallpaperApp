@@ -3,15 +3,25 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/action_dialogs/source_selector_dialog.dart';
 import 'package:wallpaper_app/filter_dialogs/filter_dialogs.dart';
+import 'package:wallpaper_app/providers/history_provider.dart';
 import 'package:wallpaper_app/providers/providers.dart';
 import 'package:wallpaper_app/screens/screens.dart';
+import 'package:wallpaper_app/storage/storage.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
   static const routeName = "/";
 
+  void initializeStorageProviders(BuildContext context) {
+    // Set History from Storage
+    final history = Provider.of<HistoryStorageProvider>(context, listen: false)
+        .fetchHistory();
+    Provider.of<HistoryProvider>(context, listen: false).history = history;
+  }
+
   @override
   Widget build(BuildContext context) {
+    initializeStorageProviders(context);
     DateTime? currentBackPressTime;
     return PopScope(
       canPop: false,
