@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/providers/query_provider.dart';
 import 'package:wallpaper_app/providers/wallpaper_list_provider.dart';
+import 'package:wallpaper_app/storage/filters_storage_provider.dart';
 import 'package:wallpaper_app/widgets/community_list_widget.dart';
 import 'package:wallpaper_app/widgets/togglable_buttons.dart';
 
@@ -15,20 +16,8 @@ class LemmyFilterDialog extends StatefulWidget {
 class _LemmyFilterDialogState extends State<LemmyFilterDialog>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
-  var communityNameController =
-      TextEditingController(text: 'mobilewallpaper@lemmy.world');
-  var sortSelected = [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    true,
-  ];
+  late TextEditingController communityNameController;
+  final List<bool> sortSelected = List.generate(10, (index) => false);
 
   static const sortList = [
     {"name": "Active", "icon": Icons.arrow_upward},
@@ -125,6 +114,12 @@ class _LemmyFilterDialogState extends State<LemmyFilterDialog>
   @override
   void initState() {
     tabController = TabController(length: 2, vsync: this);
+    final savedFilters =
+        Provider.of<LemmyFiltersStorageProvider>(context, listen: false)
+            .fetch();
+    communityNameController =
+        TextEditingController(text: savedFilters['community']);
+    sortSelected[savedFilters['sort_type'] as int] = true;
     super.initState();
   }
 
@@ -226,6 +221,7 @@ class _LemmyFilterDialogState extends State<LemmyFilterDialog>
                                   buttonList: sortList,
                                   selected: sortSelected,
                                   wrapChildren: true,
+                                  selectOnlyOne: true,
                                 ),
                                 const SizedBox(
                                   height: 10,
@@ -249,12 +245,23 @@ class _LemmyFilterDialogState extends State<LemmyFilterDialog>
                                             Provider.of<WallpaperListProvider>(
                                                 context,
                                                 listen: false);
+                                        final lemmyFilterStorageProvider =
+                                            Provider.of<
+                                                    LemmyFiltersStorageProvider>(
+                                                context,
+                                                listen: false);
+
+                                        lemmyFilterStorageProvider.update(
+                                            community:
+                                                communityNameController.text,
+                                            sortType:
+                                                sortSelected.indexOf(true));
+                                        wallpaperListProvider
+                                            .emptyWallpaperList();
                                         queryProvider.setLemmyQuery(
                                             communityName:
                                                 communityNameController.text,
                                             sortType: sortType);
-                                        wallpaperListProvider
-                                            .emptyWallpaperList();
                                         Navigator.of(context).pop();
                                       },
                                       child: const Text("Ok"),

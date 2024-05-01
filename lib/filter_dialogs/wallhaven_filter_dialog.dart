@@ -4,6 +4,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:wallpaper_app/enums/purity.dart';
 import 'package:wallpaper_app/providers/providers.dart';
 import 'package:wallpaper_app/providers/wallhaven_provider.dart';
+import 'package:wallpaper_app/storage/filters_storage_provider.dart';
 import 'package:wallpaper_app/widgets/togglable_buttons.dart';
 
 class WallhavenFilterDialog extends StatefulWidget {
@@ -21,11 +22,11 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
   var includeTag1 = true;
   var tag2 = "";
   var includeTag2 = true;
-  var categorySelected = [true, true, true];
-  var puritySelected = [true, false, false];
+  var categorySelected = [false, false, false];
+  var puritySelected = [false, false, false];
   var sortBy = WallhavenSortingType.toplist;
   var topRange = WallhavenTopRange.oneMonth;
-  var ratioSelected = [false, false, true];
+  var ratioSelected = [false, false, false];
 
   static const categoryList = [
     {"name": "General", "icon": Icons.all_inbox},
@@ -87,6 +88,20 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
   @override
   void initState() {
     tabController = TabController(length: 2, vsync: this);
+    final savedFilters =
+        Provider.of<WallhavenFiltersStorageProvider>(context, listen: false)
+            .fetch();
+    tag1 = savedFilters['primary_tag'];
+    tag2 = savedFilters['secondary_tag'];
+    includeTag1 = savedFilters['include_tag1'];
+    includeTag2 = savedFilters['include_tag2'];
+    for (int i = 0; i < 3; i++) {
+      categorySelected[i] = savedFilters['category'][i];
+      puritySelected[i] = savedFilters['purity'][i];
+    }
+    sortBy = WallhavenSortingType.values[savedFilters['sort']];
+    topRange = WallhavenTopRange.values[savedFilters['top_range']];
+    ratioSelected[savedFilters['ratio']] = true;
     super.initState();
   }
 
@@ -153,12 +168,13 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
                           Row(
                             children: [
                               Expanded(
-                                child: TextField(
+                                child: TextFormField(
+                                  initialValue: tag1,
                                   onChanged: (value) => tag1 = value,
                                   style: const TextStyle(
                                       color: Colors.white, fontSize: 14),
                                   decoration: InputDecoration(
-                                      prefixIcon: InclusionSwitch(
+                                      prefixIcon: InclusionSwitch(includeTag1,
                                           (bool value) => includeTag1 = value),
                                       hintText: "Primary Tag",
                                       contentPadding:
@@ -179,12 +195,13 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
                           Row(
                             children: [
                               Expanded(
-                                child: TextField(
+                                child: TextFormField(
+                                  initialValue: tag2,
                                   onChanged: (value) => tag2 = value,
                                   style: const TextStyle(
                                       color: Colors.white, fontSize: 14),
                                   decoration: InputDecoration(
-                                      prefixIcon: InclusionSwitch(
+                                      prefixIcon: InclusionSwitch(includeTag2,
                                           (bool value) => includeTag2 = value),
                                       hintText: "Secondary Tag",
                                       contentPadding:
@@ -248,7 +265,7 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
                                 borderRadius: BorderRadius.circular(20),
                               ),
                             ),
-                            initialSelection: WallhavenSortingType.toplist,
+                            initialSelection: sortBy,
                             textStyle: const TextStyle(
                                 color: Colors.grey, fontSize: 14),
                             dropdownMenuEntries: sortByList
@@ -284,8 +301,7 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
                                     ),
                                     DropdownMenu(
                                       leadingIcon: const Icon(Icons.date_range),
-                                      initialSelection:
-                                          WallhavenTopRange.oneMonth,
+                                      initialSelection: topRange,
                                       inputDecorationTheme:
                                           InputDecorationTheme(
                                         contentPadding:
@@ -340,6 +356,24 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
                               ),
                               FilledButton(
                                   onPressed: () {
+                                    final wallhavenFilterStorageProvider =
+                                        Provider.of<
+                                                WallhavenFiltersStorageProvider>(
+                                            context,
+                                            listen: false);
+
+                                    wallhavenFilterStorageProvider.update(
+                                      primaryTag: tag1,
+                                      secondaryTag: tag2,
+                                      includeTag1: includeTag1,
+                                      includeTag2: includeTag2,
+                                      category: categorySelected,
+                                      purity: puritySelected,
+                                      sort: sortBy.index,
+                                      topRange: topRange.index,
+                                      ratio: ratioSelected.indexOf(true),
+                                    );
+                                    wallpaperListProvider.emptyWallpaperList();
                                     queryProvider.setWallhavenQuery(
                                       tag1: tag1 == "" ? null : tag1,
                                       includeTag1: includeTag1,
@@ -351,7 +385,6 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
                                       topRange: topRange,
                                       ratio: ratio,
                                     );
-                                    wallpaperListProvider.emptyWallpaperList();
                                     Navigator.of(context).pop();
                                   },
                                   child: const Text("Ok")),
@@ -449,7 +482,8 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
 }
 
 class InclusionSwitch extends StatefulWidget {
-  const InclusionSwitch(this.onValueChange, {super.key});
+  const InclusionSwitch(this.initialValue, this.onValueChange, {super.key});
+  final bool initialValue;
   final dynamic onValueChange;
 
   @override
@@ -457,7 +491,14 @@ class InclusionSwitch extends StatefulWidget {
 }
 
 class _InclusionSwitchState extends State<InclusionSwitch> {
-  var val = true;
+  late bool val;
+
+  @override
+  void initState() {
+    val = widget.initialValue;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return IconButton(

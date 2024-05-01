@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/providers/query_provider.dart';
 import 'package:wallpaper_app/providers/wallpaper_list_provider.dart';
+import 'package:wallpaper_app/storage/filters_storage_provider.dart';
 import 'package:wallpaper_app/widgets/community_list_widget.dart';
 import 'package:wallpaper_app/widgets/togglable_buttons.dart';
 
@@ -15,10 +16,10 @@ class RedditFilterDialog extends StatefulWidget {
 class _RedditFilterDialogState extends State<RedditFilterDialog>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
-  var subredditNameController =
+  final subredditNameController =
       TextEditingController(text: 'Verticalwallpapers');
-  var sortSelected = [true, false, false, false];
-  var rangeSelected = [true, false, false, false, false, false];
+  final sortSelected = List.generate(4, (index) => false);
+  final rangeSelected = List.generate(6, (index) => false);
 
   static const sortList = [
     {"name": "Top", "icon": Icons.arrow_upward},
@@ -243,6 +244,12 @@ class _RedditFilterDialogState extends State<RedditFilterDialog>
   @override
   void initState() {
     tabController = TabController(length: 2, vsync: this);
+    final savedFilters =
+        Provider.of<RedditFiltersStorageProvider>(context, listen: false)
+            .fetch();
+    subredditNameController.text = savedFilters['subreddit'];
+    sortSelected[savedFilters['sort_type']] = true;
+    rangeSelected[savedFilters['sort_range']] = true;
     super.initState();
   }
 
@@ -389,14 +396,28 @@ class _RedditFilterDialogState extends State<RedditFilterDialog>
                                                         WallpaperListProvider>(
                                                     context,
                                                     listen: false);
+                                            final redditFilterStorageProvider =
+                                                Provider.of<
+                                                        RedditFiltersStorageProvider>(
+                                                    context,
+                                                    listen: false);
+
+                                            redditFilterStorageProvider.update(
+                                              subreddit:
+                                                  subredditNameController.text,
+                                              sortType:
+                                                  sortSelected.indexOf(true),
+                                              sortRange:
+                                                  rangeSelected.indexOf(true),
+                                            );
+                                            wallpaperListProvider
+                                                .emptyWallpaperList();
                                             queryProvider.setRedditQuery(
                                                 subredditName:
                                                     subredditNameController
                                                         .text,
                                                 sortType: sortType,
                                                 sortRange: sortRange);
-                                            wallpaperListProvider
-                                                .emptyWallpaperList();
                                             Navigator.of(context).pop();
                                           },
                                           child: const Text("Ok"),

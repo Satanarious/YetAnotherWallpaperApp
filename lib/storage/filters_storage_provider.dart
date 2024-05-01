@@ -1,47 +1,142 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 
-class FiltersStorageProvider with ChangeNotifier {
-  // Filters: Reddit
-  Future<void> fetchRedditFilters() {
-    // TODO: Implement fetching Reddit filters
-    return Future(() => null);
+class RedditFiltersStorageProvider with ChangeNotifier {
+  static const _key = 'reddit_filters';
+
+  Map<String, dynamic> fetch() {
+    final raw = localStorage.getItem(_key);
+    if (raw != null) {
+      return json.decode(raw);
+    } else {
+      return {
+        "subreddit": "Verticalwallpapers",
+        "sort_type": 0,
+        "sort_range": 0,
+      };
+    }
   }
 
-  Future<void> updateRedditFilters() {
-    // TODO: Implement changing Reddit filters
-    return Future(() => null);
+  void update(
+      {required String subreddit, int sortType = 0, int sortRange = 0}) {
+    final filters = {
+      "subreddit": subreddit,
+      "sort_type": sortType,
+      "sort_range": sortRange,
+    };
+    localStorage.setItem(_key, json.encode(filters));
+  }
+}
+
+class WallhavenFiltersStorageProvider with ChangeNotifier {
+  static const _key = 'wallhaven_filters';
+
+  Map<String, dynamic> fetch() {
+    final raw = localStorage.getItem(_key);
+    if (raw != null) {
+      return json.decode(raw);
+    } else {
+      return {
+        "primary_tag": "",
+        "secondary_tag": "",
+        "include_tag1": true,
+        "include_tag2": true,
+        "category": [true, true, true],
+        "purity": [true, false, false],
+        "sort": 4,
+        "top_range": 3,
+        "ratio": 2,
+      };
+    }
   }
 
-  // Filters: Wallhaven
-  Future<void> fetchWallhavenFilters() {
-    // TODO: Implement fetching Wallhaven filters
-    return Future(() => null);
+  void update({
+    String primaryTag = "",
+    String secondaryTag = "",
+    bool includeTag1 = true,
+    bool includeTag2 = true,
+    List<bool> category = const [true, true, true],
+    List<bool> purity = const [true, false, false],
+    int sort = 4,
+    int topRange = 3,
+    int ratio = 2,
+  }) {
+    final filters = {
+      "primary_tag": primaryTag,
+      "secondary_tag": secondaryTag,
+      "include_tag1": includeTag1,
+      "include_tag2": includeTag2,
+      "category": category,
+      "purity": purity,
+      "sort": sort,
+      "top_range": topRange,
+      "ratio": ratio,
+    };
+    localStorage.setItem(_key, json.encode(filters));
+  }
+}
+
+class LemmyFiltersStorageProvider with ChangeNotifier {
+  static const _key = 'lemmy_filters';
+
+  Map<String, dynamic> fetch() {
+    final raw = localStorage.getItem(_key);
+    if (raw != null) {
+      return json.decode(raw);
+    } else {
+      return {
+        "community": "mobilewallpaper@lemmy.world",
+        "sort_type": 9,
+      };
+    }
   }
 
-  Future<void> updateWallhavenFilters() {
-    // TODO: Implement changing Wallhaven filters
-    return Future(() => null);
+  void update({required String community, int sortType = 9}) {
+    final filters = {
+      "community": community,
+      "sort_type": sortType,
+    };
+    localStorage.setItem(_key, json.encode(filters));
+  }
+}
+
+class DeviantArtFiltersStorageProvider with ChangeNotifier {
+  static const _key = 'deviant_art_filters';
+
+  Map<String, dynamic> fetch() {
+    final raw = localStorage.getItem(_key);
+    if (raw != null) {
+      return json.decode(raw);
+    } else {
+      return {
+        "query": "",
+        "topic": "",
+        "tag": "",
+        "page": 0,
+        "mature_content": false,
+        "is_popular": true,
+      };
+    }
   }
 
-  // Filters: Lemmy
-  Future<void> fetchLemmyFilters() {
-    // TODO: Implement fetching Lemmy filters
-    return Future(() => null);
-  }
-
-  Future<void> updateLemmyFilters() {
-    // TODO: Implement changing Lemmy filters
-    return Future(() => null);
-  }
-
-  // Filters: DeviantArt
-  Future<void> fetchDeviantArtFilters() {
-    // TODO: Implement fetching DeviantArt filters
-    return Future(() => null);
-  }
-
-  Future<void> updateDeviantArtFilters() {
-    // TODO: Implement changing DeviantArt filters
-    return Future(() => null);
+  void update({
+    String query = "",
+    String topic = "",
+    String tag = "",
+    required int page,
+    required bool matureContent,
+    bool isPopular = true,
+  }) {
+    final filters = {
+      "query": query,
+      "topic": topic,
+      "tag": tag,
+      "page": page,
+      "mature_content": matureContent,
+      "is_popular": isPopular,
+    };
+    localStorage.setItem(_key, json.encode(filters));
   }
 }

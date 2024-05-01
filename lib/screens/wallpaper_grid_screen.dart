@@ -1,10 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/providers/providers.dart';
+import 'package:wallpaper_app/storage/filters_storage_provider.dart';
 import 'package:wallpaper_app/widgets/masonry_grid_widget.dart';
 
 class WallpaperGridScreen extends StatelessWidget {
   const WallpaperGridScreen({super.key});
+
+  Map<String, dynamic> initialFilters(BuildContext context, Sources source) {
+    switch (source) {
+      case Sources.wallhaven:
+        return Provider.of<WallhavenFiltersStorageProvider>(context,
+                listen: false)
+            .fetch();
+      case Sources.reddit:
+        return Provider.of<RedditFiltersStorageProvider>(context, listen: false)
+            .fetch();
+      case Sources.lemmy:
+        return Provider.of<LemmyFiltersStorageProvider>(context, listen: false)
+            .fetch();
+      case Sources.deviantArt:
+        return Provider.of<DeviantArtFiltersStorageProvider>(context,
+                listen: false)
+            .fetch();
+      default:
+        throw Exception("Source not supported");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +34,8 @@ class WallpaperGridScreen extends StatelessWidget {
         Provider.of<WallpaperListProvider>(context, listen: false);
     final source = Provider.of<SourceProvider>(context).source;
     final queryProvider = Provider.of<QueryProvider>(context);
-    queryProvider.setInitialQuery(source);
+
+    queryProvider.setInitialQuery(source, initialFilters(context, source));
 
     return FutureBuilder(
         future: wallpaperListProvider.loadMoreWallpapers(

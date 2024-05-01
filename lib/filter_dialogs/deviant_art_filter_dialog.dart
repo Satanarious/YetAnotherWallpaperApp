@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:wallpaper_app/providers/providers.dart';
+import 'package:wallpaper_app/storage/filters_storage_provider.dart';
 import 'package:wallpaper_app/widgets/community_list_widget.dart';
 import 'package:wallpaper_app/widgets/togglable_buttons.dart';
 
@@ -15,8 +16,22 @@ class DeviantArtFilterDialog extends StatefulWidget {
   State<DeviantArtFilterDialog> createState() => _DeviantArtFilterDialogState();
 }
 
-class _DeviantArtFilterDialogState extends State<DeviantArtFilterDialog> {
-  var matureContent = false;
+class _DeviantArtFilterDialogState extends State<DeviantArtFilterDialog>
+    with SingleTickerProviderStateMixin {
+  late bool matureContent;
+  late TabController tabController;
+
+  @override
+  void initState() {
+    tabController = TabController(length: 3, vsync: this);
+    final savedFilters =
+        Provider.of<DeviantArtFiltersStorageProvider>(context, listen: false)
+            .fetch();
+    matureContent = savedFilters['mature_content'] as bool;
+    tabController.animateTo(
+        duration: Duration.zero, savedFilters['page'] as int);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,10 +75,11 @@ class _DeviantArtFilterDialogState extends State<DeviantArtFilterDialog> {
                           height: 330,
                           child: Column(
                             children: [
-                              const TabBar(
+                              TabBar(
+                                controller: tabController,
                                 labelColor: Colors.grey,
                                 dividerColor: Colors.transparent,
-                                tabs: [
+                                tabs: const [
                                   Text(
                                     "By Tag",
                                     style: TextStyle(fontSize: 16),
@@ -83,19 +99,21 @@ class _DeviantArtFilterDialogState extends State<DeviantArtFilterDialog> {
                               ),
                               SizedBox(
                                 height: 290,
-                                child: TabBarView(children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0),
-                                    child: TagTab(matureContent),
-                                  ),
-                                  TopicTab(matureContent),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0),
-                                    child: QueryTab(matureContent),
-                                  ),
-                                ]),
+                                child: TabBarView(
+                                    controller: tabController,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        child: TagTab(matureContent),
+                                      ),
+                                      TopicTab(matureContent),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        child: QueryTab(matureContent),
+                                      ),
+                                    ]),
                               )
                             ],
                           ),
@@ -110,10 +128,7 @@ class _DeviantArtFilterDialogState extends State<DeviantArtFilterDialog> {
 }
 
 class TopicTab extends StatefulWidget {
-  const TopicTab(
-    this.matureContent, {
-    super.key,
-  });
+  const TopicTab(this.matureContent, {super.key});
   final bool matureContent;
 
   @override
@@ -129,7 +144,10 @@ class _TopicTabState extends State<TopicTab>
 
   @override
   void initState() {
-    topicController = TextEditingController();
+    final savedFilters =
+        Provider.of<DeviantArtFiltersStorageProvider>(context, listen: false)
+            .fetch();
+    topicController = TextEditingController(text: savedFilters['topic']);
     tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
@@ -150,6 +168,7 @@ class _TopicTabState extends State<TopicTab>
         Provider.of<WallpaperListProvider>(context, listen: false);
     final deviantArtProvider = DeviantArtProvider();
     super.build(context);
+
     return TabBarView(
       controller: tabController,
       physics: const NeverScrollableScrollPhysics(),
@@ -266,11 +285,25 @@ class _TopicTabState extends State<TopicTab>
                 onPressed: () {
                   final queryProvider =
                       Provider.of<QueryProvider>(context, listen: false);
+                  final filterStorageProvider =
+                      Provider.of<DeviantArtFiltersStorageProvider>(context,
+                          listen: false);
+                  final savedFilters =
+                      Provider.of<DeviantArtFiltersStorageProvider>(context,
+                              listen: false)
+                          .fetch();
 
+                  filterStorageProvider.update(
+                    topic: topicController.text,
+                    tag: savedFilters['tag'],
+                    query: savedFilters['query'],
+                    page: 1,
+                    matureContent: widget.matureContent,
+                  );
+                  wallpaperListProvider.emptyWallpaperList();
                   queryProvider.setDeviantArtQuery(
                       topic: topicController.text,
                       matureContent: widget.matureContent);
-                  wallpaperListProvider.emptyWallpaperList();
                   Navigator.of(context).pop();
                 },
                 child: const Text("Ok"),
@@ -325,7 +358,10 @@ class _TagTabState extends State<TagTab> {
 
   @override
   void initState() {
-    tagController = TextEditingController();
+    final savedFilters =
+        Provider.of<DeviantArtFiltersStorageProvider>(context, listen: false)
+            .fetch();
+    tagController = TextEditingController(text: savedFilters['tag']);
     super.initState();
   }
 
@@ -360,7 +396,7 @@ class _TagTabState extends State<TagTab> {
               height: 5,
             ),
             Expanded(
-              child: TextField(
+              child: TextFormField(
                 controller: tagController,
                 style: const TextStyle(color: Colors.white, fontSize: 14),
                 onChanged: _onSearchChanged,
@@ -481,11 +517,26 @@ class _TagTabState extends State<TagTab> {
                   Provider.of<QueryProvider>(context, listen: false);
               final wallpaperListProvider =
                   Provider.of<WallpaperListProvider>(context, listen: false);
+              final filterStorageProvider =
+                  Provider.of<DeviantArtFiltersStorageProvider>(context,
+                      listen: false);
+              final savedFilters =
+                  Provider.of<DeviantArtFiltersStorageProvider>(context,
+                          listen: false)
+                      .fetch();
+
+              filterStorageProvider.update(
+                tag: tagController.text,
+                topic: savedFilters['topic'],
+                query: savedFilters['query'],
+                page: 0,
+                matureContent: widget.matureContent,
+              );
+              wallpaperListProvider.emptyWallpaperList();
               queryProvider.setDeviantArtQuery(
                 tag: tagController.text,
                 matureContent: widget.matureContent,
               );
-              wallpaperListProvider.emptyWallpaperList();
               Navigator.of(context).pop();
             },
             child: const Text("Ok"),
@@ -540,8 +591,18 @@ class QueryTab extends StatefulWidget {
 
 class _QueryTabState extends State<QueryTab> {
   static const sortList = ['Popular', 'Newest'];
-  var isPopular = true;
-  String query = '';
+  late bool isPopular;
+  late String query;
+
+  @override
+  void initState() {
+    final savedFilters =
+        Provider.of<DeviantArtFiltersStorageProvider>(context, listen: false)
+            .fetch();
+    query = savedFilters['query'];
+    isPopular = savedFilters['is_popular'];
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -561,7 +622,8 @@ class _QueryTabState extends State<QueryTab> {
               const SizedBox(
                 height: 5,
               ),
-              TextField(
+              TextFormField(
+                initialValue: query,
                 style: const TextStyle(color: Colors.white, fontSize: 14),
                 onChanged: (value) => query = value,
                 decoration: InputDecoration(
@@ -587,7 +649,7 @@ class _QueryTabState extends State<QueryTab> {
               ),
               DropdownMenu(
                 leadingIcon: const Icon(Icons.filter_alt),
-                initialSelection: true,
+                initialSelection: isPopular,
                 inputDecorationTheme: InputDecorationTheme(
                   contentPadding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -622,12 +684,28 @@ class _QueryTabState extends State<QueryTab> {
                     Provider.of<QueryProvider>(context, listen: false);
                 final wallpaperListProvider =
                     Provider.of<WallpaperListProvider>(context, listen: false);
+                final filterStorageProvider =
+                    Provider.of<DeviantArtFiltersStorageProvider>(context,
+                        listen: false);
+                final savedFilters =
+                    Provider.of<DeviantArtFiltersStorageProvider>(context,
+                            listen: false)
+                        .fetch();
+
+                filterStorageProvider.update(
+                  query: query,
+                  tag: savedFilters['tag'],
+                  topic: savedFilters['topic'],
+                  page: 2,
+                  matureContent: widget.matureContent,
+                  isPopular: isPopular,
+                );
+                wallpaperListProvider.emptyWallpaperList();
                 queryProvider.setDeviantArtQuery(
                   searchQuery: query,
                   isPopular: isPopular,
                   matureContent: widget.matureContent,
                 );
-                wallpaperListProvider.emptyWallpaperList();
                 Navigator.of(context).pop();
               },
               child: const Text("Ok"),

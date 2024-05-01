@@ -204,20 +204,69 @@ class QueryProvider with ChangeNotifier {
     _query = {};
   }
 
-  void setInitialQuery(Sources source) {
+  void setInitialQuery(Sources source, Map<String, dynamic> initialFilters) {
     if (_query.isEmpty) {
       switch (source) {
         case Sources.wallhaven:
-          setWallhavenQuery();
+          // Category conversion from List<bool> to List<WallhavenCategory>
+          print(initialFilters['category']);
+          final categories = (initialFilters['category'] as List)
+              .indexed
+              .where((element) => element.$2 == true)
+              .map((e) => WallhavenCategory.values[e.$1])
+              .toList();
+          print(categories);
+          // Purity conversion from List<bool> to List<PurityType>
+          final purities = (initialFilters['purity'] as List)
+              .indexed
+              .where((element) => element.$2 == true)
+              .map((e) => PurityType.values[e.$1])
+              .toList();
+
+          setWallhavenQuery(
+            tag1: initialFilters['primary_tag'] == ""
+                ? null
+                : initialFilters['primary_tag'],
+            tag2: initialFilters['secondary_tag'] == ""
+                ? null
+                : initialFilters['secondary_tag'],
+            includeTag1: initialFilters['include_tag1'],
+            includeTag2: initialFilters['include_tag2'],
+            categories: categories,
+            purities: purities,
+            sorting: WallhavenSortingType.values[initialFilters['sort']],
+            topRange: WallhavenTopRange.values[initialFilters['top_range']],
+            ratio: WallhavenAspectRatioType.values[initialFilters['ratio']],
+          );
           break;
         case Sources.reddit:
-          setRedditQuery();
+          setRedditQuery(
+            subredditName: initialFilters['subreddit'],
+            sortType: RedditSortType.values[initialFilters['sort_type']],
+            sortRange: RedditSortRange.values[initialFilters['sort_range']],
+          );
           break;
         case Sources.lemmy:
-          setLemmyQuery();
+          setLemmyQuery(
+            communityName: initialFilters['community'],
+            sortType: LemmySortType.values[initialFilters['sort_type']],
+          );
           break;
         case Sources.deviantArt:
-          setDeviantArtQuery();
+          final page = initialFilters['page'] as int;
+          setDeviantArtQuery(
+            tag: initialFilters['tag'] == "" || page != 0
+                ? null
+                : initialFilters['tag'],
+            topic: initialFilters['topic'] == "" || page != 1
+                ? null
+                : initialFilters['topic'],
+            searchQuery: initialFilters['query'] == "" || page != 2
+                ? null
+                : initialFilters['query'],
+            isPopular: initialFilters['is_popular'],
+            matureContent: initialFilters['mature_content'],
+          );
         default:
           throw Exception("Source not supported yet!!");
       }

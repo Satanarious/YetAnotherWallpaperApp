@@ -27,7 +27,10 @@ class WallpaperApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: HistoryProvider()),
         ChangeNotifierProvider.value(value: HistoryStorageProvider()),
         ChangeNotifierProvider.value(value: FavouritesStorageProvider()),
-        ChangeNotifierProvider.value(value: FiltersStorageProvider()),
+        ChangeNotifierProvider.value(value: RedditFiltersStorageProvider()),
+        ChangeNotifierProvider.value(value: LemmyFiltersStorageProvider()),
+        ChangeNotifierProvider.value(value: WallhavenFiltersStorageProvider()),
+        ChangeNotifierProvider.value(value: DeviantArtFiltersStorageProvider()),
       ],
       child: MaterialApp(
         routes: {

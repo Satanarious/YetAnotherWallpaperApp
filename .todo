@@ -1,5 +1,9 @@
 TODO:
     Features:
+        To Add:
+            ☐ Save current query
+                - Separate screen to access/remove saved queries
+                - Save Query button on home page
         Local Filters:
             ☐ Resolution Filter
             ☐ Orientation Filter
@@ -43,7 +47,9 @@ TODO:
         ☐ Add reset button in all filter dialogs.
         ☐ Add Logs.
         ☐ Add Undo snackbars.
-        ☐ Save Filters/Query/History/Favourites.
+        ☐ Save Favourites
+        ✔ Save Filters @done(24-05-01 19:23)
+        ✔ Save History @done(24-05-01 13:27)
 
 FIXME:
     ☐ Tags loading on info sheet eveytime sheet is opened.
