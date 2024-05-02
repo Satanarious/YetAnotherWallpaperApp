@@ -6,11 +6,11 @@ enum WallhavenCategory { general, anime, people }
 
 enum WallhavenSortingType {
   dateAdded,
-  relevance,
-  random,
-  views,
   favourites,
-  toplist
+  random,
+  relevance,
+  toplist,
+  views
 }
 
 enum WallhavenTopRange {
@@ -259,7 +259,7 @@ class QueryProvider with ChangeNotifier {
             topic: initialFilters['topic'] == "" || page != 1
                 ? null
                 : initialFilters['topic'],
-            searchQuery: initialFilters['query'] == "" || page != 2
+            searchQuery: (initialFilters['query'] == "" || page != 2)
                 ? null
                 : initialFilters['query'],
             isPopular: initialFilters['is_popular'],
@@ -274,7 +274,7 @@ class QueryProvider with ChangeNotifier {
   void setDeviantArtQuery({
     String? tag,
     String? topic,
-    String searchQuery = "superhero",
+    String? searchQuery,
     bool isPopular = true,
     bool matureContent = true,
   }) {
@@ -286,7 +286,7 @@ class QueryProvider with ChangeNotifier {
       query['topic'] = topic;
       query['path'] = '/api/v1/oauth2/browse/topic';
     } else {
-      query['q'] = searchQuery;
+      query['q'] = searchQuery ?? "superhero";
       query['path'] = isPopular
           ? '/api/v1/oauth2/browse/popular'
           : '/api/v1/oauth2/browse/newest';
