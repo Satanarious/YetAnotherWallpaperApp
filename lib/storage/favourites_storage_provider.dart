@@ -1,23 +1,52 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
+import 'package:wallpaper_app/models/wallpaper_list.dart';
 
 class FavouritesStorageProvider with ChangeNotifier {
-  Future<void> fetchFavourites() {
-    // TODO: Implement fetching all favourites at the beginning
-    return Future(() => null);
+  static const _key = "favourites";
+  List fetchFavourites() {
+    final favourites = [];
+    try {
+      final folderList = jsonDecode(localStorage.getItem(_key)!) as List;
+      for (String folder in folderList) {
+        favourites.add({
+          "name": folder,
+          "list": getFavouriteFolder(folder),
+        });
+      }
+      return favourites;
+    } catch (e) {
+      localStorage.setItem(_key, jsonEncode([]));
+      return [];
+    }
   }
 
-  Future<void> addFavouriteWallpaper() {
-    // TODO: Implement saving new wallpaper to favourite folder
-    return Future(() => null);
+  WallpaperList getFavouriteFolder(String folderName) {
+    try {
+      return WallpaperList.fromJson(
+          localStorage.getItem("Favourites:$folderName")!);
+    } catch (e) {
+      return WallpaperList.emptyList();
+    }
   }
 
-  Future<void> removeFavouriteWallpaper() {
-    // TODO: Implement removing wallpaper from favourite
-    return Future(() => null);
+  void addFavouritesFolder(String folderName) {
+    localStorage.setItem("Favourites:$folderName", jsonEncode([]));
+    final folderList = jsonDecode(localStorage.getItem(_key)!) as List;
+    folderList.add(folderName);
+    localStorage.setItem(_key, jsonEncode(folderList));
   }
 
-  Future<void> removeFavouriteFolder() {
-    // TODO: Implement removing favourites folder
-    return Future(() => null);
+  void removeFavouriteFolder(String folderName) {
+    localStorage.removeItem("Favourites:$folderName");
+    final folderList = jsonDecode(localStorage.getItem(_key)!) as List;
+    folderList.remove(folderName);
+    localStorage.setItem(_key, jsonEncode(folderList));
+  }
+
+  void updateFavouritesFolder(String folderName, WallpaperList wallpaperList) {
+    localStorage.setItem("Favourites:$folderName", wallpaperList.toJson());
   }
 }

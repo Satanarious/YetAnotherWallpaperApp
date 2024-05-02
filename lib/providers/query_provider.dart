@@ -209,13 +209,11 @@ class QueryProvider with ChangeNotifier {
       switch (source) {
         case Sources.wallhaven:
           // Category conversion from List<bool> to List<WallhavenCategory>
-          print(initialFilters['category']);
           final categories = (initialFilters['category'] as List)
               .indexed
               .where((element) => element.$2 == true)
               .map((e) => WallhavenCategory.values[e.$1])
               .toList();
-          print(categories);
           // Purity conversion from List<bool> to List<PurityType>
           final purities = (initialFilters['purity'] as List)
               .indexed

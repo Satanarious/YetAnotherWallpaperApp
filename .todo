@@ -30,6 +30,7 @@ TODO:
             ☐ Add to favorites on change (Auto-Wallpaper)
         Favourites Screen:
             ☐ Add 'Remove folder' button
+                - Connect Storage
             ☐ Share folder as json
             ☐ Import/Export folder
         Wallpaper Action Widget:
@@ -47,7 +48,7 @@ TODO:
         ☐ Add reset button in all filter dialogs.
         ☐ Add Logs.
         ☐ Add Undo snackbars.
-        ☐ Save Favourites
+        ✔ Save Favourites @done(24-05-02 09:40)
         ✔ Save Filters @done(24-05-01 19:23)
         ✔ Save History @done(24-05-01 13:27)
 

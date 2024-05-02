@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:wallpaper_app/models/models.dart';
 import 'package:wallpaper_app/providers/favourites_provider.dart';
 import 'package:wallpaper_app/screens/favourites_screen.dart';
+import 'package:wallpaper_app/storage/favourites_storage_provider.dart';
 
 class AddToFavouritesDialog extends StatefulWidget {
   const AddToFavouritesDialog(this.wallpaper, {super.key});
@@ -131,11 +132,15 @@ class _AddToFavouritesDialogState extends State<AddToFavouritesDialog> {
                       ),
                       FilledButton(
                         onPressed: () {
+                          final favouritesStorageProvider =
+                              Provider.of<FavouritesStorageProvider>(context,
+                                  listen: false);
                           final isFavourite =
                               favouritesProvider.manageFavouriteFolders(
                             widget.wallpaper,
                             _initialSelection,
                             _favouriteFoldersWhereWallpaperNeedsAdding,
+                            favouritesStorageProvider,
                           );
                           Navigator.of(context).pop(isFavourite);
                         },

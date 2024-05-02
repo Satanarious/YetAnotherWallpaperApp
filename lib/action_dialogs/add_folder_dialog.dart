@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/providers/favourites_provider.dart';
+import 'package:wallpaper_app/storage/favourites_storage_provider.dart';
 
 class AddFolderDialog extends StatefulWidget {
   const AddFolderDialog({super.key});
@@ -60,6 +61,9 @@ class _AddFolderDialogState extends State<AddFolderDialog> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         favouritesProvider.createFolder(name!);
+                        Provider.of<FavouritesStorageProvider>(context,
+                                listen: false)
+                            .addFavouritesFolder(name!);
                         Navigator.of(context).pop();
                       }
                     },

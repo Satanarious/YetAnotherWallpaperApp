@@ -17,6 +17,16 @@ class HomeScreen extends StatelessWidget {
     final history = Provider.of<HistoryStorageProvider>(context, listen: false)
         .fetchHistory();
     Provider.of<HistoryProvider>(context, listen: false).history = history;
+    // Set Favourites from Storage
+    final favouritesStorageProvider =
+        Provider.of<FavouritesStorageProvider>(context, listen: false);
+    final favouriteProvider =
+        Provider.of<FavouritesProvider>(context, listen: false);
+    for (var folder in favouritesStorageProvider.fetchFavourites()) {
+      favouriteProvider.favouriteFolders[folder["name"]] = folder["list"];
+    }
+    favouriteProvider.allFavourites.data.addAll(
+        favouritesStorageProvider.getFavouriteFolder("System | All").data);
   }
 
   @override

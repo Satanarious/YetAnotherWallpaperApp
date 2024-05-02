@@ -1,34 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:wallpaper_app/models/models.dart';
+import 'package:wallpaper_app/storage/favourites_storage_provider.dart';
 
 class FavouritesProvider with ChangeNotifier {
-  final Map<String, WallpaperList> _favouriteFolders = {};
-  final _allFavourites = WallpaperList.emptyList();
-
-  WallpaperList get allFavourites {
-    return _allFavourites;
-  }
-
-  Map<String, WallpaperList> get favouriteFolders {
-    return _favouriteFolders;
-  }
+  final Map<String, WallpaperList> favouriteFolders = {};
+  final allFavourites = WallpaperList.emptyList();
 
   void removeWallpaperFromFolder(String folderName, Wallpaper wallpaper) {
-    _favouriteFolders[folderName]!.removeWallpaper(wallpaper);
+    favouriteFolders[folderName]!.removeWallpaper(wallpaper);
     notifyListeners();
   }
 
   void addWallpaperToAllFolder(Wallpaper wallpaper) {
-    _allFavourites.addWallpaper(wallpaper);
+    allFavourites.addWallpaper(wallpaper);
     notifyListeners();
   }
 
   bool removeWallpaperFromAllFolder(Wallpaper wallpaper) {
     final folders = foldersWhereWallpaperExists(wallpaper);
     if (folders.length < 2) {
-      _allFavourites.removeWallpaper(wallpaper);
+      allFavourites.removeWallpaper(wallpaper);
       if (folders.isNotEmpty) {
-        _favouriteFolders[folders[0] as String]!.removeWallpaper(wallpaper);
+        favouriteFolders[folders[0] as String]!.removeWallpaper(wallpaper);
       }
       notifyListeners();
       return false;
@@ -51,6 +44,7 @@ class FavouritesProvider with ChangeNotifier {
     Wallpaper wallpaper,
     List initialSelection,
     List selectedFavouriteFolders,
+    FavouritesStorageProvider favouritesStorageProvider,
   ) {
     final foldersNeedWallpaper = [];
 
@@ -62,25 +56,33 @@ class FavouritesProvider with ChangeNotifier {
     // Add wallpaper to 'System | All' folder
     if (foldersNeedWallpaper.isNotEmpty &&
         initialSelection.isEmpty &&
-        !_allFavourites.data.contains(wallpaper)) {
+        !allFavourites.data.contains(wallpaper)) {
       addWallpaperToAllFolder(wallpaper);
+      favouritesStorageProvider.updateFavouritesFolder(
+          "System | All", allFavourites);
     }
 
     for (var folderName in favouriteFolders.keys) {
       // Add wallpaper to favourites folders
       if (foldersNeedWallpaper.contains(folderName)) {
-        _favouriteFolders[folderName]!.addWallpaper(wallpaper);
+        favouriteFolders[folderName]!.addWallpaper(wallpaper);
+        favouritesStorageProvider.updateFavouritesFolder(
+            folderName, favouriteFolders[folderName]!);
       }
       // Remove wallpaper from favourites folders
       else if (initialSelection.contains(folderName) &&
           !selectedFavouriteFolders.contains(folderName)) {
         removeWallpaperFromFolder(folderName, wallpaper);
+        favouritesStorageProvider.updateFavouritesFolder(
+            folderName, favouriteFolders[folderName]!);
       }
     }
     notifyListeners();
     // Remove wallpaper from 'System | All' folder
     if (selectedFavouriteFolders.isEmpty) {
-      _allFavourites.removeWallpaper(wallpaper);
+      allFavourites.removeWallpaper(wallpaper);
+      favouritesStorageProvider.updateFavouritesFolder(
+          "System | All", allFavourites);
       return false;
     } else {
       return true;
@@ -88,12 +90,12 @@ class FavouritesProvider with ChangeNotifier {
   }
 
   void createFolder(String folderName) {
-    _favouriteFolders[folderName] = WallpaperList.emptyList();
+    favouriteFolders[folderName] = WallpaperList.emptyList();
     notifyListeners();
   }
 
   void removeFolder(String folderName) {
-    _favouriteFolders.remove(folderName);
+    favouriteFolders.remove(folderName);
     notifyListeners();
   }
 }
