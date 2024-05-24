@@ -9,7 +9,6 @@ import 'package:wallpaper_app/enums/file_type.dart';
 // ignore: unused_import
 import 'package:wallpaper_app/enums/purity.dart';
 import 'package:wallpaper_app/models/wallpaper_list.dart';
-import 'package:wallpaper_app/providers/history_provider.dart';
 import 'package:wallpaper_app/providers/providers.dart';
 import 'package:wallpaper_app/screens/open_image_screen.dart';
 import 'package:wallpaper_app/storage/history_storage_provider.dart';
@@ -156,7 +155,8 @@ class _MasonryGridWidgetState extends State<MasonryGridWidget>
           child: widget.listNeedsNetworkLoading
               ? NotificationListener<ScrollNotification>(
                   onNotification: (notification) {
-                    if (notification is ScrollEndNotification &&
+                    if (!_loading &&
+                        notification is ScrollEndNotification &&
                         notification.metrics.pixels ==
                             notification.metrics.maxScrollExtent) {
                       _loadWallpapers();

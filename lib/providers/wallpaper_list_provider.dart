@@ -67,10 +67,6 @@ class WallpaperListProvider with ChangeNotifier {
           break;
 
         case Sources.reddit:
-          // Check for last page on Reddit
-          // do {
-          // print("is less than 20 ---------------");
-          // print(after);
           if (after == null && before != null) {
             return;
           }
@@ -89,7 +85,6 @@ class WallpaperListProvider with ChangeNotifier {
           _wallpapers.data.addAll(wallpaperList.data);
           after = wallpaperList
               .meta.after; // Update $after to the value recieved from api
-          // } while (wallpapers.data.length < 20);
           break;
 
         case Sources.lemmy:

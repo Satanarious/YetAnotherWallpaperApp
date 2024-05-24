@@ -107,7 +107,12 @@ class ApiClient {
           );
         }
 
-        return WallpaperList.fromWallhavenJson(wallpaperListJson);
+        return WallpaperList.fromWallhavenJson(
+            wallpaperListJson,
+            wallpaperListJson['meta'] == null
+                ? Meta.empty
+                : Meta.fromWallhavenJson(
+                    wallpaperListJson['meta'] as Map<String, dynamic>));
 
       case Sources.reddit:
         if (!wallpaperListJson.containsKey('data')) {
@@ -119,12 +124,8 @@ class ApiClient {
         final children = wallpaperListJson['data']['children'] as List;
         final validChildren = children
             .where((child) => (child['data']['post_hint'] == 'image' ||
-                    child['data']['post_hint'] == 'link')
-                //     &&
-                // child['data']['preview']['images'][0]['source']['width'] <
-                //     child['data']['preview']['images'][0]['source']['height']
-                )
-            .toList(); // Filter children where data has image
+                child['data']['post_hint'] == 'link'))
+            .toList();
         wallpaperListJson['data']['children'] = validChildren;
 
         return WallpaperList.fromRedditJson(

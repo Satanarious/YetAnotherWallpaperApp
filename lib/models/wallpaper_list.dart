@@ -6,7 +6,8 @@ import 'package:wallpaper_app/models/models.dart';
 class WallpaperList extends Equatable {
   const WallpaperList({required this.data, required this.meta});
 
-  factory WallpaperList.fromWallhavenJson(Map<String, dynamic> json) =>
+  factory WallpaperList.fromWallhavenJson(
+          Map<String, dynamic> json, Meta meta) =>
       WallpaperList(
         data: json['data'] == null
             ? []
@@ -16,9 +17,7 @@ class WallpaperList extends Equatable {
                       Wallpaper.fromWallhavenJson(e as Map<String, dynamic>),
                 )
                 .toList(),
-        meta: json['meta'] == null
-            ? Meta.empty
-            : Meta.fromMap(json['meta'] as Map<String, dynamic>),
+        meta: meta,
       );
 
   factory WallpaperList.fromRedditJson(Map<String, dynamic> json, Meta meta) {

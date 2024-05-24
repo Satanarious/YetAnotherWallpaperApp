@@ -54,6 +54,9 @@ TODO:
 
 FIXME:
     ☐ Tags loading on info sheet eveytime sheet is opened.
+    ✔ Wallpapers repeating @high @done(24-05-24 20:10)
+        ✔ Wallhaven, same page repeating again and again, on page change. @done(24-05-20 15:50)
+        ✔ Adding same page to the list twice, from 2nd page onwards. @done(24-05-24 20:10)
     
 Archive:
     ✔ Add Delete Button @done(24-03-09 10:33) @project(TODO.Features.History Screen)
