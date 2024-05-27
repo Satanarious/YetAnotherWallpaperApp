@@ -30,7 +30,6 @@ class _MasonryGridWidgetState extends State<MasonryGridWidget>
 
   @override
   bool get wantKeepAlive => true;
-  static const targetWidth = 200.0;
   bool _loading = false;
 
   double calculateHeight(int imageHeight, int imageWidth, double targetWidth) {
@@ -69,6 +68,7 @@ class _MasonryGridWidgetState extends State<MasonryGridWidget>
         : widget.wallpaperList!.data;
     final blurNSFW =
         Provider.of<QueryProvider>(context, listen: false).blurNSFW;
+    final targetWidth = min(200.0, MediaQuery.of(context).size.width / 2.1);
 
     return LayoutBuilder(
       builder: (context, constraints) {

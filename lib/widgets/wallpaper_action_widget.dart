@@ -1,4 +1,6 @@
+import 'package:async_wallpaper/async_wallpaper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/models/wallpaper.dart';
 import 'package:wallpaper_app/providers/providers.dart';
@@ -64,7 +66,13 @@ class _WallpaperActionsWidgetState extends State<WallpaperActionsWidget>
       ActionWidget(
         label: "Set",
         child: IconButton(
-            onPressed: () => 1,
+            onPressed: () async {
+              final imageFile = await DefaultCacheManager()
+                  .getSingleFile(widget.wallpaper.url);
+              final imagePath = imageFile.path;
+              await AsyncWallpaper.setWallpaperFromFileNative(
+                  filePath: imagePath, goToHome: false);
+            },
             icon: const Icon(
               Icons.landscape,
               size: 30,

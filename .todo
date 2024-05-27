@@ -54,6 +54,8 @@ TODO:
 
 FIXME:
     ☐ Tags loading on info sheet eveytime sheet is opened.
+    ☐ Add Restoration of state on setting the wallpaper.
+        - https://dev.to/pedromassango/what-is-state-restoration-and-how-to-use-it-in-flutter-5blm
     ✔ Wallpapers repeating @high @done(24-05-24 20:10)
         ✔ Wallhaven, same page repeating again and again, on page change. @done(24-05-20 15:50)
         ✔ Adding same page to the list twice, from 2nd page onwards. @done(24-05-24 20:10)
