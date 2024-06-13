@@ -16,9 +16,13 @@ import 'package:wallpaper_app/widgets/image_preview_grid_item.dart';
 
 class MasonryGridWidget extends StatefulWidget {
   const MasonryGridWidget(
-      {this.wallpaperList, this.listNeedsNetworkLoading = true, super.key});
+      {this.addPadding = false,
+      this.wallpaperList,
+      this.listNeedsNetworkLoading = true,
+      super.key});
   final bool listNeedsNetworkLoading;
   final WallpaperList? wallpaperList;
+  final bool addPadding;
 
   @override
   State<MasonryGridWidget> createState() => _MasonryGridWidgetState();
@@ -69,13 +73,16 @@ class _MasonryGridWidgetState extends State<MasonryGridWidget>
     final blurNSFW =
         Provider.of<QueryProvider>(context, listen: false).blurNSFW;
     final targetWidth = min(200.0, MediaQuery.of(context).size.width / 2.1);
+    final topPadding = MediaQuery.of(context).padding.top;
 
     return LayoutBuilder(
       builder: (context, constraints) {
         final BoxConstraints layoutConstraints = constraints;
         final crossAxisCount = layoutConstraints.maxWidth ~/ targetWidth;
         final masonryGrid = MasonryGridView.builder(
-            padding: const EdgeInsets.only(top: 0),
+            padding: widget.addPadding
+                ? EdgeInsets.only(top: topPadding)
+                : const EdgeInsets.only(top: 0),
             physics: const AlwaysScrollableScrollPhysics(),
             controller: _scrollController,
             gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(

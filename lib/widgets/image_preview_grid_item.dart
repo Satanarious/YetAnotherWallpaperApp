@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -95,26 +97,32 @@ class _ImagePreviewGridItemState extends State<ImagePreviewGridItem>
               right: 5,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(25),
-                child: Container(
-                  width: showDeletButton ? 25 : 40,
-                  height: showDeletButton ? 25 : 40,
-                  color: Colors.black87,
-                  child: showDeletButton
-                      ? IconButton(
-                          padding: const EdgeInsets.all(1),
-                          onPressed: () {
-                            Provider.of<HistoryProvider>(context, listen: false)
-                                .removeFromHistory(widget.wallpaper);
-                            Provider.of<HistoryStorageProvider>(context,
-                                    listen: false)
-                                .removeWallpaperFromHistory(widget.wallpaper);
-                          },
-                          icon: const Icon(
-                            Icons.close,
-                            color: Colors.white,
-                            size: 15,
-                          ))
-                      : FavouriteButton(wallpaper: widget.wallpaper),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: Container(
+                    width: showDeletButton ? 25 : 40,
+                    height: showDeletButton ? 25 : 40,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withAlpha(100),
+                    ),
+                    child: showDeletButton
+                        ? IconButton(
+                            padding: const EdgeInsets.all(1),
+                            onPressed: () {
+                              Provider.of<HistoryProvider>(context,
+                                      listen: false)
+                                  .removeFromHistory(widget.wallpaper);
+                              Provider.of<HistoryStorageProvider>(context,
+                                      listen: false)
+                                  .removeWallpaperFromHistory(widget.wallpaper);
+                            },
+                            icon: const Icon(
+                              Icons.close,
+                              color: Colors.white,
+                              size: 15,
+                            ))
+                        : FavouriteButton(wallpaper: widget.wallpaper),
+                  ),
                 ),
               ),
             ),

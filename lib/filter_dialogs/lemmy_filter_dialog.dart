@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/providers/query_provider.dart';
@@ -20,16 +22,16 @@ class _LemmyFilterDialogState extends State<LemmyFilterDialog>
   final List<bool> sortSelected = List.generate(10, (index) => false);
 
   static const sortList = [
-    {"name": "Active", "icon": Icons.arrow_upward},
-    {"name": "New", "icon": Icons.new_releases},
-    {"name": "Hot", "icon": Icons.fireplace},
-    {"name": "Old", "icon": Icons.download},
-    {"name": "Top Hour", "icon": Icons.timer},
-    {"name": "Top Day", "icon": Icons.calendar_view_day},
-    {"name": "Top Week", "icon": Icons.calendar_view_week},
-    {"name": "Top Month", "icon": Icons.calendar_view_month},
-    {"name": "Top Year", "icon": Icons.calendar_today},
-    {"name": "Top All", "icon": Icons.all_inbox},
+    {"name": "Active", "icon": Icons.arrow_upward_rounded},
+    {"name": "New", "icon": Icons.new_releases_outlined},
+    {"name": "Hot", "icon": Icons.fireplace_rounded},
+    {"name": "Old", "icon": Icons.download_rounded},
+    {"name": "Top Hour", "icon": Icons.timer_rounded},
+    {"name": "Top Day", "icon": Icons.calendar_view_day_rounded},
+    {"name": "Top Week", "icon": Icons.calendar_view_week_rounded},
+    {"name": "Top Month", "icon": Icons.calendar_view_month_rounded},
+    {"name": "Top Year", "icon": Icons.calendar_today_rounded},
+    {"name": "Top All", "icon": Icons.all_inbox_rounded},
   ];
 
   static const communityList = [
@@ -132,157 +134,193 @@ class _LemmyFilterDialogState extends State<LemmyFilterDialog>
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      backgroundColor: Colors.transparent,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
-        child: Container(
-          color: const Color.fromRGBO(50, 50, 50, 1),
-          padding: const EdgeInsetsDirectional.symmetric(
-              horizontal: 14, vertical: 10),
-          height: 380,
-          width: 350,
-          child: Column(
-            children: [
-              Expanded(
-                child: TabBarView(
-                  controller: tabController,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Filters",
-                          style: TextStyle(fontSize: 20, color: Colors.white),
-                        ),
-                        Expanded(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const SizedBox(
-                                  height: 14,
-                                ),
-                                const Text(
-                                  "Community",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: TextField(
-                                        controller: communityNameController,
-                                        style: const TextStyle(
-                                            color: Colors.white, fontSize: 14),
-                                        decoration: InputDecoration(
-                                          prefixText: "!",
-                                          suffixIcon: IconButton(
-                                            tooltip: "Presets",
-                                            icon: const Icon(
-                                              Icons.list,
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.black.withAlpha(50),
+                border: Border.all(
+                  color: Colors.white,
+                  width: 1,
+                ),
+                borderRadius: BorderRadius.circular(30)),
+            padding: const EdgeInsetsDirectional.symmetric(
+                horizontal: 14, vertical: 10),
+            height: 430,
+            width: 350,
+            child: Column(
+              children: [
+                Expanded(
+                  child: TabBarView(
+                    controller: tabController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Filters",
+                            style: TextStyle(fontSize: 20, color: Colors.white),
+                          ),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const SizedBox(
+                                    height: 14,
+                                  ),
+                                  const Text(
+                                    "Community",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 14),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: TextField(
+                                          controller: communityNameController,
+                                          style: const TextStyle(
                                               color: Colors.white,
+                                              fontSize: 14),
+                                          decoration: InputDecoration(
+                                            prefixText: "!",
+                                            suffixIcon: IconButton(
+                                              tooltip: "Presets",
+                                              icon: const Icon(
+                                                Icons.list_rounded,
+                                                color: Colors.white,
+                                              ),
+                                              onPressed: () =>
+                                                  tabController.animateTo(1),
                                             ),
-                                            onPressed: () =>
-                                                tabController.animateTo(1),
-                                          ),
-                                          hintText: "Community Name",
-                                          contentPadding:
-                                              const EdgeInsetsDirectional
-                                                  .symmetric(
-                                                  horizontal: 10, vertical: 2),
-                                          hintStyle: const TextStyle(
-                                              color: Colors.grey, fontSize: 14),
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
+                                            hintText: "Community Name",
+                                            contentPadding:
+                                                const EdgeInsetsDirectional
+                                                    .symmetric(
+                                                    horizontal: 10,
+                                                    vertical: 2),
+                                            hintStyle: const TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 14),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                const Text(
-                                  "Sort Type",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                TogglableButtons(
-                                  buttonList: sortList,
-                                  selected: sortSelected,
-                                  wrapChildren: true,
-                                  selectOnlyOne: true,
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    FilledButton(
-                                      onPressed: Navigator.of(context).pop,
-                                      child: const Text("Cancel"),
-                                    ),
-                                    const SizedBox(
-                                      width: 20,
-                                    ),
-                                    FilledButton(
-                                      onPressed: () {
-                                        final queryProvider =
-                                            Provider.of<QueryProvider>(context,
-                                                listen: false);
-                                        final wallpaperListProvider =
-                                            Provider.of<WallpaperListProvider>(
-                                                context,
-                                                listen: false);
-                                        final lemmyFilterStorageProvider =
-                                            Provider.of<
-                                                    LemmyFiltersStorageProvider>(
-                                                context,
-                                                listen: false);
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Text(
+                                    "Sort Type",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 14),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  TogglableButtons(
+                                    buttonList: sortList,
+                                    selected: sortSelected,
+                                    wrapChildren: true,
+                                    selectOnlyOne: true,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      FilledButton(
+                                        onPressed: Navigator.of(context).pop,
+                                        style: ButtonStyle(
+                                          side:
+                                              MaterialStateProperty.resolveWith(
+                                                  (states) => const BorderSide(
+                                                      color: Colors.white)),
+                                          backgroundColor:
+                                              MaterialStateProperty.resolveWith(
+                                                  (states) => Theme.of(context)
+                                                      .primaryColor
+                                                      .withAlpha(120)),
+                                        ),
+                                        child: const Text("Cancel"),
+                                      ),
+                                      const SizedBox(
+                                        width: 20,
+                                      ),
+                                      FilledButton(
+                                        onPressed: () {
+                                          final queryProvider =
+                                              Provider.of<QueryProvider>(
+                                                  context,
+                                                  listen: false);
+                                          final wallpaperListProvider = Provider
+                                              .of<WallpaperListProvider>(
+                                                  context,
+                                                  listen: false);
+                                          final lemmyFilterStorageProvider =
+                                              Provider.of<
+                                                      LemmyFiltersStorageProvider>(
+                                                  context,
+                                                  listen: false);
 
-                                        lemmyFilterStorageProvider.update(
-                                            community:
-                                                communityNameController.text,
-                                            sortType:
-                                                sortSelected.indexOf(true));
-                                        wallpaperListProvider
-                                            .emptyWallpaperList();
-                                        queryProvider.setLemmyQuery(
-                                            communityName:
-                                                communityNameController.text,
-                                            sortType: sortType);
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text("Ok"),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                          lemmyFilterStorageProvider.update(
+                                              community:
+                                                  communityNameController.text,
+                                              sortType:
+                                                  sortSelected.indexOf(true));
+                                          wallpaperListProvider
+                                              .emptyWallpaperList();
+                                          queryProvider.setLemmyQuery(
+                                              communityName:
+                                                  communityNameController.text,
+                                              sortType: sortType);
+                                          Navigator.of(context).pop();
+                                        },
+                                        style: ButtonStyle(
+                                          side:
+                                              MaterialStateProperty.resolveWith(
+                                                  (states) => const BorderSide(
+                                                      color: Colors.white)),
+                                          backgroundColor:
+                                              MaterialStateProperty.resolveWith(
+                                                  (states) => Theme.of(context)
+                                                      .primaryColor
+                                                      .withAlpha(120)),
+                                        ),
+                                        child: const Text("Ok"),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    CommunityListWidget(
-                      communityNameController: communityNameController,
-                      tabController: tabController,
-                      communityList: communityList,
-                    ),
-                  ],
-                ),
-              )
-            ],
+                        ],
+                      ),
+                      CommunityListWidget(
+                        communityNameController: communityNameController,
+                        tabController: tabController,
+                        communityList: communityList,
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

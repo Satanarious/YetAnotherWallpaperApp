@@ -65,8 +65,19 @@ class _CommunityListWidgetState extends State<CommunityListWidget> {
                   });
                 },
                 decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.search),
-                  hintText: "Search by name or tag",
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: const BorderSide(color: Colors.white),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: const BorderSide(color: Colors.white),
+                  ),
+                  prefixIcon: const Icon(
+                    Icons.search,
+                    color: Colors.white,
+                  ),
+                  hintText: "Search by name",
                   contentPadding: const EdgeInsetsDirectional.symmetric(
                       horizontal: 10, vertical: 2),
                   hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
@@ -81,6 +92,7 @@ class _CommunityListWidgetState extends State<CommunityListWidget> {
             ),
             Expanded(
               child: ListView.builder(
+                padding: const EdgeInsets.all(0),
                 itemCount: filteredList.length,
                 controller: _scrollController,
                 itemBuilder: (context, index) => Card(
@@ -112,9 +124,13 @@ class _CommunityListWidgetState extends State<CommunityListWidget> {
                             const SizedBox(
                               width: 10,
                             ),
-                            Text(
-                              filteredList[index]["name"] as String,
-                              style: const TextStyle(color: Colors.white),
+                            Expanded(
+                              child: Text(
+                                filteredList[index]["name"] as String,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(color: Colors.white),
+                              ),
                             ),
                           ],
                         ),

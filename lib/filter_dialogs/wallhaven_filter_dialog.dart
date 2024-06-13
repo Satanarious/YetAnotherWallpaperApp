@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -29,19 +31,19 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
   var ratioSelected = [false, false, false];
 
   static const categoryList = [
-    {"name": "General", "icon": Icons.all_inbox},
-    {"name": "Anime", "icon": Icons.wallet_giftcard_outlined},
-    {"name": "People", "icon": Icons.people},
+    {"name": "General", "icon": Icons.all_inbox_rounded},
+    {"name": "Anime", "icon": Icons.wallet_giftcard_rounded},
+    {"name": "People", "icon": Icons.people_outline_rounded},
   ];
   static const ratioList = [
-    {"name": "Portrait", "icon": Icons.tablet_android},
-    {"name": "Landscape", "icon": Icons.tablet},
-    {"name": "All", "icon": Icons.filter},
+    {"name": "Portrait", "icon": Icons.tablet_android_rounded},
+    {"name": "Landscape", "icon": Icons.tablet_rounded},
+    {"name": "All", "icon": Icons.filter_rounded},
   ];
   static const purityList = [
     {"name": "General", "icon": Icons.all_inbox_rounded},
-    {"name": "Sketchy", "icon": Icons.strikethrough_s},
-    {"name": "NSFW", "icon": Icons.no_adult_content},
+    {"name": "Sketchy", "icon": Icons.strikethrough_s_rounded},
+    {"name": "NSFW", "icon": Icons.no_adult_content_rounded},
   ];
   static const sortByList = [
     {'label': 'Date Added', 'value': WallhavenSortingType.dateAdded},
@@ -60,6 +62,8 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
     {'label': 'Six Months', 'value': WallhavenTopRange.sixMonths},
     {'label': 'One Year', 'value': WallhavenTopRange.oneYear},
   ];
+
+  late ScrollController _scrollController;
 
   List<WallhavenCategory> get categories {
     final List<WallhavenCategory> categoryList = [];
@@ -102,6 +106,7 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
     sortBy = WallhavenSortingType.values[savedFilters['sort']];
     topRange = WallhavenTopRange.values[savedFilters['top_range']];
     ratioSelected[savedFilters['ratio']] = true;
+    _scrollController = ScrollController();
     super.initState();
   }
 
@@ -117,363 +122,515 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
     final wallpaperListProvider =
         Provider.of<WallpaperListProvider>(context, listen: false);
     return Dialog(
+      backgroundColor: Colors.transparent,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
-        child: Container(
-          color: const Color.fromRGBO(50, 50, 50, 1),
-          padding: const EdgeInsetsDirectional.symmetric(
-              horizontal: 14, vertical: 10),
-          height: 500,
-          width: 350,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Filters",
-                style: TextStyle(fontSize: 20, color: Colors.white),
-              ),
-              Expanded(
-                child: TabBarView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  controller: tabController,
-                  children: [
-                    SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Row(
-                            children: [
-                              const Text(
-                                "Tags",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 14),
-                              ),
-                              const Spacer(),
-                              IconButton(
-                                tooltip: "Popular Tags",
-                                icon: const Icon(
-                                  Icons.list,
-                                  color: Colors.white,
-                                ),
-                                onPressed: () => tabController.animateTo(1),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: TextFormField(
-                                  initialValue: tag1,
-                                  onChanged: (value) => tag1 = value,
-                                  style: const TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                  decoration: InputDecoration(
-                                      prefixIcon: InclusionSwitch(includeTag1,
-                                          (bool value) => includeTag1 = value),
-                                      hintText: "Primary Tag",
-                                      contentPadding:
-                                          const EdgeInsetsDirectional.symmetric(
-                                              horizontal: 10, vertical: 2),
-                                      hintStyle: const TextStyle(
-                                          color: Colors.grey, fontSize: 14),
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20))),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: TextFormField(
-                                  initialValue: tag2,
-                                  onChanged: (value) => tag2 = value,
-                                  style: const TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                  decoration: InputDecoration(
-                                      prefixIcon: InclusionSwitch(includeTag2,
-                                          (bool value) => includeTag2 = value),
-                                      hintText: "Secondary Tag",
-                                      contentPadding:
-                                          const EdgeInsetsDirectional.symmetric(
-                                              horizontal: 10, vertical: 2),
-                                      hintStyle: const TextStyle(
-                                          color: Colors.grey, fontSize: 14),
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20))),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text(
-                            "Category",
-                            style: TextStyle(color: Colors.white, fontSize: 14),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          TogglableButtons(
-                            buttonList: categoryList,
-                            selected: categorySelected,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text(
-                            "Purity",
-                            style: TextStyle(color: Colors.white, fontSize: 14),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          TogglableButtons(
-                            buttonList: purityList,
-                            selected: puritySelected,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text(
-                            "Sort by",
-                            style: TextStyle(color: Colors.white, fontSize: 14),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          DropdownMenu(
-                            leadingIcon: const Icon(Icons.sort),
-                            inputDecorationTheme: InputDecorationTheme(
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
-                              constraints: BoxConstraints.tight(
-                                  const Size.fromHeight(50)),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.black.withAlpha(50),
+                border: Border.all(
+                  color: Colors.white,
+                  width: 1,
+                ),
+                borderRadius: BorderRadius.circular(30)),
+            padding: const EdgeInsetsDirectional.symmetric(
+                horizontal: 14, vertical: 10),
+            height: 500,
+            width: 350,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Filters",
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                ),
+                Expanded(
+                  child: TabBarView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    controller: tabController,
+                    children: [
+                      SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 5,
                             ),
-                            initialSelection: sortBy,
-                            textStyle: const TextStyle(
-                                color: Colors.grey, fontSize: 14),
-                            dropdownMenuEntries: sortByList
-                                .map((item) => DropdownMenuEntry(
-                                    value: item['value'],
-                                    label: item['label'] as String))
-                                .toList(),
-                            onSelected: (sortType) {
-                              sortBy = (sortType as WallhavenSortingType);
-                              setState(() {
-                                isTop =
-                                    sortType == WallhavenSortingType.toplist;
-                              });
-                            },
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
-                            height: isTop ? 80 : 0,
-                            child: SingleChildScrollView(
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      "Top range",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 14),
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    DropdownMenu(
-                                      leadingIcon: const Icon(Icons.date_range),
-                                      initialSelection: topRange,
-                                      inputDecorationTheme:
-                                          InputDecorationTheme(
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                                horizontal: 10, vertical: 5),
-                                        constraints: BoxConstraints.tight(
-                                            const Size.fromHeight(50)),
-                                        border: OutlineInputBorder(
+                            Row(
+                              children: [
+                                const Text(
+                                  "Tags",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
+                                ),
+                                const Spacer(),
+                                IconButton(
+                                  tooltip: "Popular Tags",
+                                  icon: const Icon(
+                                    Icons.list_rounded,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () => tabController.animateTo(1),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextFormField(
+                                    initialValue: tag1,
+                                    onChanged: (value) => tag1 = value,
+                                    style: const TextStyle(
+                                        color: Colors.white, fontSize: 14),
+                                    decoration: InputDecoration(
+                                        enabledBorder: OutlineInputBorder(
                                           borderRadius:
                                               BorderRadius.circular(20),
+                                          borderSide: const BorderSide(
+                                              color: Colors.white),
                                         ),
-                                      ),
-                                      textStyle: const TextStyle(
-                                          color: Colors.grey, fontSize: 14),
-                                      dropdownMenuEntries: topRangeList
-                                          .map((item) => DropdownMenuEntry(
-                                              value: item['value'],
-                                              label: item['label'] as String))
-                                          .toList(),
-                                      onSelected: (topRangeType) => topRange =
-                                          (topRangeType as WallhavenTopRange),
-                                    ),
-                                  ]),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          borderSide: const BorderSide(
+                                              color: Colors.white),
+                                        ),
+                                        prefixIcon: InclusionSwitch(
+                                            includeTag1,
+                                            (bool value) =>
+                                                includeTag1 = value),
+                                        hintText: "Primary Tag",
+                                        contentPadding:
+                                            const EdgeInsetsDirectional
+                                                .symmetric(
+                                                horizontal: 10, vertical: 2),
+                                        hintStyle: const TextStyle(
+                                            color: Colors.grey, fontSize: 14),
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20))),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text(
-                            "Ratio",
-                            style: TextStyle(color: Colors.white, fontSize: 14),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          TogglableButtons(
-                            buttonList: ratioList,
-                            selected: ratioSelected,
-                            selectOnlyOne: true,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              FilledButton(
-                                  onPressed: Navigator.of(context).pop,
-                                  child: const Text("Cancel")),
-                              const SizedBox(
-                                width: 10,
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextFormField(
+                                    initialValue: tag2,
+                                    onChanged: (value) => tag2 = value,
+                                    style: const TextStyle(
+                                        color: Colors.white, fontSize: 14),
+                                    decoration: InputDecoration(
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          borderSide: const BorderSide(
+                                              color: Colors.white),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          borderSide: const BorderSide(
+                                              color: Colors.white),
+                                        ),
+                                        prefixIcon: InclusionSwitch(
+                                            includeTag2,
+                                            (bool value) =>
+                                                includeTag2 = value),
+                                        hintText: "Secondary Tag",
+                                        contentPadding:
+                                            const EdgeInsetsDirectional
+                                                .symmetric(
+                                                horizontal: 10, vertical: 2),
+                                        hintStyle: const TextStyle(
+                                            color: Colors.grey, fontSize: 14),
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20))),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            const Text(
+                              "Category",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 14),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            TogglableButtons(
+                              buttonList: categoryList,
+                              selected: categorySelected,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            const Text(
+                              "Purity",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 14),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            TogglableButtons(
+                              buttonList: purityList,
+                              selected: puritySelected,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            const Text(
+                              "Sort by",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 14),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            DropdownMenu(
+                              leadingIcon: Icon(Icons.sort,
+                                  color: Colors.white.withAlpha(180)),
+                              textStyle: const TextStyle(
+                                  color: Colors.white, fontSize: 14),
+                              menuStyle: MenuStyle(
+                                  backgroundColor:
+                                      MaterialStateColor.resolveWith((states) =>
+                                          Colors.black.withAlpha(210)),
+                                  shape: MaterialStateProperty.resolveWith(
+                                      (states) => RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20))),
+                                  side: MaterialStateBorderSide.resolveWith(
+                                      (states) => const BorderSide(
+                                            color: Colors.white,
+                                          ))),
+                              inputDecorationTheme: InputDecorationTheme(
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide:
+                                      const BorderSide(color: Colors.white),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide:
+                                      const BorderSide(color: Colors.white),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
+                                constraints: BoxConstraints.tight(
+                                    const Size.fromHeight(50)),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
                               ),
-                              FilledButton(
-                                  onPressed: () {
-                                    final wallhavenFilterStorageProvider =
-                                        Provider.of<
-                                                WallhavenFiltersStorageProvider>(
-                                            context,
-                                            listen: false);
-
-                                    wallhavenFilterStorageProvider.update(
-                                      primaryTag: tag1,
-                                      secondaryTag: tag2,
-                                      includeTag1: includeTag1,
-                                      includeTag2: includeTag2,
-                                      category: categorySelected,
-                                      purity: puritySelected,
-                                      sort: sortBy.index,
-                                      topRange: topRange.index,
-                                      ratio: ratioSelected.indexOf(true),
-                                    );
-                                    wallpaperListProvider.emptyWallpaperList();
-                                    queryProvider.setWallhavenQuery(
-                                      tag1: tag1 == "" ? null : tag1,
-                                      includeTag1: includeTag1,
-                                      tag2: tag2 == "" ? null : tag2,
-                                      includeTag2: includeTag2,
-                                      categories: categories,
-                                      purities: purities,
-                                      sorting: sortBy,
-                                      topRange: topRange,
-                                      ratio: ratio,
-                                    );
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text("Ok")),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    FutureBuilder(
-                      future: WallhavenProvider.getPopularTags(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return SingleChildScrollView(
-                            child: Wrap(
-                              alignment: WrapAlignment.center,
-                              children: snapshot.data!
-                                  .map((tag) => Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 3, vertical: 2),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            queryProvider.setWallhavenQuery(
-                                                tagId: tag['id']);
-                                            wallpaperListProvider
-                                                .emptyWallpaperList();
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: Container(
-                                            padding: const EdgeInsets.all(8),
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: Colors.white,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: const Color.fromRGBO(
-                                                  50, 50, 50, 1),
-                                            ),
-                                            child: Text(
-                                              tag['name'] as String,
-                                              style: const TextStyle(
+                              initialSelection: sortBy,
+                              dropdownMenuEntries: sortByList
+                                  .map((item) => DropdownMenuEntry(
+                                        value: item['value'],
+                                        label: item['label'] as String,
+                                        style: ButtonStyle(
+                                          foregroundColor:
+                                              MaterialStateColor.resolveWith(
+                                                  (states) => Colors.white),
+                                        ),
+                                      ))
+                                  .toList(),
+                              onSelected: (sortType) {
+                                sortBy = (sortType as WallhavenSortingType);
+                                setState(() {
+                                  isTop =
+                                      sortType == WallhavenSortingType.toplist;
+                                });
+                              },
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              height: isTop ? 80 : 0,
+                              child: SingleChildScrollView(
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Top range",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 14),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      DropdownMenu(
+                                        leadingIcon: Icon(Icons.date_range,
+                                            color: Colors.white.withAlpha(180)),
+                                        initialSelection: topRange,
+                                        textStyle: const TextStyle(
+                                            color: Colors.white, fontSize: 14),
+                                        menuStyle: MenuStyle(
+                                            backgroundColor: MaterialStateColor
+                                                .resolveWith((states) =>
+                                                    MaterialStateColor.resolveWith(
+                                                        (states) => Colors.black
+                                                            .withAlpha(210))),
+                                            shape: MaterialStateProperty.resolveWith(
+                                                (states) => RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(20))),
+                                            side: MaterialStateBorderSide.resolveWith((states) => const BorderSide(
                                                   color: Colors.white,
-                                                  fontSize: 12),
-                                            ),
+                                                ))),
+                                        inputDecorationTheme:
+                                            InputDecorationTheme(
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            borderSide: const BorderSide(
+                                                color: Colors.white),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            borderSide: const BorderSide(
+                                                color: Colors.white),
+                                          ),
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  horizontal: 10, vertical: 5),
+                                          constraints: BoxConstraints.tight(
+                                              const Size.fromHeight(50)),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
                                           ),
                                         ),
-                                      ))
-                                  .toList(),
+                                        dropdownMenuEntries: topRangeList
+                                            .map((item) => DropdownMenuEntry(
+                                                  value: item['value'],
+                                                  label:
+                                                      item['label'] as String,
+                                                  style: ButtonStyle(
+                                                    foregroundColor:
+                                                        MaterialStateColor
+                                                            .resolveWith(
+                                                                (states) =>
+                                                                    Colors
+                                                                        .white),
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        onSelected: (topRangeType) => topRange =
+                                            (topRangeType as WallhavenTopRange),
+                                      ),
+                                    ]),
+                              ),
                             ),
-                          );
-                        } else {
-                          return SingleChildScrollView(
-                            child: Wrap(
-                              alignment: WrapAlignment.center,
-                              children: List.generate(90, (index) => index)
-                                  .map((index) => Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 3, vertical: 2),
-                                        child: Shimmer.fromColors(
-                                          enabled: true,
-                                          baseColor: Colors.grey,
-                                          highlightColor: Colors.white70,
-                                          child: Container(
-                                            height: 35,
-                                            width: index % 3 == 0
-                                                ? 50
-                                                : index % 3 == 1
-                                                    ? 40
-                                                    : 60,
-                                            padding: const EdgeInsets.all(8),
-                                            decoration: BoxDecoration(
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            const Text(
+                              "Ratio",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 14),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            TogglableButtons(
+                              buttonList: ratioList,
+                              selected: ratioSelected,
+                              selectOnlyOne: true,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                FilledButton(
+                                    onPressed: Navigator.of(context).pop,
+                                    style: ButtonStyle(
+                                      side: MaterialStateProperty.resolveWith(
+                                          (states) => const BorderSide(
+                                              color: Colors.white)),
+                                      backgroundColor:
+                                          MaterialStateProperty.resolveWith(
+                                              (states) => Theme.of(context)
+                                                  .primaryColor
+                                                  .withAlpha(120)),
+                                    ),
+                                    child: const Text("Cancel")),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                FilledButton(
+                                    onPressed: () {
+                                      final wallhavenFilterStorageProvider =
+                                          Provider.of<
+                                                  WallhavenFiltersStorageProvider>(
+                                              context,
+                                              listen: false);
+
+                                      wallhavenFilterStorageProvider.update(
+                                        primaryTag: tag1,
+                                        secondaryTag: tag2,
+                                        includeTag1: includeTag1,
+                                        includeTag2: includeTag2,
+                                        category: categorySelected,
+                                        purity: puritySelected,
+                                        sort: sortBy.index,
+                                        topRange: topRange.index,
+                                        ratio: ratioSelected.indexOf(true),
+                                      );
+                                      wallpaperListProvider
+                                          .emptyWallpaperList();
+                                      queryProvider.setWallhavenQuery(
+                                        tag1: tag1 == "" ? null : tag1,
+                                        includeTag1: includeTag1,
+                                        tag2: tag2 == "" ? null : tag2,
+                                        includeTag2: includeTag2,
+                                        categories: categories,
+                                        purities: purities,
+                                        sorting: sortBy,
+                                        topRange: topRange,
+                                        ratio: ratio,
+                                      );
+                                      Navigator.of(context).pop();
+                                    },
+                                    style: ButtonStyle(
+                                      side: MaterialStateProperty.resolveWith(
+                                          (states) => const BorderSide(
+                                              color: Colors.white)),
+                                      backgroundColor:
+                                          MaterialStateProperty.resolveWith(
+                                              (states) => Theme.of(context)
+                                                  .primaryColor
+                                                  .withAlpha(120)),
+                                    ),
+                                    child: const Text("Ok")),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      FutureBuilder(
+                        future: WallhavenProvider.getPopularTags(),
+                        builder: (context, snapshot) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            // Scroll animation after list builds
+                            _scrollController.jumpTo(150);
+                            _scrollController.animateTo(
+                              -150,
+                              duration: const Duration(milliseconds: 800),
+                              curve: Curves.decelerate,
+                            );
+                          });
+                          if (snapshot.hasData) {
+                            return SingleChildScrollView(
+                              controller: _scrollController,
+                              child: Wrap(
+                                alignment: WrapAlignment.center,
+                                children: snapshot.data!
+                                    .map((tag) => Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 3, vertical: 6),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              queryProvider.setWallhavenQuery(
+                                                  tagId: tag['id']);
+                                              wallpaperListProvider
+                                                  .emptyWallpaperList();
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: ClipRRect(
                                               borderRadius:
                                                   BorderRadius.circular(10),
-                                              color: const Color.fromRGBO(
-                                                  50, 50, 50, 1),
+                                              child: BackdropFilter(
+                                                filter: ImageFilter.blur(
+                                                    sigmaX: 6, sigmaY: 6),
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.all(8),
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                      color: Colors.white,
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    color: Colors.black
+                                                        .withAlpha(50),
+                                                  ),
+                                                  child: Text(
+                                                    tag['name'] as String,
+                                                    style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 12),
+                                                  ),
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ))
-                                  .toList(),
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                  ],
+                                        ))
+                                    .toList(),
+                              ),
+                            );
+                          } else {
+                            return SingleChildScrollView(
+                              child: Wrap(
+                                alignment: WrapAlignment.center,
+                                children: List.generate(90, (index) => index)
+                                    .map((index) => Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 3, vertical: 6),
+                                          child: Shimmer.fromColors(
+                                            enabled: true,
+                                            baseColor:
+                                                Colors.grey.withAlpha(80),
+                                            highlightColor: Colors.white70,
+                                            child: Container(
+                                              height: 35,
+                                              width: index % 3 == 0
+                                                  ? 50
+                                                  : index % 3 == 1
+                                                      ? 40
+                                                      : 60,
+                                              padding: const EdgeInsets.all(8),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: const Color.fromRGBO(
+                                                    50, 50, 50, 1),
+                                              ),
+                                            ),
+                                          ),
+                                        ))
+                                    .toList(),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

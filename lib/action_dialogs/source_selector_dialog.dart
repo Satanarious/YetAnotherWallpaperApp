@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/providers/providers.dart';
@@ -42,64 +44,89 @@ class _SourceSelectorDialogState extends State<SourceSelectorDialog> {
         Provider.of<WallpaperListProvider>(context, listen: false);
 
     return Dialog(
+        backgroundColor: Colors.transparent,
         child: ClipRRect(
-      borderRadius: BorderRadius.circular(20),
-      child: Container(
-        color: const Color.fromRGBO(50, 50, 50, 1),
-        height: orientation == Orientation.portrait ? 400 : 200,
-        width: orientation == Orientation.portrait ? 300 : 600,
-        child: ListView(
-          controller: _scrollController,
-          scrollDirection: orientation == Orientation.portrait
-              ? Axis.vertical
-              : Axis.horizontal,
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          children: sourceMaps.map((source) {
-            final isSelected = source['value'] == sourceProvider.source;
-            return GestureDetector(
-              onTap: () {
-                queryProvider.emptyQuery();
-                wallpaperListProvider.emptyWallpaperList();
-                sourceProvider.changeSource(source['value'] as Sources);
-                Navigator.of(context).pop();
-              },
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Container(
-                  color: isSelected ? Colors.white : null,
-                  width: orientation == Orientation.portrait
-                      ? double.infinity
-                      : 120,
-                  padding: const EdgeInsets.all(0.2),
-                  child: Card(
-                      color: source['colour'] as Color,
-                      elevation: 5,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Center(
-                            child: Column(
-                          mainAxisSize: MainAxisSize.min,
+          borderRadius: BorderRadius.circular(20),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+            child: SizedBox(
+              height: orientation == Orientation.portrait ? 400 : 200,
+              width: orientation == Orientation.portrait ? 300 : 600,
+              child: ListView(
+                controller: _scrollController,
+                scrollDirection: orientation == Orientation.portrait
+                    ? Axis.vertical
+                    : Axis.horizontal,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                children: sourceMaps.map((source) {
+                  final isSelected = source['value'] == sourceProvider.source;
+                  return GestureDetector(
+                    onTap: () {
+                      queryProvider.emptyQuery();
+                      wallpaperListProvider.emptyWallpaperList();
+                      sourceProvider.changeSource(source['value'] as Sources);
+                      Navigator.of(context).pop();
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Container(
+                        color: isSelected ? Colors.white : null,
+                        width: orientation == Orientation.portrait
+                            ? double.infinity
+                            : 120,
+                        padding: const EdgeInsets.all(0.2),
+                        child: Stack(
                           children: [
-                            Icon(
-                              source['icon'] as IconData,
-                              color: Colors.white,
-                              size: 40,
-                            ),
-                            Text(
-                              source['name'] as String,
-                              style: const TextStyle(color: Colors.white),
+                            Card(
+                                color: source['colour'] as Color,
+                                elevation: 5,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                      child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        source['icon'] as IconData,
+                                        color: Colors.white,
+                                        size: 40,
+                                      ),
+                                      Text(
+                                        source['name'] as String,
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      )
+                                    ],
+                                  )),
+                                )),
+                            Container(
+                              decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topRight,
+                                  end: Alignment.bottomLeft,
+                                  colors: [
+                                    Colors.white10,
+                                    Colors.white12,
+                                    Colors.white24,
+                                    Colors.white30,
+                                    Colors.white38,
+                                    Colors.white54,
+                                  ],
+                                ),
+                              ),
                             )
                           ],
-                        )),
-                      )),
-                ),
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
               ),
-            );
-          }).toList(),
-        ),
-      ),
-    ));
+            ),
+          ),
+        ));
   }
 }

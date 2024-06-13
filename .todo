@@ -1,9 +1,13 @@
 TODO:
     Features:
         To Add:
+            ☐ Deviant Art Topics loading time indication.
+            ☐ Deviant Art Save topics.
+            ☐ Community List/Deviant Art Topic List, grid and list view options.
             ☐ Save current query
                 - Separate screen to access/remove saved queries
                 - Save Query button on home page
+            ☐ Add to Favourites dialog, add preview of images 
         Local Filters:
             ☐ Resolution Filter
             ☐ Orientation Filter
@@ -48,14 +52,22 @@ TODO:
         ☐ Add reset button in all filter dialogs.
         ☐ Add Logs.
         ☐ Add Undo snackbars.
+        ☐ Frosted Glass Theming
+            ☐ Clear All History
+            ✔ Favourites Add @done(24-06-14 03:04)
+            ✔ New Favourites Folder @done(24-06-14 02:55)
         ✔ Save Favourites @done(24-05-02 09:40)
         ✔ Save Filters @done(24-05-01 19:23)
         ✔ Save History @done(24-05-01 13:27)
 
 FIXME:
+    ☐ Loading when there are no more pages left. 
+        - Remove the loading animation
+        - Add a toast
     ☐ Tags loading on info sheet eveytime sheet is opened.
     ☐ Add Restoration of state on setting the wallpaper.
-        - https://dev.to/pedromassango/what-is-state-restoration-and-how-to-use-it-in-flutter-5blm
+    - https://dev.to/pedromassango/what-is-state-restoration-and-how-to-use-it-in-flutter-5blm
+    ✔ Deviant Art Topic not working. (notify user to change filter) @done(24-06-11 19:04)
     ✔ Wallpapers repeating @high @done(24-05-24 20:10)
         ✔ Wallhaven, same page repeating again and again, on page change. @done(24-05-20 15:50)
         ✔ Adding same page to the list twice, from 2nd page onwards. @done(24-05-24 20:10)

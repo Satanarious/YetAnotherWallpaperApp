@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/models/models.dart';
@@ -45,117 +47,157 @@ class _AddToFavouritesDialogState extends State<AddToFavouritesDialog> {
     final favourites = favouritesProvider.favouriteFolders;
 
     return Dialog(
+      backgroundColor: Colors.transparent,
       child: SizedBox(
         height: 270,
         width: 360,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
-          child: Container(
-            color: const Color.fromRGBO(50, 50, 50, 1),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            child: Column(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Text(
-                    "Add to Favourites",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                  color: Colors.black.withAlpha(100),
+                  border: Border.all(
+                    color: Colors.white,
+                    width: 1,
                   ),
-                ),
-                favourites.keys.isEmpty
-                    ? Expanded(
-                        child: Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Text(
-                                "Add folders in the favourites screen to proceed",
-                                textAlign: TextAlign.center,
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 15),
-                              ),
-                              TextButton(
-                                onPressed: () => Navigator.of(context)
-                                    .pushNamed(FavouritesScreen.routeName),
-                                child: Text(
-                                  "Goto Favourites",
+                  borderRadius: BorderRadius.circular(30)),
+              child: Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Text(
+                      "Add to Favourites",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  favourites.keys.isEmpty
+                      ? Expanded(
+                          child: Center(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Text(
+                                  "Add folders in the favourites screen to proceed",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontSize: 15,
+                                      color: Colors.grey, fontSize: 15),
+                                ),
+                                TextButton(
+                                  onPressed: () => Navigator.of(context)
+                                      .pushNamed(FavouritesScreen.routeName),
+                                  child: const Text(
+                                    "Goto Favourites",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      decoration: TextDecoration.underline,
+                                      decorationColor: Colors.white,
+                                      fontSize: 14,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
+                          ),
+                        )
+                      : Expanded(
+                          child: ListView.builder(
+                            padding: const EdgeInsets.only(top: 0),
+                            itemCount: favourites.keys.length,
+                            itemBuilder: (context, index) {
+                              final folderName =
+                                  favourites.keys.elementAt(index);
+                              return FavouriteFolderTile(
+                                  folderName,
+                                  toggleFavourite,
+                                  _favouriteFoldersWhereWallpaperNeedsAdding
+                                      .contains(folderName));
+                            },
                           ),
                         ),
-                      )
-                    : Expanded(
-                        child: ListView.builder(
-                          itemCount: favourites.keys.length,
-                          itemBuilder: (context, index) {
-                            final folderName = favourites.keys.elementAt(index);
-                            return FavouriteFolderTile(
-                                folderName,
-                                toggleFavourite,
-                                _favouriteFoldersWhereWallpaperNeedsAdding
-                                    .contains(folderName));
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FilledButton(
+                          onPressed: Navigator.of(context).pop,
+                          style: ButtonStyle(
+                            side: MaterialStateProperty.resolveWith((states) =>
+                                const BorderSide(color: Colors.white)),
+                            backgroundColor: MaterialStateProperty.resolveWith(
+                                (states) => Theme.of(context)
+                                    .primaryColor
+                                    .withAlpha(120)),
+                          ),
+                          child: const Text("Cancel"),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        FilledButton(
+                          onPressed: () {
+                            // Clear All Selected
+                            setState(() {
+                              _favouriteFoldersWhereWallpaperNeedsAdding
+                                  .clear();
+                            });
                           },
+                          style: ButtonStyle(
+                            side: MaterialStateProperty.resolveWith((states) =>
+                                const BorderSide(color: Colors.white)),
+                            backgroundColor: MaterialStateProperty.resolveWith(
+                                (states) => Theme.of(context)
+                                    .primaryColor
+                                    .withAlpha(120)),
+                          ),
+                          child: const Text("Clear All"),
                         ),
-                      ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      FilledButton(
-                        onPressed: Navigator.of(context).pop,
-                        child: const Text("Cancel"),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      FilledButton(
-                        onPressed: () {
-                          // Clear All Selected
-                          setState(() {
-                            _favouriteFoldersWhereWallpaperNeedsAdding.clear();
-                          });
-                        },
-                        child: const Text("Clear All"),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      FilledButton(
-                        onPressed: () {
-                          final favouritesStorageProvider =
-                              Provider.of<FavouritesStorageProvider>(context,
-                                  listen: false);
-                          final isFavourite =
-                              favouritesProvider.manageFavouriteFolders(
-                            widget.wallpaper,
-                            _initialSelection,
-                            _favouriteFoldersWhereWallpaperNeedsAdding,
-                            favouritesStorageProvider,
-                          );
-                          Navigator.of(context).pop(isFavourite);
-                        },
-                        child: AnimatedSize(
-                          duration: const Duration(milliseconds: 100),
-                          child: Text(
-                              _favouriteFoldersWhereWallpaperNeedsAdding.isEmpty
-                                  ? "Remove"
-                                  : "Ok"),
+                        const SizedBox(
+                          width: 5,
                         ),
-                      ),
-                    ],
+                        FilledButton(
+                          onPressed: () {
+                            final favouritesStorageProvider =
+                                Provider.of<FavouritesStorageProvider>(context,
+                                    listen: false);
+                            final isFavourite =
+                                favouritesProvider.manageFavouriteFolders(
+                              widget.wallpaper,
+                              _initialSelection,
+                              _favouriteFoldersWhereWallpaperNeedsAdding,
+                              favouritesStorageProvider,
+                            );
+                            Navigator.of(context).pop(isFavourite);
+                          },
+                          style: ButtonStyle(
+                            side: MaterialStateProperty.resolveWith((states) =>
+                                const BorderSide(color: Colors.white)),
+                            backgroundColor: MaterialStateProperty.resolveWith(
+                                (states) => Theme.of(context)
+                                    .primaryColor
+                                    .withAlpha(120)),
+                          ),
+                          child: AnimatedSize(
+                            duration: const Duration(milliseconds: 100),
+                            child: Text(
+                                _favouriteFoldersWhereWallpaperNeedsAdding
+                                        .isEmpty
+                                    ? "Remove"
+                                    : "Ok"),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -201,6 +243,9 @@ class _FavouriteFolderTileState extends State<FavouriteFolderTile> {
         ),
         leading: Checkbox(
           value: _selected,
+          side: const BorderSide(color: Colors.white),
+          checkColor: Theme.of(context).primaryColor,
+          activeColor: Colors.white,
           onChanged: (value) => onTap(),
         ));
   }

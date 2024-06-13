@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:iconly/iconly.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/enums/file_type.dart';
@@ -108,26 +111,29 @@ class _OpenImageScreenState extends State<OpenImageScreen> {
             },
           ),
           AnimatedPositioned(
-            curve: Curves.fastOutSlowIn,
-            duration: const Duration(milliseconds: 200),
+            curve: Curves.fastEaseInToSlowEaseOut,
+            duration: const Duration(milliseconds: 400),
             top: statusBarHeight + 10,
             left: isInteracting ? -60 : 10,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(30),
-              child: Container(
-                color: Colors.black.withAlpha(210),
-                child: IconButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(
-                      Icons.arrow_circle_left_outlined,
-                      color: Colors.white,
-                    )),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+                child: Container(
+                  color: Colors.black.withAlpha(50),
+                  child: IconButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(
+                        IconlyLight.arrow_left_circle,
+                        color: Colors.white,
+                      )),
+                ),
               ),
             ),
           ),
           AnimatedPositioned(
-              curve: Curves.fastOutSlowIn,
-              duration: const Duration(milliseconds: 200),
+              curve: Curves.fastEaseInToSlowEaseOut,
+              duration: const Duration(milliseconds: 400),
               left: 0,
               right: 0,
               bottom: isInteracting ? -80 : 0,

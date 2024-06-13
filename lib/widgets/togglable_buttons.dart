@@ -83,12 +83,11 @@ class _TogglableButtonsState extends State<TogglableButtons> {
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               border: Border.all(
-                color: isSelected ? Colors.grey.shade600 : Colors.white,
+                color: isSelected ? Colors.white : Colors.grey.shade600,
+                width: 2,
               ),
               borderRadius: BorderRadius.circular(10),
-              color: isSelected
-                  ? Colors.grey.shade600
-                  : const Color.fromRGBO(50, 50, 50, 1),
+              color: Colors.transparent,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,

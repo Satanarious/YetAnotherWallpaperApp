@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:async_wallpaper/async_wallpaper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/models/wallpaper.dart';
 import 'package:wallpaper_app/providers/providers.dart';
@@ -40,7 +43,7 @@ class _WallpaperActionsWidgetState extends State<WallpaperActionsWidget>
             builder: (context) => WallpaperInfoSheet(widget.wallpaper),
           ),
           icon: const Icon(
-            Icons.info,
+            IconlyLight.info_circle,
             size: 30,
             color: Colors.white,
           ),
@@ -57,7 +60,7 @@ class _WallpaperActionsWidgetState extends State<WallpaperActionsWidget>
             Navigator.of(context).pop();
           },
           icon: const Icon(
-            Icons.search,
+            IconlyLight.search,
             size: 30,
             color: Colors.white,
           ),
@@ -74,7 +77,7 @@ class _WallpaperActionsWidgetState extends State<WallpaperActionsWidget>
                   filePath: imagePath, goToHome: false);
             },
             icon: const Icon(
-              Icons.landscape,
+              IconlyLight.image,
               size: 30,
               color: Colors.white,
             )),
@@ -94,20 +97,25 @@ class _WallpaperActionsWidgetState extends State<WallpaperActionsWidget>
       validButtons = list;
     }
 
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 10,
-        vertical: 6,
-      ),
-      color: Colors.black.withAlpha(210),
-      height: 80,
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: validButtons,
+    return ClipRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 10,
+            vertical: 6,
           ),
-        ],
+          color: Colors.black.withAlpha(50),
+          height: 80,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: validButtons,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -181,7 +189,7 @@ class _DownloadButtonState extends State<DownloadButton>
                   builder: (context, child) => Transform.scale(
                     scale: _controller.value,
                     child: const Icon(
-                      Icons.check,
+                      Icons.check_rounded,
                       size: 30,
                       color: Colors.white,
                     ),
@@ -202,7 +210,7 @@ class _DownloadButtonState extends State<DownloadButton>
                 },
                 tooltip: "Download",
                 icon: const Icon(
-                  Icons.download,
+                  IconlyLight.download,
                   size: 30,
                   color: Colors.white,
                 ),

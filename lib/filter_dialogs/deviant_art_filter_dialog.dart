@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:wallpaper_app/providers/providers.dart';
@@ -36,91 +38,105 @@ class _DeviantArtFilterDialogState extends State<DeviantArtFilterDialog>
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      backgroundColor: Colors.transparent,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
-        child: Container(
-          color: const Color.fromRGBO(50, 50, 50, 1),
-          padding: const EdgeInsetsDirectional.symmetric(
-              horizontal: 14, vertical: 10),
-          height: 385,
-          width: 350,
-          child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Text(
-                      "Filters",
-                      style: TextStyle(fontSize: 20, color: Colors.white),
-                    ),
-                    const Spacer(),
-                    Checkbox(
-                      value: matureContent,
-                      onChanged: (value) => setState(() {
-                        matureContent = !matureContent;
-                      }),
-                    ),
-                    const Text(
-                      "18+",
-                      style: TextStyle(fontSize: 15, color: Colors.white),
-                    ),
-                  ],
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.black.withAlpha(50),
+                border: Border.all(
+                  color: Colors.white,
+                  width: 1,
                 ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: DefaultTabController(
-                        length: 3,
-                        child: SizedBox(
-                          height: 330,
-                          child: Column(
-                            children: [
-                              TabBar(
-                                controller: tabController,
-                                labelColor: Colors.grey,
-                                dividerColor: Colors.transparent,
-                                tabs: const [
-                                  Text(
-                                    "By Tag",
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  Text(
-                                    "By Topic",
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  Text(
-                                    "By Query",
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              SizedBox(
-                                height: 290,
-                                child: TabBarView(
-                                    controller: tabController,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        child: TagTab(matureContent),
-                                      ),
-                                      TopicTab(matureContent),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        child: QueryTab(matureContent),
-                                      ),
-                                    ]),
-                              )
-                            ],
-                          ),
-                        )),
+                borderRadius: BorderRadius.circular(30)),
+            padding: const EdgeInsetsDirectional.symmetric(
+                horizontal: 14, vertical: 10),
+            height: 430,
+            width: 350,
+            child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Text(
+                        "Filters",
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                      const Spacer(),
+                      Checkbox(
+                        value: matureContent,
+                        side: const BorderSide(color: Colors.white),
+                        checkColor: Theme.of(context).primaryColor,
+                        activeColor: Colors.white,
+                        onChanged: (value) => setState(() {
+                          matureContent = !matureContent;
+                        }),
+                      ),
+                      const Text(
+                        "18+",
+                        style: TextStyle(fontSize: 15, color: Colors.white),
+                      ),
+                    ],
                   ),
-                ),
-              ]),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: DefaultTabController(
+                          length: 3,
+                          child: SizedBox(
+                            height: 370,
+                            child: Column(
+                              children: [
+                                TabBar(
+                                  controller: tabController,
+                                  labelColor: Colors.white,
+                                  unselectedLabelColor: Colors.white,
+                                  dividerColor: Colors.transparent,
+                                  tabs: const [
+                                    Text(
+                                      "By Tag",
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                    Text(
+                                      "By Topic",
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                    Text(
+                                      "By Query",
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                SizedBox(
+                                  height: 330,
+                                  child: TabBarView(
+                                      controller: tabController,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: TagTab(matureContent),
+                                        ),
+                                        TopicTab(matureContent),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: QueryTab(matureContent),
+                                        ),
+                                      ]),
+                                )
+                              ],
+                            ),
+                          )),
+                    ),
+                  ),
+                ]),
+          ),
         ),
       ),
     );
@@ -193,9 +209,21 @@ class _TopicTabState extends State<TopicTab>
                   style: const TextStyle(color: Colors.white, fontSize: 14),
                   onChanged: (value) => topicController.text = value,
                   decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: const BorderSide(color: Colors.white),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: const BorderSide(color: Colors.white),
+                    ),
+                    prefixIcon: Icon(
+                      Icons.label_important_outline_rounded,
+                      color: Colors.white.withAlpha(180),
+                    ),
                     suffixIcon: IconButton(
                       tooltip: "Topic List",
-                      icon: const Icon(Icons.list),
+                      icon: const Icon(Icons.list_rounded),
                       color: Colors.white,
                       onPressed: () => tabController.animateTo(1),
                     ),
@@ -204,9 +232,6 @@ class _TopicTabState extends State<TopicTab>
                         horizontal: 10, vertical: 2),
                     hintStyle:
                         const TextStyle(color: Colors.grey, fontSize: 14),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
                   ),
                 ),
                 const SizedBox(
@@ -214,7 +239,9 @@ class _TopicTabState extends State<TopicTab>
                 ),
                 const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [Icon(Icons.arrow_upward, color: Colors.white)]),
+                    children: [
+                      Icon(Icons.arrow_upward_rounded, color: Colors.white)
+                    ]),
                 const Text(
                   "Top Topics",
                   style: TextStyle(color: Colors.white, fontSize: 14),
@@ -222,48 +249,43 @@ class _TopicTabState extends State<TopicTab>
                 const SizedBox(
                   height: 5,
                 ),
-                Expanded(
-                  child: FutureBuilder(
-                    future: deviantArtProvider.deviantArtTopTopics,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        topics = snapshot.data!;
-                        topicSelected =
-                            List.generate(topics.length, (index) => false);
-                        return SingleChildScrollView(
-                            child: TogglableButtons(
-                          buttonList: topics,
-                          selected: topicSelected,
-                          controller: topicController,
-                          selectOnlyOne: true,
-                          wrapChildren: true,
-                        ));
-                      } else {
-                        return Wrap(
-                          children: List.generate(7, (index) => index)
-                              .map(
-                                (e) => Padding(
-                                  padding: const EdgeInsets.all(3),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Shimmer.fromColors(
-                                      enabled: true,
-                                      baseColor: Colors.grey,
-                                      highlightColor: Colors.white70,
-                                      child: Container(
-                                        height: 35,
-                                        width: 60,
-                                        color: Colors.black,
-                                      ),
-                                    ),
+                FutureBuilder(
+                  future: deviantArtProvider.deviantArtTopTopics,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      topics = snapshot.data!;
+                      topicSelected =
+                          List.generate(topics.length, (index) => false);
+                      return SingleChildScrollView(
+                          child: TogglableButtons(
+                        buttonList: topics,
+                        selected: topicSelected,
+                        controller: topicController,
+                        selectOnlyOne: true,
+                        wrapChildren: true,
+                      ));
+                    } else {
+                      return Wrap(
+                        children: List.generate(7, (index) => index)
+                            .map(
+                              (e) => ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Shimmer.fromColors(
+                                  enabled: true,
+                                  baseColor: Colors.grey.withAlpha(80),
+                                  highlightColor: Colors.white70,
+                                  child: Container(
+                                    height: 35,
+                                    width: 60,
+                                    color: Colors.black,
                                   ),
                                 ),
-                              )
-                              .toList(),
-                        );
-                      }
-                    },
-                  ),
+                              ),
+                            )
+                            .toList(),
+                      );
+                    }
+                  },
                 ),
               ],
             ),
@@ -276,6 +298,12 @@ class _TopicTabState extends State<TopicTab>
             children: [
               FilledButton(
                 onPressed: Navigator.of(context).pop,
+                style: ButtonStyle(
+                  side: MaterialStateProperty.resolveWith(
+                      (states) => const BorderSide(color: Colors.white)),
+                  backgroundColor: MaterialStateProperty.resolveWith((states) =>
+                      Theme.of(context).primaryColor.withAlpha(120)),
+                ),
                 child: const Text("Cancel"),
               ),
               const SizedBox(
@@ -306,6 +334,12 @@ class _TopicTabState extends State<TopicTab>
                       matureContent: widget.matureContent);
                   Navigator.of(context).pop();
                 },
+                style: ButtonStyle(
+                  side: MaterialStateProperty.resolveWith(
+                      (states) => const BorderSide(color: Colors.white)),
+                  backgroundColor: MaterialStateProperty.resolveWith((states) =>
+                      Theme.of(context).primaryColor.withAlpha(120)),
+                ),
                 child: const Text("Ok"),
               ),
             ],
@@ -324,7 +358,7 @@ class _TopicTabState extends State<TopicTab>
                 : ListView.builder(
                     itemBuilder: (context, index) => Shimmer.fromColors(
                       enabled: true,
-                      baseColor: Colors.grey,
+                      baseColor: Colors.grey.withAlpha(80),
                       highlightColor: Colors.white70,
                       child: Card(
                         child: Container(
@@ -401,7 +435,18 @@ class _TagTabState extends State<TagTab> {
                 style: const TextStyle(color: Colors.white, fontSize: 14),
                 onChanged: _onSearchChanged,
                 decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.label),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: const BorderSide(color: Colors.white),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: const BorderSide(color: Colors.white),
+                  ),
+                  prefixIcon: Icon(
+                    Icons.label_outline_rounded,
+                    color: Colors.white.withAlpha(180),
+                  ),
                   hintText: "3 or more characters without spaces",
                   contentPadding: const EdgeInsetsDirectional.symmetric(
                       horizontal: 10, vertical: 2),
@@ -476,7 +521,8 @@ class _TagTabState extends State<TagTab> {
                                               BorderRadius.circular(10),
                                           child: Shimmer.fromColors(
                                             enabled: true,
-                                            baseColor: Colors.grey,
+                                            baseColor:
+                                                Colors.grey.withAlpha(80),
                                             highlightColor: Colors.white70,
                                             child: Container(
                                               height: 35,
@@ -506,6 +552,12 @@ class _TagTabState extends State<TagTab> {
         children: [
           FilledButton(
             onPressed: Navigator.of(context).pop,
+            style: ButtonStyle(
+              side: MaterialStateProperty.resolveWith(
+                  (states) => const BorderSide(color: Colors.white)),
+              backgroundColor: MaterialStateProperty.resolveWith(
+                  (states) => Theme.of(context).primaryColor.withAlpha(120)),
+            ),
             child: const Text("Cancel"),
           ),
           const SizedBox(
@@ -539,6 +591,12 @@ class _TagTabState extends State<TagTab> {
               );
               Navigator.of(context).pop();
             },
+            style: ButtonStyle(
+              side: MaterialStateProperty.resolveWith(
+                  (states) => const BorderSide(color: Colors.white)),
+              backgroundColor: MaterialStateProperty.resolveWith(
+                  (states) => Theme.of(context).primaryColor.withAlpha(120)),
+            ),
             child: const Text("Ok"),
           ),
         ],
@@ -627,7 +685,16 @@ class _QueryTabState extends State<QueryTab> {
                 style: const TextStyle(color: Colors.white, fontSize: 14),
                 onChanged: (value) => query = value,
                 decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.search),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: const BorderSide(color: Colors.white),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: const BorderSide(color: Colors.white),
+                  ),
+                  prefixIcon: Icon(IconlyLight.search,
+                      color: Colors.white.withAlpha(180)),
                   hintText: "Search anything here...",
                   contentPadding: const EdgeInsetsDirectional.symmetric(
                       horizontal: 10, vertical: 2),
@@ -648,9 +715,31 @@ class _QueryTabState extends State<QueryTab> {
                 height: 5,
               ),
               DropdownMenu(
-                leadingIcon: const Icon(Icons.filter_alt),
+                leadingIcon: Icon(
+                  IconlyLight.filter_2,
+                  color: Colors.white.withAlpha(180),
+                ),
                 initialSelection: isPopular,
+                menuStyle: MenuStyle(
+                    backgroundColor: MaterialStateColor.resolveWith((states) =>
+                        MaterialStateColor.resolveWith(
+                            (states) => Colors.black.withAlpha(210))),
+                    shape: MaterialStateProperty.resolveWith((states) =>
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20))),
+                    side: MaterialStateBorderSide.resolveWith(
+                        (states) => const BorderSide(
+                              color: Colors.white,
+                            ))),
                 inputDecorationTheme: InputDecorationTheme(
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: const BorderSide(color: Colors.white),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: const BorderSide(color: Colors.white),
+                  ),
                   contentPadding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   constraints: BoxConstraints.tight(const Size.fromHeight(50)),
@@ -658,10 +747,15 @@ class _QueryTabState extends State<QueryTab> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
-                textStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+                textStyle: const TextStyle(color: Colors.white, fontSize: 14),
                 dropdownMenuEntries: sortList
                     .map((item) => DropdownMenuEntry(
-                        value: item == 'Popular', label: item))
+                        value: item == 'Popular',
+                        label: item,
+                        style: ButtonStyle(
+                          foregroundColor: MaterialStateColor.resolveWith(
+                              (states) => Colors.white),
+                        )))
                     .toList(),
                 onSelected: (sortType) => isPopular = sortType!,
               ),
@@ -671,9 +765,17 @@ class _QueryTabState extends State<QueryTab> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FilledButton(
-              onPressed: Navigator.of(context).pop,
-              child: const Text("Cancel"),
+            ClipRRect(
+              child: FilledButton(
+                onPressed: Navigator.of(context).pop,
+                style: ButtonStyle(
+                  side: MaterialStateProperty.resolveWith(
+                      (states) => const BorderSide(color: Colors.white)),
+                  backgroundColor: MaterialStateProperty.resolveWith((states) =>
+                      Theme.of(context).primaryColor.withAlpha(120)),
+                ),
+                child: const Text("Cancel"),
+              ),
             ),
             const SizedBox(
               width: 20,
@@ -708,6 +810,12 @@ class _QueryTabState extends State<QueryTab> {
                 );
                 Navigator.of(context).pop();
               },
+              style: ButtonStyle(
+                side: MaterialStateProperty.resolveWith(
+                    (states) => const BorderSide(color: Colors.white)),
+                backgroundColor: MaterialStateProperty.resolveWith(
+                    (states) => Theme.of(context).primaryColor.withAlpha(120)),
+              ),
               child: const Text("Ok"),
             ),
           ],

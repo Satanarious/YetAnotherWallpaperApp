@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/providers/query_provider.dart';
@@ -22,13 +24,13 @@ class _RedditFilterDialogState extends State<RedditFilterDialog>
   final rangeSelected = List.generate(6, (index) => false);
 
   static const sortList = [
-    {"name": "Top", "icon": Icons.arrow_upward},
-    {"name": "New", "icon": Icons.new_releases},
-    {"name": "Hot", "icon": Icons.fireplace},
-    {"name": "Rising", "icon": Icons.upload},
+    {"name": "Top", "icon": Icons.arrow_upward_rounded},
+    {"name": "New", "icon": Icons.new_releases_outlined},
+    {"name": "Hot", "icon": Icons.fireplace_rounded},
+    {"name": "Rising", "icon": Icons.upload_rounded},
   ];
   static const rangeList = [
-    {"name": "All", "icon": Icons.date_range},
+    {"name": "All", "icon": Icons.date_range_rounded},
     {"name": "Year", "icon": Icons.calendar_month_outlined},
     {"name": "Month", "icon": Icons.calendar_view_month},
     {"name": "Week", "icon": Icons.calendar_view_week},
@@ -262,183 +264,245 @@ class _RedditFilterDialogState extends State<RedditFilterDialog>
   @override
   Widget build(BuildContext context) {
     return Dialog(
+        backgroundColor: Colors.transparent,
         child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Container(
-              color: const Color.fromRGBO(50, 50, 50, 1),
-              padding: const EdgeInsetsDirectional.symmetric(
-                  horizontal: 14, vertical: 10),
-              height: 360,
-              width: 350,
-              child: Column(
-                children: [
-                  Expanded(
-                    child: TabBarView(
-                      controller: tabController,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "Filters",
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.white),
-                            ),
-                            Expanded(
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const SizedBox(
-                                      height: 14,
-                                    ),
-                                    const Text(
-                                      "Subreddit",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 14),
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: TextField(
-                                            controller: subredditNameController,
-                                            style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 14),
-                                            decoration: InputDecoration(
-                                                prefixText: "r/",
-                                                suffixIcon: IconButton(
-                                                  tooltip: "Presets",
-                                                  icon: const Icon(
-                                                    Icons.list,
-                                                    color: Colors.white,
-                                                  ),
-                                                  onPressed: () => tabController
-                                                      .animateTo(1),
-                                                ),
-                                                hintText: "Subreddit Name",
-                                                contentPadding:
-                                                    const EdgeInsetsDirectional
-                                                        .symmetric(
-                                                        horizontal: 10,
-                                                        vertical: 2),
-                                                hintStyle: const TextStyle(
-                                                    color: Colors.grey,
-                                                    fontSize: 14),
-                                                border: OutlineInputBorder(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.black.withAlpha(50),
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.circular(30)),
+                padding: const EdgeInsetsDirectional.symmetric(
+                    horizontal: 14, vertical: 10),
+                height: 370,
+                width: 350,
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: TabBarView(
+                        controller: tabController,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: [
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "Filters",
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.white),
+                              ),
+                              Expanded(
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const SizedBox(
+                                        height: 14,
+                                      ),
+                                      const Text(
+                                        "Subreddit",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 14),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: TextField(
+                                              controller:
+                                                  subredditNameController,
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14),
+                                              decoration: InputDecoration(
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            20))),
+                                                            20),
+                                                    borderSide:
+                                                        const BorderSide(
+                                                            color:
+                                                                Colors.white),
+                                                  ),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                    borderSide:
+                                                        const BorderSide(
+                                                            color:
+                                                                Colors.white),
+                                                  ),
+                                                  prefixText: "r/",
+                                                  suffixIcon: IconButton(
+                                                    tooltip: "Presets",
+                                                    icon: const Icon(
+                                                      Icons.list_rounded,
+                                                      color: Colors.white,
+                                                    ),
+                                                    onPressed: () =>
+                                                        tabController
+                                                            .animateTo(1),
+                                                  ),
+                                                  hintText: "Subreddit Name",
+                                                  contentPadding:
+                                                      const EdgeInsetsDirectional
+                                                          .symmetric(
+                                                          horizontal: 10,
+                                                          vertical: 2),
+                                                  hintStyle: const TextStyle(
+                                                      color: Colors.grey,
+                                                      fontSize: 14),
+                                                  border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20))),
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    const Text(
-                                      "Sort Type",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 14),
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    TogglableButtons(
-                                      buttonList: sortList,
-                                      selected: sortSelected,
-                                      selectOnlyOne: true,
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    const Text(
-                                      "Sort Range",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 14),
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    TogglableButtons(
-                                      buttonList: rangeList,
-                                      selected: rangeSelected,
-                                      selectOnlyOne: true,
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        FilledButton(
-                                          onPressed: Navigator.of(context).pop,
-                                          child: const Text("Cancel"),
-                                        ),
-                                        const SizedBox(
-                                          width: 20,
-                                        ),
-                                        FilledButton(
-                                          onPressed: () {
-                                            final queryProvider =
-                                                Provider.of<QueryProvider>(
-                                                    context,
-                                                    listen: false);
-                                            final wallpaperListProvider =
-                                                Provider.of<
-                                                        WallpaperListProvider>(
-                                                    context,
-                                                    listen: false);
-                                            final redditFilterStorageProvider =
-                                                Provider.of<
-                                                        RedditFiltersStorageProvider>(
-                                                    context,
-                                                    listen: false);
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      const Text(
+                                        "Sort Type",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 14),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      TogglableButtons(
+                                        buttonList: sortList,
+                                        selected: sortSelected,
+                                        selectOnlyOne: true,
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      const Text(
+                                        "Sort Range",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 14),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      TogglableButtons(
+                                        buttonList: rangeList,
+                                        selected: rangeSelected,
+                                        selectOnlyOne: true,
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          FilledButton(
+                                            onPressed:
+                                                Navigator.of(context).pop,
+                                            style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty
+                                                        .resolveWith((states) =>
+                                                            Theme.of(context)
+                                                                .primaryColor
+                                                                .withAlpha(
+                                                                    120)),
+                                                side: MaterialStateBorderSide
+                                                    .resolveWith((states) =>
+                                                        const BorderSide(
+                                                          color: Colors.white,
+                                                        ))),
+                                            child: const Text("Cancel"),
+                                          ),
+                                          const SizedBox(
+                                            width: 20,
+                                          ),
+                                          FilledButton(
+                                            onPressed: () {
+                                              final queryProvider =
+                                                  Provider.of<QueryProvider>(
+                                                      context,
+                                                      listen: false);
+                                              final wallpaperListProvider =
+                                                  Provider.of<
+                                                          WallpaperListProvider>(
+                                                      context,
+                                                      listen: false);
+                                              final redditFilterStorageProvider =
+                                                  Provider.of<
+                                                          RedditFiltersStorageProvider>(
+                                                      context,
+                                                      listen: false);
 
-                                            redditFilterStorageProvider.update(
-                                              subreddit:
-                                                  subredditNameController.text,
-                                              sortType:
-                                                  sortSelected.indexOf(true),
-                                              sortRange:
-                                                  rangeSelected.indexOf(true),
-                                            );
-                                            wallpaperListProvider
-                                                .emptyWallpaperList();
-                                            queryProvider.setRedditQuery(
-                                                subredditName:
+                                              redditFilterStorageProvider
+                                                  .update(
+                                                subreddit:
                                                     subredditNameController
                                                         .text,
-                                                sortType: sortType,
-                                                sortRange: sortRange);
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: const Text("Ok"),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                                sortType:
+                                                    sortSelected.indexOf(true),
+                                                sortRange:
+                                                    rangeSelected.indexOf(true),
+                                              );
+                                              wallpaperListProvider
+                                                  .emptyWallpaperList();
+                                              queryProvider.setRedditQuery(
+                                                  subredditName:
+                                                      subredditNameController
+                                                          .text,
+                                                  sortType: sortType,
+                                                  sortRange: sortRange);
+                                              Navigator.of(context).pop();
+                                            },
+                                            style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty
+                                                        .resolveWith((states) =>
+                                                            Theme.of(context)
+                                                                .primaryColor
+                                                                .withAlpha(
+                                                                    120)),
+                                                side: MaterialStateBorderSide
+                                                    .resolveWith((states) =>
+                                                        const BorderSide(
+                                                          color: Colors.white,
+                                                        ))),
+                                            child: const Text("Ok"),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        CommunityListWidget(
-                          communityNameController: subredditNameController,
-                          tabController: tabController,
-                          communityList: subredditList,
-                        ),
-                      ],
-                    ),
-                  )
-                ],
+                            ],
+                          ),
+                          CommunityListWidget(
+                            communityNameController: subredditNameController,
+                            tabController: tabController,
+                            communityList: subredditList,
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             )));
   }

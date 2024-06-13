@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/action_dialogs/add_to_favourites_dialog.dart';
 import 'package:wallpaper_app/models/models.dart';
@@ -95,10 +96,24 @@ class _FavouriteButtonState extends State<FavouriteButton>
             setState(() {});
           },
           onLongPress: () async {
-            await showDialog(
-              context: context,
-              builder: (context) => AddToFavouritesDialog(widget.wallpaper),
-            );
+            await showGeneralDialog(
+                barrierColor: Colors.black.withOpacity(0.5),
+                transitionBuilder: (context, a1, a2, wid) {
+                  return Transform.scale(
+                    scale: a1.value,
+                    child: Opacity(
+                      opacity: a1.value,
+                      child: Builder(
+                          builder: (context) =>
+                              AddToFavouritesDialog(widget.wallpaper)),
+                    ),
+                  );
+                },
+                transitionDuration: const Duration(milliseconds: 200),
+                barrierDismissible: true,
+                barrierLabel: '',
+                context: context,
+                pageBuilder: (context, animation1, animation2) => Container());
           },
           child: AnimatedBuilder(
             animation: rotationAnimation,
@@ -106,8 +121,8 @@ class _FavouriteButtonState extends State<FavouriteButton>
               transform: Matrix4.rotationY(rotationAnimation.value * 2 * pi),
               alignment: Alignment.center,
               child: Icon(
-                isFavourite ? Icons.favorite : Icons.favorite_outline,
-                size: isOpenImageScreen ? 30 : 25,
+                isFavourite ? IconlyBold.heart : IconlyLight.heart,
+                size: isOpenImageScreen ? 30 : 23,
                 color: Colors.white,
               ),
             ),

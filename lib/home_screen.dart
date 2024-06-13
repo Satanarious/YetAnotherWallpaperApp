@@ -1,5 +1,7 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/action_dialogs/source_selector_dialog.dart';
 import 'package:wallpaper_app/filter_dialogs/filter_dialogs.dart';
@@ -51,6 +53,7 @@ class HomeScreen extends StatelessWidget {
       },
       child: const Scaffold(
         backgroundColor: Color.fromRGBO(50, 50, 50, 1),
+        extendBody: true,
         body: Stack(children: [
           WallpaperGridScreen(),
           PillTabBar(),
@@ -68,31 +71,39 @@ class PillTabBar extends StatefulWidget {
 }
 
 class _PillTabBarState extends State<PillTabBar> {
+  Future animatedPopInOutDialog(Widget dialog) {
+    return showGeneralDialog(
+        barrierColor: Colors.black.withOpacity(0.5),
+        transitionBuilder: (context, a1, a2, wid) {
+          return Transform.scale(
+              scale: a1.value,
+              child: Opacity(
+                opacity: a1.value,
+                child: dialog,
+              ));
+        },
+        transitionDuration: const Duration(milliseconds: 200),
+        barrierDismissible: true,
+        barrierLabel: '',
+        context: context,
+        pageBuilder: (context, animation1, animation2) => Container());
+  }
+
   void filterButtonAction() {
     final source = Provider.of<SourceProvider>(context, listen: false).source;
     switch (source) {
       case Sources.wallhaven:
-        showDialog(
-          context: context,
-          builder: (context) => const WallhavenFilterDialog(),
-        );
+        animatedPopInOutDialog(const WallhavenFilterDialog());
         break;
       case Sources.reddit:
-        showDialog(
-          context: context,
-          builder: (context) => const RedditFilterDialog(),
-        );
+        animatedPopInOutDialog(const RedditFilterDialog());
         break;
       case Sources.lemmy:
-        showDialog(
-          context: context,
-          builder: (context) => const LemmyFilterDialog(),
-        );
+        animatedPopInOutDialog(const LemmyFilterDialog());
+        break;
       case Sources.deviantArt:
-        showDialog(
-          context: context,
-          builder: (context) => const DeviantArtFilterDialog(),
-        );
+        animatedPopInOutDialog(const DeviantArtFilterDialog());
+        break;
       default:
         throw Exception("Source not supported yet!!");
     }
@@ -106,10 +117,10 @@ class _PillTabBarState extends State<PillTabBar> {
             builder: (context) => const SourceSelectorDialog());
         break;
       case 1:
-        Navigator.of(context).pushNamed(HistoryScreen.routeName);
+        Navigator.of(context).pushNamed(FavouritesScreen.routeName);
         break;
       case 2:
-        Navigator.of(context).pushNamed(FavouritesScreen.routeName);
+        Navigator.of(context).pushNamed(HistoryScreen.routeName);
         break;
     }
   }
@@ -127,41 +138,58 @@ class _PillTabBarState extends State<PillTabBar> {
           ClipRRect(
             borderRadius: BorderRadius.circular(25),
             child: SizedBox(
-              width: 180,
+              width: 242,
               height: scrollHandlingProvider.pillHeight,
-              child: BottomNavigationBar(
-                type: BottomNavigationBarType.fixed,
-                showSelectedLabels: false,
-                showUnselectedLabels: false,
-                elevation: 10,
-                backgroundColor: Colors.black.withAlpha(210),
-                unselectedItemColor: Colors.grey,
-                selectedItemColor: Colors.grey,
-                onTap: (index) {
-                  pillButtonAction(index);
-                },
-                items: const [
-                  BottomNavigationBarItem(
-                    tooltip: "Change Source",
-                    icon: Icon(Icons.wallpaper),
-                    label: "Source",
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.black.withAlpha(50),
+                      border: Border.all(
+                        color: Colors.white,
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(30)),
+                  child: Row(
+                    children: [
+                      IconButton(
+                          onPressed: () => pillButtonAction(0),
+                          tooltip: "Sources",
+                          icon: const Icon(
+                            IconlyLight.category,
+                            color: Colors.white,
+                          )),
+                      IconButton(
+                          onPressed: () => pillButtonAction(1),
+                          tooltip: "Favourites",
+                          icon: const Icon(
+                            IconlyLight.heart,
+                            color: Colors.white,
+                          )),
+                      IconButton(
+                          onPressed: () => pillButtonAction(2),
+                          tooltip: "History",
+                          icon: const Icon(
+                            IconlyLight.time_circle,
+                            color: Colors.white,
+                          )),
+                      IconButton(
+                          onPressed: () => 1,
+                          tooltip: "Queries",
+                          icon: const Icon(
+                            IconlyLight.document,
+                            color: Colors.white,
+                          )),
+                      IconButton(
+                          onPressed: () => 1,
+                          tooltip: "Settings",
+                          icon: const Icon(
+                            IconlyLight.setting,
+                            color: Colors.white,
+                          )),
+                    ],
                   ),
-                  BottomNavigationBarItem(
-                    tooltip: "History",
-                    icon: Icon(Icons.history),
-                    label: "History",
-                  ),
-                  BottomNavigationBarItem(
-                    tooltip: "Favourites",
-                    icon: Icon(Icons.favorite),
-                    label: "Favourites",
-                  ),
-                  BottomNavigationBarItem(
-                    tooltip: "Settings",
-                    icon: Icon(Icons.settings),
-                    label: "Settings",
-                  ),
-                ],
+                ),
               ),
             ),
           ),
@@ -170,21 +198,32 @@ class _PillTabBarState extends State<PillTabBar> {
           ),
           ClipRRect(
             borderRadius: BorderRadius.circular(30),
-            child: Container(
-                height: 60,
-                width: 60,
-                decoration: BoxDecoration(color: Colors.black.withAlpha(210)),
-                child: IconButton(
-                  onPressed: filterButtonAction,
-                  tooltip: "Filter",
-                  icon: const Icon(
-                    Icons.filter_list,
-                    color: Colors.grey,
-                  ),
-                )),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              child: Container(
+                  height: 60,
+                  width: 60,
+                  decoration: BoxDecoration(
+                      color: Colors.black.withAlpha(50),
+                      border: Border.all(
+                        color: Colors.white,
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(30)),
+                  child: IconButton(
+                    onPressed: filterButtonAction,
+                    tooltip: "Filter",
+                    icon: const Icon(
+                      Icons.filter_list,
+                      color: Colors.white,
+                    ),
+                  )),
+            ),
           ),
         ],
       ),
     );
   }
 }
+
+class Lottie {}

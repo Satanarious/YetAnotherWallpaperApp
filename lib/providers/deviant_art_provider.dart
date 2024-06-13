@@ -108,14 +108,20 @@ class DeviantArtProvider {
       }
       final data = jsonDecode(response.body) as Map<String, dynamic>;
       final topics = (data['results'] as List).map((topicMap) {
-        final url =
-            (topicMap['example_deviations'][0]['thumbs'] as List).last['src'];
+        String url;
+        try {
+          url =
+              (topicMap['example_deviations'][0]['thumbs'] as List).last['src'];
+        } catch (e) {
+          url = "https://placehold.co/400x200/FFFFFF/FFFFFF/png";
+        }
         final topic = {
           'name': topicMap['name'] as String,
           'value': topicMap['canonical_name'] as String,
           'description': '',
-          'url': url as String,
+          'url': url,
         };
+
         return topic;
       }).toList();
       _deviantArtAllTopics.addAll(topics);
