@@ -7,7 +7,7 @@ TODO:
             ☐ Save current query
                 - Separate screen to access/remove saved queries
                 - Save Query button on home page
-            ☐ Add to Favourites dialog, add preview of images 
+            ✔ Add to Favourites dialog, add preview of images @done(24-06-16 02:08)
         Local Filters:
             ☐ Resolution Filter
             ☐ Orientation Filter

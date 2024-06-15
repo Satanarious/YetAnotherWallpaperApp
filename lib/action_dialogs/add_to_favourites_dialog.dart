@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/models/models.dart';
@@ -49,7 +50,7 @@ class _AddToFavouritesDialogState extends State<AddToFavouritesDialog> {
     return Dialog(
       backgroundColor: Colors.transparent,
       child: SizedBox(
-        height: 270,
+        height: 350,
         width: 360,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
@@ -235,18 +236,58 @@ class _FavouriteFolderTileState extends State<FavouriteFolderTile> {
   @override
   Widget build(BuildContext context) {
     _selected = widget.initialSelection;
+    final favourites = Provider.of<FavouritesProvider>(context, listen: false)
+        .favouriteFolders[widget.folderName];
+    const tileSize = 40.0;
     return ListTile(
-        onTap: onTap,
-        title: Text(
-          widget.folderName,
-          style: const TextStyle(color: Colors.white, fontSize: 14),
+      onTap: onTap,
+      title: Text(
+        widget.folderName,
+        softWrap: true,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+        style: const TextStyle(color: Colors.white, fontSize: 14),
+      ),
+      leading: Checkbox(
+        value: _selected,
+        side: const BorderSide(color: Colors.white),
+        checkColor: Theme.of(context).primaryColor,
+        activeColor: Colors.white,
+        onChanged: (value) => onTap(),
+      ),
+      subtitle: SizedBox(
+        width: 210,
+        height: tileSize,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: 4,
+          itemBuilder: (context, index) {
+            final folderIndex = favourites!.data.length - 1;
+            return Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Container(
+                height: tileSize,
+                width: tileSize,
+                decoration: BoxDecoration(
+                    color: Colors.white.withAlpha(80),
+                    border: Border.all(color: Colors.white, width: 1.5),
+                    borderRadius: BorderRadius.circular(8)),
+                child: index > folderIndex
+                    ? null
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: CachedNetworkImage(
+                          imageUrl: favourites.data[folderIndex - index].url,
+                          fit: BoxFit.cover,
+                          width: tileSize,
+                          height: tileSize,
+                        ),
+                      ),
+              ),
+            );
+          },
         ),
-        leading: Checkbox(
-          value: _selected,
-          side: const BorderSide(color: Colors.white),
-          checkColor: Theme.of(context).primaryColor,
-          activeColor: Colors.white,
-          onChanged: (value) => onTap(),
-        ));
+      ),
+    );
   }
 }
