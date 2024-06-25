@@ -12,4 +12,5 @@ As of now, you can do the following:
 
 There are many more features that will be added in the future. This is supposed to be your goto ultimate wallpaper app.
 
-> [!Important]This project is a currently in development. You can still build and test it, but it is not yet ready for use.
+> [!Important]
+> This project is currently in development. You can still build and test it, but it is not yet ready for use.
