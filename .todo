@@ -1,6 +1,7 @@
 TODO:
     Features:
         To Add:
+            ☐ More confirmation dialogs/snackbars with undo functionality
             ☐ Deviant Art Topics loading time indication.
             ☐ Deviant Art Save topics.
             ☐ Community List/Deviant Art Topic List, grid and list view options.
@@ -33,8 +34,7 @@ TODO:
             ☐ Notification of wallpaper change
             ☐ Add to favorites on change (Auto-Wallpaper)
         Favourites Screen:
-            ☐ Add 'Remove folder' button
-                - Connect Storage
+            ✔ Add 'Remove folder' button @done(24-06-25 08:09)
             ☐ Share folder as json
             ☐ Import/Export folder
         Wallpaper Action Widget:

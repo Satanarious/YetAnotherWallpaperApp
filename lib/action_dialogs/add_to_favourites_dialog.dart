@@ -251,6 +251,7 @@ class _FavouriteFolderTileState extends State<FavouriteFolderTile> {
       leading: Checkbox(
         value: _selected,
         side: const BorderSide(color: Colors.white),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         checkColor: Theme.of(context).primaryColor,
         activeColor: Colors.white,
         onChanged: (value) => onTap(),
