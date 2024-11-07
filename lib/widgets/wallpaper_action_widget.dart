@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
+import 'package:wallpaper_app/action_dialogs/animated_pop_in_dialog.dart';
 import 'package:wallpaper_app/models/wallpaper.dart';
 import 'package:wallpaper_app/providers/providers.dart';
 import 'package:wallpaper_app/widgets/favourite_button_widget.dart';
@@ -70,11 +71,110 @@ class _WallpaperActionsWidgetState extends State<WallpaperActionsWidget>
         label: "Set",
         child: IconButton(
             onPressed: () async {
+              bool needSetting = false;
+
+              // Show warning dialog
+              await AnimatedPopInDialog.show(
+                context,
+                Dialog(
+                  backgroundColor: Colors.transparent,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        height: 200,
+                        width: 300,
+                        decoration: BoxDecoration(
+                            color: Colors.black.withAlpha(50),
+                            border: Border.all(
+                              color: Colors.white,
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(30)),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.warning_amber_rounded,
+                                    color: Colors.white,
+                                  ),
+                                  Text(
+                                    "Warning",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ]),
+                            const Text(
+                              "Setting the wallpaper will reset the app. To avoid this, download the wallpaper and set it manually.",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                FilledButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  style: ButtonStyle(
+                                    side: WidgetStateProperty.resolveWith(
+                                        (states) => const BorderSide(
+                                            color: Colors.white)),
+                                    backgroundColor:
+                                        WidgetStateProperty.resolveWith(
+                                            (states) => Theme.of(context)
+                                                .primaryColor
+                                                .withAlpha(120)),
+                                  ),
+                                  child: const Text("Cancel"),
+                                ),
+                                FilledButton(
+                                  onPressed: () {
+                                    needSetting = true;
+                                    Navigator.of(context).pop();
+                                  },
+                                  style: ButtonStyle(
+                                    side: WidgetStateProperty.resolveWith(
+                                        (states) => const BorderSide(
+                                            color: Colors.white)),
+                                    backgroundColor:
+                                        WidgetStateProperty.resolveWith(
+                                            (states) => Theme.of(context)
+                                                .primaryColor
+                                                .withAlpha(120)),
+                                  ),
+                                  child: const Text("Continue"),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+
+              if (!needSetting) {
+                return;
+              }
+              // Set wallpaper
               final imageFile = await DefaultCacheManager()
                   .getSingleFile(widget.wallpaper.url);
               final imagePath = imageFile.path;
-              await AsyncWallpaper.setWallpaperFromFileNative(
-                  filePath: imagePath, goToHome: false);
+              await AsyncWallpaper.setWallpaperFromFile(
+                filePath: imagePath,
+                goToHome: true,
+              );
             },
             icon: const Icon(
               IconlyLight.image,

@@ -246,12 +246,11 @@ class _LemmyFilterDialogState extends State<LemmyFilterDialog>
                                       FilledButton(
                                         onPressed: Navigator.of(context).pop,
                                         style: ButtonStyle(
-                                          side:
-                                              MaterialStateProperty.resolveWith(
-                                                  (states) => const BorderSide(
-                                                      color: Colors.white)),
+                                          side: WidgetStateProperty.resolveWith(
+                                              (states) => const BorderSide(
+                                                  color: Colors.white)),
                                           backgroundColor:
-                                              MaterialStateProperty.resolveWith(
+                                              WidgetStateProperty.resolveWith(
                                                   (states) => Theme.of(context)
                                                       .primaryColor
                                                       .withAlpha(120)),
@@ -291,12 +290,11 @@ class _LemmyFilterDialogState extends State<LemmyFilterDialog>
                                           Navigator.of(context).pop();
                                         },
                                         style: ButtonStyle(
-                                          side:
-                                              MaterialStateProperty.resolveWith(
-                                                  (states) => const BorderSide(
-                                                      color: Colors.white)),
+                                          side: WidgetStateProperty.resolveWith(
+                                              (states) => const BorderSide(
+                                                  color: Colors.white)),
                                           backgroundColor:
-                                              MaterialStateProperty.resolveWith(
+                                              WidgetStateProperty.resolveWith(
                                                   (states) => Theme.of(context)
                                                       .primaryColor
                                                       .withAlpha(120)),

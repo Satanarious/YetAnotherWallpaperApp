@@ -5,13 +5,14 @@ import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/action_dialogs/source_selector_dialog.dart';
 import 'package:wallpaper_app/filter_dialogs/filter_dialogs.dart';
+import 'action_dialogs/animated_pop_in_dialog.dart';
 import 'package:wallpaper_app/providers/providers.dart';
 import 'package:wallpaper_app/screens/screens.dart';
 import 'package:wallpaper_app/storage/storage.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
-  static const routeName = "/";
+  static const routeName = "/Home";
 
   void initializeStorageProviders(BuildContext context) {
     // Set History from Storage
@@ -36,7 +37,7 @@ class HomeScreen extends StatelessWidget {
     DateTime? currentBackPressTime;
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) {
+      onPopInvokedWithResult: (didPop, _) {
         final now = DateTime.now();
         if (currentBackPressTime == null ||
             DateTime.now().difference(currentBackPressTime!) >
@@ -71,38 +72,20 @@ class PillTabBar extends StatefulWidget {
 }
 
 class _PillTabBarState extends State<PillTabBar> {
-  Future animatedPopInOutDialog(Widget dialog) {
-    return showGeneralDialog(
-        barrierColor: Colors.black.withOpacity(0.5),
-        transitionBuilder: (context, a1, a2, wid) {
-          return Transform.scale(
-              scale: a1.value,
-              child: Opacity(
-                opacity: a1.value,
-                child: dialog,
-              ));
-        },
-        transitionDuration: const Duration(milliseconds: 200),
-        barrierDismissible: true,
-        barrierLabel: '',
-        context: context,
-        pageBuilder: (context, animation1, animation2) => Container());
-  }
-
   void filterButtonAction() {
     final source = Provider.of<SourceProvider>(context, listen: false).source;
     switch (source) {
       case Sources.wallhaven:
-        animatedPopInOutDialog(const WallhavenFilterDialog());
+        AnimatedPopInDialog.show(context, const WallhavenFilterDialog());
         break;
       case Sources.reddit:
-        animatedPopInOutDialog(const RedditFilterDialog());
+        AnimatedPopInDialog.show(context, const RedditFilterDialog());
         break;
       case Sources.lemmy:
-        animatedPopInOutDialog(const LemmyFilterDialog());
+        AnimatedPopInDialog.show(context, const LemmyFilterDialog());
         break;
       case Sources.deviantArt:
-        animatedPopInOutDialog(const DeviantArtFilterDialog());
+        AnimatedPopInDialog.show(context, const DeviantArtFilterDialog());
         break;
       default:
         throw Exception("Source not supported yet!!");

@@ -3,7 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/providers/favourites_provider.dart';
+import 'package:wallpaper_app/widgets/delete_favourite_folder_button.dart';
 import 'package:wallpaper_app/widgets/masonry_grid_widget.dart';
+import 'package:wallpaper_app/widgets/share_favourite_folder_button.dart';
 
 class FavouriteWallpaperGridScreen extends StatelessWidget {
   const FavouriteWallpaperGridScreen({super.key});
@@ -20,6 +22,49 @@ class FavouriteWallpaperGridScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(50, 50, 50, 1),
       extendBodyBehindAppBar: true,
+      floatingActionButton: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 60,
+            width: 60,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.white, width: 1),
+              borderRadius: BorderRadius.circular(30),
+            ),
+          ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(30),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              child: FloatingActionButton(
+                onPressed: () => showGeneralDialog(
+                    barrierColor: Colors.black.withOpacity(0.5),
+                    transitionBuilder: (context, a1, a2, wid) {
+                      return Transform.scale(
+                        scale: a1.value,
+                        child: Opacity(
+                          opacity: a1.value,
+                          child: Container(),
+                        ),
+                      );
+                    },
+                    transitionDuration: const Duration(milliseconds: 200),
+                    barrierDismissible: true,
+                    barrierLabel: '',
+                    context: context,
+                    pageBuilder: (context, animation1, animation2) =>
+                        Container()),
+                backgroundColor: Colors.white.withAlpha(50),
+                child: const Icon(
+                  Icons.add_photo_alternate_outlined,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
       appBar: PreferredSize(
         preferredSize: const Size(double.infinity, appBarHeight),
         child: ClipRect(
@@ -30,6 +75,10 @@ class FavouriteWallpaperGridScreen extends StatelessWidget {
                 "Favourites: $title",
                 style: const TextStyle(color: Colors.white),
               ),
+              actions: [
+                ShareFavouriteFolderButton(title),
+                DeleteFavouriteFolderButton(title)
+              ],
               backgroundColor: Colors.transparent,
               leading: IconButton(
                 icon: const Icon(

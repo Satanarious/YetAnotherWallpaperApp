@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:wallpaper_app/home_screen.dart';
 import 'package:wallpaper_app/providers/providers.dart';
 import 'package:wallpaper_app/screens/screens.dart';
+import 'package:wallpaper_app/screens/splash_screen.dart';
 import 'package:wallpaper_app/storage/storage.dart';
 
 Future<void> main() async {
@@ -33,6 +34,7 @@ class WallpaperApp extends StatelessWidget {
       ],
       child: MaterialApp(
         routes: {
+          SplashScreen.routeName: (context) => const SplashScreen(),
           HomeScreen.routeName: (context) => const HomeScreen(),
           FavouritesScreen.routeName: (context) => const FavouritesScreen(),
           OpenImageScreen.routeName: (context) => const OpenImageScreen(),

@@ -299,9 +299,9 @@ class _TopicTabState extends State<TopicTab>
               FilledButton(
                 onPressed: Navigator.of(context).pop,
                 style: ButtonStyle(
-                  side: MaterialStateProperty.resolveWith(
+                  side: WidgetStateProperty.resolveWith(
                       (states) => const BorderSide(color: Colors.white)),
-                  backgroundColor: MaterialStateProperty.resolveWith((states) =>
+                  backgroundColor: WidgetStateProperty.resolveWith((states) =>
                       Theme.of(context).primaryColor.withAlpha(120)),
                 ),
                 child: const Text("Cancel"),
@@ -335,9 +335,9 @@ class _TopicTabState extends State<TopicTab>
                   Navigator.of(context).pop();
                 },
                 style: ButtonStyle(
-                  side: MaterialStateProperty.resolveWith(
+                  side: WidgetStateProperty.resolveWith(
                       (states) => const BorderSide(color: Colors.white)),
-                  backgroundColor: MaterialStateProperty.resolveWith((states) =>
+                  backgroundColor: WidgetStateProperty.resolveWith((states) =>
                       Theme.of(context).primaryColor.withAlpha(120)),
                 ),
                 child: const Text("Ok"),
@@ -553,9 +553,9 @@ class _TagTabState extends State<TagTab> {
           FilledButton(
             onPressed: Navigator.of(context).pop,
             style: ButtonStyle(
-              side: MaterialStateProperty.resolveWith(
+              side: WidgetStateProperty.resolveWith(
                   (states) => const BorderSide(color: Colors.white)),
-              backgroundColor: MaterialStateProperty.resolveWith(
+              backgroundColor: WidgetStateProperty.resolveWith(
                   (states) => Theme.of(context).primaryColor.withAlpha(120)),
             ),
             child: const Text("Cancel"),
@@ -592,9 +592,9 @@ class _TagTabState extends State<TagTab> {
               Navigator.of(context).pop();
             },
             style: ButtonStyle(
-              side: MaterialStateProperty.resolveWith(
+              side: WidgetStateProperty.resolveWith(
                   (states) => const BorderSide(color: Colors.white)),
-              backgroundColor: MaterialStateProperty.resolveWith(
+              backgroundColor: WidgetStateProperty.resolveWith(
                   (states) => Theme.of(context).primaryColor.withAlpha(120)),
             ),
             child: const Text("Ok"),
@@ -721,13 +721,13 @@ class _QueryTabState extends State<QueryTab> {
                 ),
                 initialSelection: isPopular,
                 menuStyle: MenuStyle(
-                    backgroundColor: MaterialStateColor.resolveWith((states) =>
-                        MaterialStateColor.resolveWith(
+                    backgroundColor: WidgetStateColor.resolveWith((states) =>
+                        WidgetStateColor.resolveWith(
                             (states) => Colors.black.withAlpha(210))),
-                    shape: MaterialStateProperty.resolveWith((states) =>
+                    shape: WidgetStateProperty.resolveWith((states) =>
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20))),
-                    side: MaterialStateBorderSide.resolveWith(
+                    side: WidgetStateBorderSide.resolveWith(
                         (states) => const BorderSide(
                               color: Colors.white,
                             ))),
@@ -753,7 +753,7 @@ class _QueryTabState extends State<QueryTab> {
                         value: item == 'Popular',
                         label: item,
                         style: ButtonStyle(
-                          foregroundColor: MaterialStateColor.resolveWith(
+                          foregroundColor: WidgetStateColor.resolveWith(
                               (states) => Colors.white),
                         )))
                     .toList(),
@@ -769,9 +769,9 @@ class _QueryTabState extends State<QueryTab> {
               child: FilledButton(
                 onPressed: Navigator.of(context).pop,
                 style: ButtonStyle(
-                  side: MaterialStateProperty.resolveWith(
+                  side: WidgetStateProperty.resolveWith(
                       (states) => const BorderSide(color: Colors.white)),
-                  backgroundColor: MaterialStateProperty.resolveWith((states) =>
+                  backgroundColor: WidgetStateProperty.resolveWith((states) =>
                       Theme.of(context).primaryColor.withAlpha(120)),
                 ),
                 child: const Text("Cancel"),
@@ -811,9 +811,9 @@ class _QueryTabState extends State<QueryTab> {
                 Navigator.of(context).pop();
               },
               style: ButtonStyle(
-                side: MaterialStateProperty.resolveWith(
+                side: WidgetStateProperty.resolveWith(
                     (states) => const BorderSide(color: Colors.white)),
-                backgroundColor: MaterialStateProperty.resolveWith(
+                backgroundColor: WidgetStateProperty.resolveWith(
                     (states) => Theme.of(context).primaryColor.withAlpha(120)),
               ),
               child: const Text("Ok"),

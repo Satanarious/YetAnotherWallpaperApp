@@ -307,14 +307,13 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
                               textStyle: const TextStyle(
                                   color: Colors.white, fontSize: 14),
                               menuStyle: MenuStyle(
-                                  backgroundColor:
-                                      MaterialStateColor.resolveWith((states) =>
-                                          Colors.black.withAlpha(210)),
-                                  shape: MaterialStateProperty.resolveWith(
+                                  backgroundColor: WidgetStateColor.resolveWith(
+                                      (states) => Colors.black.withAlpha(210)),
+                                  shape: WidgetStateProperty.resolveWith(
                                       (states) => RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(20))),
-                                  side: MaterialStateBorderSide.resolveWith(
+                                  side: WidgetStateBorderSide.resolveWith(
                                       (states) => const BorderSide(
                                             color: Colors.white,
                                           ))),
@@ -344,7 +343,7 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
                                         label: item['label'] as String,
                                         style: ButtonStyle(
                                           foregroundColor:
-                                              MaterialStateColor.resolveWith(
+                                              WidgetStateColor.resolveWith(
                                                   (states) => Colors.white),
                                         ),
                                       ))
@@ -383,16 +382,16 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
                                         textStyle: const TextStyle(
                                             color: Colors.white, fontSize: 14),
                                         menuStyle: MenuStyle(
-                                            backgroundColor: MaterialStateColor
+                                            backgroundColor: WidgetStateColor
                                                 .resolveWith((states) =>
-                                                    MaterialStateColor.resolveWith(
+                                                    WidgetStateColor.resolveWith(
                                                         (states) => Colors.black
                                                             .withAlpha(210))),
-                                            shape: MaterialStateProperty.resolveWith(
+                                            shape: WidgetStateProperty.resolveWith(
                                                 (states) => RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(20))),
-                                            side: MaterialStateBorderSide.resolveWith((states) => const BorderSide(
+                                            side: WidgetStateBorderSide.resolveWith((states) => const BorderSide(
                                                   color: Colors.white,
                                                 ))),
                                         inputDecorationTheme:
@@ -426,7 +425,7 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
                                                       item['label'] as String,
                                                   style: ButtonStyle(
                                                     foregroundColor:
-                                                        MaterialStateColor
+                                                        WidgetStateColor
                                                             .resolveWith(
                                                                 (states) =>
                                                                     Colors
@@ -465,11 +464,11 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
                                 FilledButton(
                                     onPressed: Navigator.of(context).pop,
                                     style: ButtonStyle(
-                                      side: MaterialStateProperty.resolveWith(
+                                      side: WidgetStateProperty.resolveWith(
                                           (states) => const BorderSide(
                                               color: Colors.white)),
                                       backgroundColor:
-                                          MaterialStateProperty.resolveWith(
+                                          WidgetStateProperty.resolveWith(
                                               (states) => Theme.of(context)
                                                   .primaryColor
                                                   .withAlpha(120)),
@@ -513,11 +512,11 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
                                       Navigator.of(context).pop();
                                     },
                                     style: ButtonStyle(
-                                      side: MaterialStateProperty.resolveWith(
+                                      side: WidgetStateProperty.resolveWith(
                                           (states) => const BorderSide(
                                               color: Colors.white)),
                                       backgroundColor:
-                                          MaterialStateProperty.resolveWith(
+                                          WidgetStateProperty.resolveWith(
                                               (states) => Theme.of(context)
                                                   .primaryColor
                                                   .withAlpha(120)),

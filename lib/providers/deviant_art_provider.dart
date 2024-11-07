@@ -145,9 +145,15 @@ class DeviantArtProvider {
 
       // Get new token
       final authResponse = await http.get(authURI);
-      if (authResponse.statusCode != 200) {
+      try {
+        if (authResponse.statusCode != 200) {
+          throw Exception(
+            'Request failed with status: ${authResponse.statusCode}',
+          );
+        }
+      } on FormatException {
         throw Exception(
-          'Request failed with status: ${authResponse.statusCode}',
+          '[Request failed] Configure environment variables: Client ID and Secret',
         );
       }
       final newToken = (jsonDecode(authResponse.body)

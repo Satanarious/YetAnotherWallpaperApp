@@ -99,9 +99,9 @@ class _AddFolderDialogState extends State<AddFolderDialog> {
                           }
                         },
                         style: ButtonStyle(
-                          side: MaterialStateProperty.resolveWith((states) =>
+                          side: WidgetStateProperty.resolveWith((states) =>
                               const BorderSide(color: Colors.white)),
-                          backgroundColor: MaterialStateProperty.resolveWith(
+                          backgroundColor: WidgetStateProperty.resolveWith(
                               (states) => Theme.of(context)
                                   .primaryColor
                                   .withAlpha(120)),
@@ -112,9 +112,9 @@ class _AddFolderDialogState extends State<AddFolderDialog> {
                       FilledButton(
                         onPressed: () => Navigator.of(context).pop(),
                         style: ButtonStyle(
-                          side: MaterialStateProperty.resolveWith((states) =>
+                          side: WidgetStateProperty.resolveWith((states) =>
                               const BorderSide(color: Colors.white)),
-                          backgroundColor: MaterialStateProperty.resolveWith(
+                          backgroundColor: WidgetStateProperty.resolveWith(
                               (states) => Theme.of(context)
                                   .primaryColor
                                   .withAlpha(120)),

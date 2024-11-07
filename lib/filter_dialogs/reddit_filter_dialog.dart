@@ -417,13 +417,13 @@ class _RedditFilterDialogState extends State<RedditFilterDialog>
                                                 Navigator.of(context).pop,
                                             style: ButtonStyle(
                                                 backgroundColor:
-                                                    MaterialStateProperty
+                                                    WidgetStateProperty
                                                         .resolveWith((states) =>
                                                             Theme.of(context)
                                                                 .primaryColor
                                                                 .withAlpha(
                                                                     120)),
-                                                side: MaterialStateBorderSide
+                                                side: WidgetStateBorderSide
                                                     .resolveWith((states) =>
                                                         const BorderSide(
                                                           color: Colors.white,
@@ -472,13 +472,13 @@ class _RedditFilterDialogState extends State<RedditFilterDialog>
                                             },
                                             style: ButtonStyle(
                                                 backgroundColor:
-                                                    MaterialStateProperty
+                                                    WidgetStateProperty
                                                         .resolveWith((states) =>
                                                             Theme.of(context)
                                                                 .primaryColor
                                                                 .withAlpha(
                                                                     120)),
-                                                side: MaterialStateBorderSide
+                                                side: WidgetStateBorderSide
                                                     .resolveWith((states) =>
                                                         const BorderSide(
                                                           color: Colors.white,

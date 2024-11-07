@@ -41,39 +41,110 @@ class HistoryScreen extends StatelessWidget {
                             scale: a1.value,
                             child: Opacity(
                               opacity: a1.value,
-                              child: AlertDialog(
-                                backgroundColor: Colors.black.withAlpha(200),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                    side: const BorderSide(
-                                        color: Colors.white, width: 1)),
-                                title: const Text(
-                                  "Clear History",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                content: const Text(
-                                  "Are you sure you want to clear the history?",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: Navigator.of(context).pop,
-                                    child: const Text("No",
-                                        style: TextStyle(color: Colors.white)),
+                              child: Dialog(
+                                backgroundColor: Colors.transparent,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: BackdropFilter(
+                                    filter:
+                                        ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(20),
+                                      height: 200,
+                                      width: 300,
+                                      decoration: BoxDecoration(
+                                          color: Colors.black.withAlpha(50),
+                                          border: Border.all(
+                                            color: Colors.white,
+                                            width: 1,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(30)),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons.warning_amber_rounded,
+                                                  color: Colors.white,
+                                                ),
+                                                Text(
+                                                  "Warning",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ]),
+                                          const Text(
+                                            "Are you sure? This will clear all the history of your previously visited wallpaper pages.",
+                                            softWrap: true,
+                                            textAlign: TextAlign.center,
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              FilledButton(
+                                                onPressed:
+                                                    Navigator.of(context).pop,
+                                                style: ButtonStyle(
+                                                  side: WidgetStateProperty
+                                                      .resolveWith((states) =>
+                                                          const BorderSide(
+                                                              color: Colors
+                                                                  .white)),
+                                                  backgroundColor:
+                                                      WidgetStateProperty
+                                                          .resolveWith((states) =>
+                                                              Theme.of(context)
+                                                                  .primaryColor
+                                                                  .withAlpha(
+                                                                      120)),
+                                                ),
+                                                child: const Text("No"),
+                                              ),
+                                              FilledButton(
+                                                onPressed: () {
+                                                  historyProvider
+                                                      .clearAllHistory();
+                                                  Provider.of<HistoryStorageProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .emptyHistory();
+                                                  Navigator.of(context).pop();
+                                                },
+                                                style: ButtonStyle(
+                                                  side: WidgetStateProperty
+                                                      .resolveWith((states) =>
+                                                          const BorderSide(
+                                                              color: Colors
+                                                                  .white)),
+                                                  backgroundColor:
+                                                      WidgetStateProperty
+                                                          .resolveWith((states) =>
+                                                              Theme.of(context)
+                                                                  .primaryColor
+                                                                  .withAlpha(
+                                                                      120)),
+                                                ),
+                                                child: const Text("Yes"),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                  TextButton(
-                                    onPressed: () {
-                                      historyProvider.clearAllHistory();
-                                      Provider.of<HistoryStorageProvider>(
-                                              context,
-                                              listen: false)
-                                          .emptyHistory();
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text("Yes",
-                                        style: TextStyle(color: Colors.white)),
-                                  ),
-                                ],
+                                ),
                               ),
                             ),
                           );

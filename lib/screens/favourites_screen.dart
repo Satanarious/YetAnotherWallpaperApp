@@ -9,7 +9,8 @@ import 'package:wallpaper_app/action_dialogs/add_folder_dialog.dart';
 import 'package:wallpaper_app/models/wallpaper_list.dart';
 import 'package:wallpaper_app/providers/favourites_provider.dart';
 import 'package:wallpaper_app/screens/favourite_wallpaper_grid_screen.dart';
-import 'package:wallpaper_app/storage/favourites_storage_provider.dart';
+import 'package:wallpaper_app/widgets/delete_favourite_folder_button.dart';
+import 'package:wallpaper_app/widgets/share_favourite_folder_button.dart';
 
 class FavouritesScreen extends StatelessWidget {
   const FavouritesScreen({super.key});
@@ -82,7 +83,7 @@ class FavouritesScreen extends StatelessWidget {
                     context: context,
                     pageBuilder: (context, animation1, animation2) =>
                         Container()),
-                backgroundColor: Colors.black.withAlpha(50),
+                backgroundColor: Colors.white.withAlpha(50),
                 child: const Icon(
                   IconlyLight.folder,
                   color: Colors.white,
@@ -120,6 +121,7 @@ class FavouritesScreen extends StatelessWidget {
                       crossAxisCount: crossAxisCount,
                       wallpapersList: favouritesProvider.allFavourites,
                       folderTitle: "System | All",
+                      isGrid: true,
                     ),
                   ] +
                   favouritefolderTitles
@@ -127,6 +129,7 @@ class FavouritesScreen extends StatelessWidget {
                             crossAxisCount: crossAxisCount,
                             wallpapersList: favouriteFolders[folderTitle]!,
                             folderTitle: folderTitle,
+                            isGrid: false,
                           ))
                       .toList(),
             ),
@@ -140,11 +143,13 @@ class FavouriteFolderWidget extends StatefulWidget {
     required this.crossAxisCount,
     required this.wallpapersList,
     required this.folderTitle,
+    required this.isGrid,
   });
 
   final int crossAxisCount;
   final WallpaperList wallpapersList;
   final String folderTitle;
+  final bool isGrid;
 
   @override
   State<FavouriteFolderWidget> createState() => _FavouriteFolderWidgetState();
@@ -152,7 +157,7 @@ class FavouriteFolderWidget extends StatefulWidget {
 
 class _FavouriteFolderWidgetState extends State<FavouriteFolderWidget>
     with SingleTickerProviderStateMixin {
-  bool isDeletable = false;
+  bool showFolderOptions = false;
   late AnimationController _controller;
   late Animation<double> _animation;
 
@@ -191,7 +196,7 @@ class _FavouriteFolderWidgetState extends State<FavouriteFolderWidget>
           arguments: widget.folderTitle),
       onLongPress: () {
         if (widget.folderTitle == "System | All") return;
-        setState(() => isDeletable = !isDeletable);
+        setState(() => showFolderOptions = !showFolderOptions);
         _controller.forward();
       },
       child: SizedBox(
@@ -203,125 +208,100 @@ class _FavouriteFolderWidgetState extends State<FavouriteFolderWidget>
             children: [
               SizedBox(
                 height: (size.width / widget.crossAxisCount) - 45,
-                child: Stack(
-                  children: [
-                    FolderImagePreview(
-                      top: 0,
-                      right: constraints.maxWidth / 4,
-                      url: widget.wallpapersList.data.length > 2
-                          ? widget.wallpapersList.data[2].thumbs.large
-                          : null,
-                    ),
-                    FolderImagePreview(
-                      top: 15,
-                      right: (constraints.maxWidth / 4) - 15,
-                      url: widget.wallpapersList.data.length > 1
-                          ? widget.wallpapersList.data[1].thumbs.large
-                          : null,
-                    ),
-                    FolderImagePreview(
-                      top: 30,
-                      right: (constraints.maxWidth / 4) - 30,
-                      url: widget.wallpapersList.data.isEmpty
-                          ? null
-                          : widget.wallpapersList.data[0].thumbs.large,
-                    ),
-                    Positioned(
-                      top: -15,
-                      left: 0,
-                      child: Visibility(
-                        visible: isDeletable,
-                        child: Transform.translate(
-                          offset: Offset(
-                              _animation.value *
-                                  sin(_controller.value * pi * 2),
-                              0),
-                          child: IconButton(
-                              onPressed: () => showGeneralDialog(
-                                  barrierColor: Colors.black.withOpacity(0.5),
-                                  transitionBuilder: (context, a1, a2, wid) {
-                                    return Transform.scale(
-                                        scale: a1.value,
-                                        child: Opacity(
-                                          opacity: a1.value,
-                                          child: AlertDialog(
-                                              icon: const Icon(
-                                                  IconlyLight.danger,
-                                                  color: Colors.white),
-                                              backgroundColor:
-                                                  Colors.black.withAlpha(150),
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(15),
-                                                  side: const BorderSide(
-                                                      color: Colors.white,
-                                                      width: 1)),
-                                              title: const Text(
-                                                "Delete Folder",
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                              content: const Text(
-                                                "Deleteing this folder will also delete all\n favourited items inside it as well. Are you\n sure you want to delete this folder?",
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                              actions: [
-                                                TextButton(
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                      setState(() {
-                                                        isDeletable = false;
-                                                      });
-                                                    },
-                                                    child: const Text(
-                                                      "Cancel",
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    )),
-                                                TextButton(
-                                                    onPressed: () {
-                                                      Provider.of<FavouritesStorageProvider>(
-                                                              context,
-                                                              listen: false)
-                                                          .removeFavouriteFolder(
-                                                              widget
-                                                                  .folderTitle);
-                                                      Provider.of<FavouritesProvider>(
-                                                              context,
-                                                              listen: false)
-                                                          .removeFolder(widget
-                                                              .folderTitle);
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                    child: const Text(
-                                                      "Delete",
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    )),
-                                              ]),
-                                        ));
-                                  },
-                                  transitionDuration:
-                                      const Duration(milliseconds: 200),
-                                  barrierDismissible: true,
-                                  barrierLabel: '',
-                                  context: context,
-                                  pageBuilder:
-                                      (context, animation1, animation2) =>
-                                          Container()),
-                              icon: const Icon(
-                                IconlyLight.delete,
-                                color: Colors.white,
-                                size: 20,
-                              )),
-                        ),
+                child: widget.isGrid
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              FolderGridImagePreview(
+                                url: widget.wallpapersList.data.isNotEmpty
+                                    ? widget.wallpapersList.data[0].thumbs.large
+                                    : null,
+                              ),
+                              const SizedBox(width: 10),
+                              FolderGridImagePreview(
+                                url: widget.wallpapersList.data.length > 1
+                                    ? widget.wallpapersList.data[1].thumbs.large
+                                    : null,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(width: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              FolderGridImagePreview(
+                                url: widget.wallpapersList.data.length > 2
+                                    ? widget.wallpapersList.data[2].thumbs.large
+                                    : null,
+                              ),
+                              const SizedBox(width: 10),
+                              FolderGridImagePreview(
+                                url: widget.wallpapersList.data.length > 3
+                                    ? widget.wallpapersList.data[3].thumbs.large
+                                    : null,
+                              ),
+                            ],
+                          )
+                        ],
+                      )
+                    : Stack(
+                        children: [
+                          FolderImagePreview(
+                            top: 0,
+                            right: constraints.maxWidth / 4,
+                            url: widget.wallpapersList.data.length > 2
+                                ? widget.wallpapersList.data[2].thumbs.large
+                                : null,
+                          ),
+                          FolderImagePreview(
+                            top: 15,
+                            right: (constraints.maxWidth / 4) - 15,
+                            url: widget.wallpapersList.data.length > 1
+                                ? widget.wallpapersList.data[1].thumbs.large
+                                : null,
+                          ),
+                          FolderImagePreview(
+                            top: 30,
+                            right: (constraints.maxWidth / 4) - 30,
+                            url: widget.wallpapersList.data.isEmpty
+                                ? null
+                                : widget.wallpapersList.data[0].thumbs.large,
+                          ),
+                          Positioned(
+                            top: -15,
+                            left: 0,
+                            child: Visibility(
+                              visible: showFolderOptions,
+                              child: Transform.translate(
+                                offset: Offset(
+                                    _animation.value *
+                                        sin(_controller.value * pi * 2),
+                                    0),
+                                child: ShareFavouriteFolderButton(
+                                    widget.folderTitle),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                              top: -15,
+                              right: -5,
+                              child: Visibility(
+                                visible: showFolderOptions,
+                                child: Transform.translate(
+                                  offset: Offset(
+                                      _animation.value *
+                                          sin(_controller.value * pi * 2),
+                                      0),
+                                  child: DeleteFavouriteFolderButton(
+                                      widget.folderTitle),
+                                ),
+                              ))
+                        ],
                       ),
-                    )
-                  ],
-                ),
               ),
               Text(
                 widget.folderTitle,
@@ -345,8 +325,8 @@ class FolderImagePreview extends StatelessWidget {
   final double top;
   final double right;
   final String? url;
-
   static const itemHeight = 120.0;
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -369,6 +349,37 @@ class FolderImagePreview extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 )),
+    );
+  }
+}
+
+class FolderGridImagePreview extends StatelessWidget {
+  const FolderGridImagePreview({
+    super.key,
+    this.url,
+  });
+  final String? url;
+  static const itemHeight = 70.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: itemHeight,
+      width: itemHeight,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.white60,
+        border: Border.all(color: Colors.white, width: 1),
+      ),
+      child: url == null
+          ? Container()
+          : ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: CachedNetworkImage(
+                imageUrl: url!,
+                fit: BoxFit.cover,
+              ),
+            ),
     );
   }
 }

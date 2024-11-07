@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:wallpaper_app/models/wallpaper_list.dart';
 
 class FavouritesStorageProvider with ChangeNotifier {
@@ -20,6 +23,32 @@ class FavouritesStorageProvider with ChangeNotifier {
     } catch (e) {
       localStorage.setItem(_key, jsonEncode([]));
       return [];
+    }
+  }
+
+  Future<String?> getFavouritesFolderJsonPath(String folderName) async {
+    try {
+      final folderJson = localStorage.getItem("Favourites:$folderName")!;
+      final tempDirectory = await getTemporaryDirectory();
+      final file = File('${tempDirectory.path}/$folderName.json');
+      file.writeAsString(folderJson);
+
+      return file.path;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<void> shareFavouriteFolder(String folderName) async {
+    final isFolderEmpty = getFavouriteFolder(folderName).data.isEmpty;
+    // Check if favourites folder is not empty
+    if (isFolderEmpty) {
+      return;
+    }
+    final filePath = await getFavouritesFolderJsonPath(folderName);
+    // Check if file exists
+    if (filePath != null) {
+      Share.shareXFiles([XFile(filePath)], text: 'YAWA - $folderName');
     }
   }
 
