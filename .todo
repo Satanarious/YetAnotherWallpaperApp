@@ -8,7 +8,6 @@ TODO:
             ☐ Save current query
                 - Separate screen to access/remove saved queries
                 - Save Query button on home page
-            ✔ Add to Favourites dialog, add preview of images @done(24-06-16 02:08)
         Local Filters:
             ☐ Resolution Filter
             ☐ Orientation Filter
@@ -34,7 +33,6 @@ TODO:
             ☐ Notification of wallpaper change
             ☐ Add to favorites on change (Auto-Wallpaper)
         Favourites Screen:
-            ✔ Add 'Remove folder' button @done(24-06-25 08:09)
             ☐ Share folder as json
             ☐ Import/Export folder
         Wallpaper Action Widget:
@@ -52,27 +50,29 @@ TODO:
         ☐ Add reset button in all filter dialogs.
         ☐ Add Logs.
         ☐ Add Undo snackbars.
-        ✔ Frosted Glass Theming @done(24-06-25 08:25)
-            ✔ Clear All History @done(24-06-25 08:24)
-            ✔ Favourites Add @done(24-06-14 03:04)
-            ✔ New Favourites Folder @done(24-06-14 02:55)
-        ✔ Save Favourites @done(24-05-02 09:40)
-        ✔ Save Filters @done(24-05-01 19:23)
-        ✔ Save History @done(24-05-01 13:27)
+        ☐ Remove Query tab and underlying logic from DeviantArt Filters.
 
 FIXME:
     ☐ Loading when there are no more pages left. 
         - Remove the loading animation
         - Add a toast
     ☐ Tags loading on info sheet eveytime sheet is opened.
-    ☐ Add Restoration of state on setting the wallpaper.
-    - https://dev.to/pedromassango/what-is-state-restoration-and-how-to-use-it-in-flutter-5blm
-    ✔ Deviant Art Topic not working. (notify user to change filter) @done(24-06-11 19:04)
-    ✔ Wallpapers repeating @high @done(24-05-24 20:10)
-        ✔ Wallhaven, same page repeating again and again, on page change. @done(24-05-20 15:50)
-        ✔ Adding same page to the list twice, from 2nd page onwards. @done(24-05-24 20:10)
     
+
 Archive:
+    ✔ Add to Favourites dialog, add preview of images @done(24-06-16 02:08) @project(TODO.Features.To Add)
+    ✔ Add 'Remove folder' button @done(24-06-25 08:09) @project(TODO.Features.Favourites Screen)
+    ✔ Frosted Glass Theming @done(24-06-25 08:25) @project(TODO.Chores)
+    ✔ Clear All History @done(24-06-25 08:24) @project(TODO.Chores)
+    ✔ Favourites Add @done(24-06-14 03:04) @project(TODO.Chores)
+    ✔ New Favourites Folder @done(24-06-14 02:55) @project(TODO.Chores)
+    ✔ Save Favourites @done(24-05-02 09:40) @project(TODO.Chores)
+    ✔ Save Filters @done(24-05-01 19:23) @project(TODO.Chores)
+    ✔ Save History @done(24-05-01 13:27) @project(TODO.Chores)
+    ✔ Deviant Art Topic not working. (notify user to change filter) @done(24-06-11 19:04) @project(FIXME)
+    ✔ Wallpapers repeating @high @done(24-05-24 20:10) @project(FIXME)
+    ✔ Wallhaven, same page repeating again and again, on page change. @done(24-05-20 15:50) @project(FIXME)
+    ✔ Adding same page to the list twice, from 2nd page onwards. @done(24-05-24 20:10) @project(FIXME)
     ✔ Add Delete Button @done(24-03-09 10:33) @project(TODO.Features.History Screen)
     ✔ Create history screen @done(24-03-06 21:37) @project(TODO.Features.History Screen)
     ✔ Maintain history in a provider @done(24-03-06 21:51) @project(TODO.Features.History Screen)

@@ -259,9 +259,6 @@ class QueryProvider with ChangeNotifier {
             topic: initialFilters['topic'] == "" || page != 1
                 ? null
                 : initialFilters['topic'],
-            searchQuery: (initialFilters['query'] == "" || page != 2)
-                ? null
-                : initialFilters['query'],
             isPopular: initialFilters['is_popular'],
             matureContent: initialFilters['mature_content'],
           );
@@ -274,7 +271,6 @@ class QueryProvider with ChangeNotifier {
   void setDeviantArtQuery({
     String? tag,
     String? topic,
-    String? searchQuery,
     bool isPopular = true,
     bool matureContent = true,
   }) {
@@ -285,11 +281,6 @@ class QueryProvider with ChangeNotifier {
     } else if (topic != null) {
       query['topic'] = topic;
       query['path'] = '/api/v1/oauth2/browse/topic';
-    } else {
-      query['q'] = searchQuery ?? "superhero";
-      query['path'] = isPopular
-          ? '/api/v1/oauth2/browse/popular'
-          : '/api/v1/oauth2/browse/newest';
     }
     query['with_session'] = 'false';
     query['mature_content'] = matureContent.toString();

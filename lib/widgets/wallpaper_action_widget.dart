@@ -84,7 +84,7 @@ class _WallpaperActionsWidgetState extends State<WallpaperActionsWidget>
                       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                       child: Container(
                         padding: const EdgeInsets.all(20),
-                        height: 200,
+                        height: 250,
                         width: 300,
                         decoration: BoxDecoration(
                             color: Colors.black.withAlpha(50),
@@ -112,12 +112,15 @@ class _WallpaperActionsWidgetState extends State<WallpaperActionsWidget>
                                     ),
                                   ),
                                 ]),
+                            const SizedBox(
+                              height: 10,
+                            ),
                             const Text(
-                              "Setting the wallpaper will reset the app. To avoid this, download the wallpaper and set it manually.",
+                              "Setting the wallpaper might reset the app on some android versions and you might lose any progress in the wallpaper feed. To avoid this, download the wallpaper and set it manually.",
                               textAlign: TextAlign.center,
                               style: TextStyle(color: Colors.white),
                             ),
-                            const SizedBox(height: 10),
+                            const SizedBox(height: 15),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [

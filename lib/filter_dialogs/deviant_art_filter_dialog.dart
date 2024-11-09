@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:wallpaper_app/providers/providers.dart';
@@ -25,7 +24,7 @@ class _DeviantArtFilterDialogState extends State<DeviantArtFilterDialog>
 
   @override
   void initState() {
-    tabController = TabController(length: 3, vsync: this);
+    tabController = TabController(length: 2, vsync: this);
     final savedFilters =
         Provider.of<DeviantArtFiltersStorageProvider>(context, listen: false)
             .fetch();
@@ -84,7 +83,7 @@ class _DeviantArtFilterDialogState extends State<DeviantArtFilterDialog>
                   Expanded(
                     child: SingleChildScrollView(
                       child: DefaultTabController(
-                          length: 3,
+                          length: 2,
                           child: SizedBox(
                             height: 370,
                             child: Column(
@@ -103,10 +102,6 @@ class _DeviantArtFilterDialogState extends State<DeviantArtFilterDialog>
                                       "By Topic",
                                       style: TextStyle(fontSize: 16),
                                     ),
-                                    Text(
-                                      "By Query",
-                                      style: TextStyle(fontSize: 16),
-                                    ),
                                   ],
                                 ),
                                 const SizedBox(
@@ -123,11 +118,6 @@ class _DeviantArtFilterDialogState extends State<DeviantArtFilterDialog>
                                           child: TagTab(matureContent),
                                         ),
                                         TopicTab(matureContent),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: QueryTab(matureContent),
-                                        ),
                                       ]),
                                 )
                               ],
@@ -632,198 +622,6 @@ class DottedContainer extends StatelessWidget {
           textAlign: TextAlign.center,
         )),
       ),
-    );
-  }
-}
-
-class QueryTab extends StatefulWidget {
-  const QueryTab(
-    this.matureContent, {
-    super.key,
-  });
-  final bool matureContent;
-
-  @override
-  State<QueryTab> createState() => _QueryTabState();
-}
-
-class _QueryTabState extends State<QueryTab> {
-  static const sortList = ['Popular', 'Newest'];
-  late bool isPopular;
-  late String query;
-
-  @override
-  void initState() {
-    final savedFilters =
-        Provider.of<DeviantArtFiltersStorageProvider>(context, listen: false)
-            .fetch();
-    query = savedFilters['query'];
-    isPopular = savedFilters['is_popular'];
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 5,
-              ),
-              const Text(
-                "Query",
-                style: TextStyle(color: Colors.white, fontSize: 14),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              TextFormField(
-                initialValue: query,
-                style: const TextStyle(color: Colors.white, fontSize: 14),
-                onChanged: (value) => query = value,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: const BorderSide(color: Colors.white),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: const BorderSide(color: Colors.white),
-                  ),
-                  prefixIcon: Icon(IconlyLight.search,
-                      color: Colors.white.withAlpha(180)),
-                  hintText: "Search anything here...",
-                  contentPadding: const EdgeInsetsDirectional.symmetric(
-                      horizontal: 10, vertical: 2),
-                  hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const Text(
-                "Sort Type",
-                style: TextStyle(color: Colors.white, fontSize: 14),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              DropdownMenu(
-                leadingIcon: Icon(
-                  IconlyLight.filter_2,
-                  color: Colors.white.withAlpha(180),
-                ),
-                initialSelection: isPopular,
-                menuStyle: MenuStyle(
-                    backgroundColor: WidgetStateColor.resolveWith((states) =>
-                        WidgetStateColor.resolveWith(
-                            (states) => Colors.black.withAlpha(210))),
-                    shape: WidgetStateProperty.resolveWith((states) =>
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20))),
-                    side: WidgetStateBorderSide.resolveWith(
-                        (states) => const BorderSide(
-                              color: Colors.white,
-                            ))),
-                inputDecorationTheme: InputDecorationTheme(
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: const BorderSide(color: Colors.white),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: const BorderSide(color: Colors.white),
-                  ),
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  constraints: BoxConstraints.tight(const Size.fromHeight(50)),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                textStyle: const TextStyle(color: Colors.white, fontSize: 14),
-                dropdownMenuEntries: sortList
-                    .map((item) => DropdownMenuEntry(
-                        value: item == 'Popular',
-                        label: item,
-                        style: ButtonStyle(
-                          foregroundColor: WidgetStateColor.resolveWith(
-                              (states) => Colors.white),
-                        )))
-                    .toList(),
-                onSelected: (sortType) => isPopular = sortType!,
-              ),
-            ],
-          ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ClipRRect(
-              child: FilledButton(
-                onPressed: Navigator.of(context).pop,
-                style: ButtonStyle(
-                  side: WidgetStateProperty.resolveWith(
-                      (states) => const BorderSide(color: Colors.white)),
-                  backgroundColor: WidgetStateProperty.resolveWith((states) =>
-                      Theme.of(context).primaryColor.withAlpha(120)),
-                ),
-                child: const Text("Cancel"),
-              ),
-            ),
-            const SizedBox(
-              width: 20,
-            ),
-            FilledButton(
-              onPressed: () {
-                final queryProvider =
-                    Provider.of<QueryProvider>(context, listen: false);
-                final wallpaperListProvider =
-                    Provider.of<WallpaperListProvider>(context, listen: false);
-                final filterStorageProvider =
-                    Provider.of<DeviantArtFiltersStorageProvider>(context,
-                        listen: false);
-                final savedFilters =
-                    Provider.of<DeviantArtFiltersStorageProvider>(context,
-                            listen: false)
-                        .fetch();
-
-                filterStorageProvider.update(
-                  query: query,
-                  tag: savedFilters['tag'],
-                  topic: savedFilters['topic'],
-                  page: 2,
-                  matureContent: widget.matureContent,
-                  isPopular: isPopular,
-                );
-                wallpaperListProvider.emptyWallpaperList();
-                queryProvider.setDeviantArtQuery(
-                  searchQuery: query,
-                  isPopular: isPopular,
-                  matureContent: widget.matureContent,
-                );
-                Navigator.of(context).pop();
-              },
-              style: ButtonStyle(
-                side: WidgetStateProperty.resolveWith(
-                    (states) => const BorderSide(color: Colors.white)),
-                backgroundColor: WidgetStateProperty.resolveWith(
-                    (states) => Theme.of(context).primaryColor.withAlpha(120)),
-              ),
-              child: const Text("Ok"),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-      ],
     );
   }
 }

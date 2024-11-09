@@ -7,6 +7,7 @@ import 'package:wallpaper_app/providers/deviant_art_provider.dart';
 import 'package:wallpaper_app/providers/source_provider.dart';
 
 class ApiClient {
+  // Wallpaper Source Default Base URLs and Paths
   Map<String, dynamic> getHttpParams(Sources source) {
     switch (source) {
       case Sources.wallhaven:
@@ -49,19 +50,22 @@ class ApiClient {
       query = null;
     }
 
-    // Modify query and call other methods before wallpaper search
+    // Modify query and call other methods before calling wallpaper search
     switch (source) {
       case Sources.wallhaven:
+        // Set page to default value or user provided value
         query!['page'] = pageIndex ?? "1";
         break;
       case Sources.reddit:
         if (pageId != null) {
+          // Signifying last page
           query!['after'] = pageId;
         }
         httpsParams['path'] = "/r/${query!['subreddit']}/${query['sort']}.json";
         query.remove("subreddit");
         break;
       case Sources.lemmy:
+        // Set page to default value or user provided value
         query!['page'] = pageIndex ?? "1";
         break;
       case Sources.deviantArt:
@@ -69,6 +73,7 @@ class ApiClient {
             await DeviantArtProvider().checkAndRefreshDeviantArtToken();
 
         if (offset != null) {
+          // Signifying last page
           query!['offset'] = offset;
         }
         httpsParams['path'] = query!['path'];
