@@ -174,7 +174,7 @@ class _WallpaperActionsWidgetState extends State<WallpaperActionsWidget>
               final imageFile = await DefaultCacheManager()
                   .getSingleFile(widget.wallpaper.url);
               final imagePath = imageFile.path;
-              await AsyncWallpaper.setWallpaperFromFile(
+              await AsyncWallpaper.setWallpaperFromFileNative(
                 filePath: imagePath,
                 goToHome: true,
               );

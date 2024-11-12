@@ -252,14 +252,18 @@ class QueryProvider with ChangeNotifier {
           break;
         case Sources.deviantArt:
           final page = initialFilters['page'] as int;
+          String? tag = initialFilters['tag'] == "" || page != 0
+              ? null
+              : initialFilters['tag'];
+          final topic = initialFilters['topic'] == "" || page != 1
+              ? null
+              : initialFilters['topic'];
+          if (tag == null && topic == null) {
+            tag = "superheroes";
+          }
           setDeviantArtQuery(
-            tag: initialFilters['tag'] == "" || page != 0
-                ? null
-                : initialFilters['tag'],
-            topic: initialFilters['topic'] == "" || page != 1
-                ? null
-                : initialFilters['topic'],
-            isPopular: initialFilters['is_popular'],
+            tag: tag,
+            topic: topic,
             matureContent: initialFilters['mature_content'],
           );
         default:
@@ -271,7 +275,6 @@ class QueryProvider with ChangeNotifier {
   void setDeviantArtQuery({
     String? tag,
     String? topic,
-    bool isPopular = true,
     bool matureContent = true,
   }) {
     Map<String, String> query = {};

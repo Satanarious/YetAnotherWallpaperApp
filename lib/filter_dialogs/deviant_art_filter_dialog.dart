@@ -385,7 +385,12 @@ class _TagTabState extends State<TagTab> {
     final savedFilters =
         Provider.of<DeviantArtFiltersStorageProvider>(context, listen: false)
             .fetch();
-    tagController = TextEditingController(text: savedFilters['tag']);
+    String? tag = savedFilters['tag'];
+    final String? topic = savedFilters['topic'];
+    if ((tag == null && topic == null) || tag!.isEmpty && topic!.isEmpty) {
+      tag = "superheroes";
+    }
+    tagController = TextEditingController(text: tag);
     super.initState();
   }
 
