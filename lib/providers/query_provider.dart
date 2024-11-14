@@ -252,18 +252,13 @@ class QueryProvider with ChangeNotifier {
           break;
         case Sources.deviantArt:
           final page = initialFilters['page'] as int;
-          String? tag = initialFilters['tag'] == "" || page != 0
-              ? null
-              : initialFilters['tag'];
-          final topic = initialFilters['topic'] == "" || page != 1
-              ? null
-              : initialFilters['topic'];
-          if (tag == null && topic == null) {
-            tag = "superheroes";
-          }
           setDeviantArtQuery(
-            tag: tag,
-            topic: topic,
+            tag: initialFilters['tag'] == "" || page != 0
+                ? null
+                : initialFilters['tag'],
+            topic: initialFilters['topic'] == "" || page != 1
+                ? null
+                : initialFilters['topic'],
             matureContent: initialFilters['mature_content'],
           );
         default:
@@ -284,6 +279,8 @@ class QueryProvider with ChangeNotifier {
     } else if (topic != null) {
       query['topic'] = topic;
       query['path'] = '/api/v1/oauth2/browse/topic';
+    } else {
+      query['tag'] = "superheroes";
     }
     query['with_session'] = 'false';
     query['mature_content'] = matureContent.toString();

@@ -83,7 +83,7 @@ class _TogglableButtonsState extends State<TogglableButtons> {
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               border: Border.all(
-                color: isSelected ? Colors.white : Colors.grey.shade600,
+                color: isSelected ? Colors.white : Colors.grey.shade500,
                 width: 2,
               ),
               borderRadius: BorderRadius.circular(10),
@@ -97,14 +97,16 @@ class _TogglableButtonsState extends State<TogglableButtons> {
                     ? Container()
                     : Icon(
                         button['icon'] as IconData,
-                        color: Colors.white,
+                        color: isSelected ? Colors.white : Colors.grey.shade500,
                       ),
                 const SizedBox(
                   width: 2,
                 ),
                 Text(
                   button['name'] as String,
-                  style: const TextStyle(color: Colors.white, fontSize: 12),
+                  style: TextStyle(
+                      color: isSelected ? Colors.white : Colors.grey.shade500,
+                      fontSize: 12),
                 ),
               ],
             ),
