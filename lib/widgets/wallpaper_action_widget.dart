@@ -74,97 +74,19 @@ class _WallpaperActionsWidgetState extends State<WallpaperActionsWidget>
               bool needSetting = false;
 
               // Show warning dialog
-              await AnimatedPopInDialog.show(
-                context,
-                Dialog(
-                  backgroundColor: Colors.transparent,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                      child: Container(
-                        padding: const EdgeInsets.all(20),
-                        height: 250,
-                        width: 300,
-                        decoration: BoxDecoration(
-                            color: Colors.black.withAlpha(50),
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(30)),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.warning_amber_rounded,
-                                    color: Colors.white,
-                                  ),
-                                  Text(
-                                    "Warning",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ]),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            const Text(
-                              "Setting the wallpaper might reset the app on some android versions and you might lose any progress in the wallpaper feed. To avoid this, download the wallpaper and set it manually.",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            const SizedBox(height: 15),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                FilledButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  style: ButtonStyle(
-                                    side: WidgetStateProperty.resolveWith(
-                                        (states) => const BorderSide(
-                                            color: Colors.white)),
-                                    backgroundColor:
-                                        WidgetStateProperty.resolveWith(
-                                            (states) => Theme.of(context)
-                                                .primaryColor
-                                                .withAlpha(120)),
-                                  ),
-                                  child: const Text("Cancel"),
-                                ),
-                                FilledButton(
-                                  onPressed: () {
-                                    needSetting = true;
-                                    Navigator.of(context).pop();
-                                  },
-                                  style: ButtonStyle(
-                                    side: WidgetStateProperty.resolveWith(
-                                        (states) => const BorderSide(
-                                            color: Colors.white)),
-                                    backgroundColor:
-                                        WidgetStateProperty.resolveWith(
-                                            (states) => Theme.of(context)
-                                                .primaryColor
-                                                .withAlpha(120)),
-                                  ),
-                                  child: const Text("Continue"),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+              await AnimatedPopInDialog.showCustomized(
+                context: context,
+                title: "Warning",
+                icon: Icons.warning_amber_rounded,
+                description:
+                    "Setting the wallpaper might reset the app on some android versions and you might lose any progress in the wallpaper feed. To avoid this, download the wallpaper and set it manually.",
+                buttonNameAndFunctionMap: {
+                  "Cancel": Navigator.of(context).pop,
+                  "Continue": () {
+                    needSetting = true;
+                    Navigator.of(context).pop();
+                  }
+                },
               );
 
               if (!needSetting) {

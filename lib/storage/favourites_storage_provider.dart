@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:wallpaper_app/models/wallpaper_list.dart';
 
@@ -36,6 +37,24 @@ class FavouritesStorageProvider with ChangeNotifier {
       return file.path;
     } catch (e) {
       return null;
+    }
+  }
+
+  Future<bool> saveFavouritesFolderJson(String folderName) async {
+    try {
+      PermissionStatus status = await Permission.storage.request();
+      if (status.isGranted) {
+        final folderJson = localStorage.getItem("Favourites:$folderName")!;
+        final downloadsDirectory = Directory('/storage/emulated/0/Download');
+        final now = DateTime.now();
+        final file = File('${downloadsDirectory.path}/${folderName}_$now.json');
+        file.writeAsString(folderJson);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
     }
   }
 

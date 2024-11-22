@@ -76,16 +76,17 @@ class _PillTabBarState extends State<PillTabBar> {
     final source = Provider.of<SourceProvider>(context, listen: false).source;
     switch (source) {
       case Sources.wallhaven:
-        AnimatedPopInDialog.show(context, const WallhavenFilterDialog());
+        AnimatedPopInDialog.showGeneral(context, const WallhavenFilterDialog());
         break;
       case Sources.reddit:
-        AnimatedPopInDialog.show(context, const RedditFilterDialog());
+        AnimatedPopInDialog.showGeneral(context, const RedditFilterDialog());
         break;
       case Sources.lemmy:
-        AnimatedPopInDialog.show(context, const LemmyFilterDialog());
+        AnimatedPopInDialog.showGeneral(context, const LemmyFilterDialog());
         break;
       case Sources.deviantArt:
-        AnimatedPopInDialog.show(context, const DeviantArtFilterDialog());
+        AnimatedPopInDialog.showGeneral(
+            context, const DeviantArtFilterDialog());
         break;
       default:
         throw Exception("Source not supported yet!!");

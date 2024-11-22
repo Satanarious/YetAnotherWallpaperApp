@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/action_dialogs/add_folder_dialog.dart';
+import 'package:wallpaper_app/action_dialogs/animated_pop_in_dialog.dart';
 import 'package:wallpaper_app/models/wallpaper_list.dart';
 import 'package:wallpaper_app/providers/favourites_provider.dart';
 import 'package:wallpaper_app/screens/favourite_wallpaper_grid_screen.dart';
-import 'package:wallpaper_app/widgets/delete_favourite_folder_button.dart';
-import 'package:wallpaper_app/widgets/share_favourite_folder_button.dart';
+import 'package:wallpaper_app/storage/favourites_storage_provider.dart';
 
 class FavouritesScreen extends StatelessWidget {
   const FavouritesScreen({super.key});
@@ -190,6 +190,8 @@ class _FavouriteFolderWidgetState extends State<FavouriteFolderWidget>
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final favouritesStorageProvider =
+        Provider.of<FavouritesStorageProvider>(context, listen: false);
     return GestureDetector(
       onTap: () => Navigator.of(context).pushNamed(
           FavouriteWallpaperGridScreen.routeName,
@@ -281,8 +283,57 @@ class _FavouriteFolderWidgetState extends State<FavouriteFolderWidget>
                                     _animation.value *
                                         sin(_controller.value * pi * 2),
                                     0),
-                                child: ShareFavouriteFolderButton(
-                                    widget.folderTitle),
+                                child: IconButton(
+                                    onPressed: () =>
+                                        AnimatedPopInDialog.showCustomized(
+                                          context: context,
+                                          title: "Share",
+                                          icon: Icons.share_rounded,
+                                          description:
+                                              "Choose whether to share this folder or save it on device.",
+                                          buttonNameAndFunctionMap: {
+                                            "Cancel": Navigator.of(context).pop,
+                                            "Share": () {
+                                              Provider.of<FavouritesStorageProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .shareFavouriteFolder(
+                                                      widget.folderTitle);
+                                              Navigator.of(context).pop();
+                                            },
+                                            "Save": () async {
+                                              if (await favouritesStorageProvider
+                                                  .saveFavouritesFolderJson(
+                                                      widget.folderTitle)) {
+                                                if (context.mounted) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                          const SnackBar(
+                                                    content: Text(
+                                                        "Saved to Downloads!!"),
+                                                  ));
+                                                }
+                                              } else {
+                                                if (context.mounted) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                          const SnackBar(
+                                                    content: Text(
+                                                        "Failed to save to Downloads!!"),
+                                                  ));
+                                                }
+                                              }
+                                              if (context.mounted) {
+                                                Navigator.of(context).pop();
+                                              }
+                                            }
+                                          },
+                                        ),
+                                    icon: const Icon(
+                                      Icons.share_rounded,
+                                      color: Colors.white,
+                                      size: 20,
+                                    )),
                               ),
                             ),
                           ),
@@ -296,8 +347,37 @@ class _FavouriteFolderWidgetState extends State<FavouriteFolderWidget>
                                       _animation.value *
                                           sin(_controller.value * pi * 2),
                                       0),
-                                  child: DeleteFavouriteFolderButton(
-                                      widget.folderTitle),
+                                  child: IconButton(
+                                    icon: const Icon(
+                                      IconlyLight.delete,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                    onPressed: () async =>
+                                        await AnimatedPopInDialog
+                                            .showCustomized(
+                                      context: context,
+                                      title: "Warning",
+                                      icon: Icons.warning_amber_rounded,
+                                      description:
+                                          "Deleting this folder will also delete all favourited items inside it as well. Are you sure you want to delete this folder?",
+                                      buttonNameAndFunctionMap: {
+                                        "Cancel": Navigator.of(context).pop,
+                                        "Delete": () {
+                                          Provider.of<FavouritesStorageProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .removeFavouriteFolder(
+                                                  widget.folderTitle);
+                                          Provider.of<FavouritesProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .removeFolder(widget.folderTitle);
+                                          Navigator.of(context).pop();
+                                        }
+                                      },
+                                    ),
+                                  ),
                                 ),
                               ))
                         ],
