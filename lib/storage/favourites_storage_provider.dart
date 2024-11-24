@@ -42,12 +42,12 @@ class FavouritesStorageProvider with ChangeNotifier {
 
   Future<bool> saveFavouritesFolderJson(String folderName) async {
     try {
-      PermissionStatus status = await Permission.storage.request();
+      PermissionStatus status =
+          await Permission.manageExternalStorage.request();
       if (status.isGranted) {
         final folderJson = localStorage.getItem("Favourites:$folderName")!;
         final downloadsDirectory = Directory('/storage/emulated/0/Download');
-        final now = DateTime.now();
-        final file = File('${downloadsDirectory.path}/${folderName}_$now.json');
+        final file = File('${downloadsDirectory.path}/$folderName.json');
         file.writeAsString(folderJson);
         return true;
       } else {
