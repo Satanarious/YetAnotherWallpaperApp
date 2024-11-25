@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
-import 'package:wallpaper_app/home_screen.dart';
-import 'package:wallpaper_app/providers/providers.dart';
-import 'package:wallpaper_app/screens/screens.dart';
-import 'package:wallpaper_app/screens/splash_screen.dart';
-import 'package:wallpaper_app/storage/storage.dart';
+import 'package:wallpaper_app/favourites/providers/favourites_provider.dart';
+import 'package:wallpaper_app/favourites/screens/favourite_wallpaper_grid_screen.dart';
+import 'package:wallpaper_app/favourites/screens/favourites_screen.dart';
+import 'package:wallpaper_app/favourites/storage/favourites_storage_provider.dart';
+import 'package:wallpaper_app/filters/storage/filters_storage_provider.dart';
+import 'package:wallpaper_app/history/providers/history_provider.dart';
+import 'package:wallpaper_app/history/screens/history_screen.dart';
+import 'package:wallpaper_app/history/storage/history_storage_provider.dart';
+import 'package:wallpaper_app/home/providers/query_provider.dart';
+import 'package:wallpaper_app/home/providers/scroll_handling_provider.dart';
+import 'package:wallpaper_app/home/providers/source_provider.dart';
+import 'package:wallpaper_app/home/providers/wallpaper_list_provider.dart';
+import 'package:wallpaper_app/home/screens/home_screen.dart';
+import 'package:wallpaper_app/open_image/screens/open_image_screen.dart';
+import 'package:wallpaper_app/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

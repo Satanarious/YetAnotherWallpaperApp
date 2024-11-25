@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-import 'package:wallpaper_app/models/models.dart';
-import 'package:wallpaper_app/providers/deviant_art_provider.dart';
-import 'package:wallpaper_app/providers/source_provider.dart';
+import 'package:wallpaper_app/common/models/models.dart';
+import 'package:wallpaper_app/home/providers/deviant_art_provider.dart';
+import 'package:wallpaper_app/home/providers/source_provider.dart';
 
 class ApiClient {
   // Wallpaper Source Default Base URLs and Paths
