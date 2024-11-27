@@ -71,6 +71,24 @@ class FavouritesStorageProvider with ChangeNotifier {
     }
   }
 
+  List<dynamic> importFavouritesFolder(String filePath) {
+    final file = File(filePath);
+    if (file.existsSync()) {
+      final folderName = file.path.split("/").last.split(".").first;
+      // Check if folder already exists
+      if (!fetchFavourites().contains(folderName)) {
+        return [false, "Folder already exists!"];
+      }
+      localStorage.setItem("Favourites:$folderName", file.readAsStringSync());
+      final folderList = jsonDecode(localStorage.getItem(_key)!) as List;
+      folderList.add(folderName);
+      localStorage.setItem(_key, jsonEncode(folderList));
+      return [true, "Successfully imported!"];
+    } else {
+      return [false, "File doesn't exist!"];
+    }
+  }
+
   WallpaperList getFavouriteFolder(String folderName) {
     try {
       return WallpaperList.fromJson(

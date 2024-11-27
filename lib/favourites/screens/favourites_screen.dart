@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
@@ -41,8 +42,43 @@ class FavouritesScreen extends StatelessWidget {
               backgroundColor: Colors.transparent,
               actions: [
                 IconButton(
-                  icon: const Icon(IconlyLight.upload),
-                  onPressed: () {},
+                  icon: const Icon(
+                    IconlyLight.upload,
+                    color: Colors.white,
+                  ),
+                  onPressed: () async {
+                    final files = await FilePicker.platform.pickFiles();
+                    if (files != null && files.files.isNotEmpty) {
+                      final file = files.files.first;
+                      if (file.extension == "json") {
+                        if (context.mounted) {
+                          final result = Provider.of<FavouritesStorageProvider>(
+                                  context,
+                                  listen: false)
+                              .importFavouritesFolder(file.path!);
+
+                          // result is [folderCreated,message], where result[0] is bool, result[1] is String
+                          if (result.first) {
+                            favouritesProvider
+                                .importFavouritesFolder(file.path!);
+                          }
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(result.last)));
+                        }
+                      } else {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("Invalid file type!")));
+                        }
+                      }
+                    } else {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("No file selected!")));
+                      }
+                    }
+                  },
                 )
               ],
               leading: IconButton(
@@ -91,7 +127,7 @@ class FavouritesScreen extends StatelessWidget {
                         Container()),
                 backgroundColor: Colors.white.withAlpha(50),
                 child: const Icon(
-                  Icons.create_new_folder_outlined,
+                  Icons.add_outlined,
                   size: 30,
                   color: Colors.white,
                 ),

@@ -181,7 +181,6 @@ class _TopicTabState extends State<TopicTab>
 
     return TabBarView(
       controller: tabController,
-      physics: const NeverScrollableScrollPhysics(),
       children: [
         Column(children: [
           Expanded(

@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:wallpaper_app/common/models/models.dart';
 import 'package:wallpaper_app/favourites/storage/favourites_storage_provider.dart';
@@ -86,6 +89,16 @@ class FavouritesProvider with ChangeNotifier {
       return false;
     } else {
       return true;
+    }
+  }
+
+  void importFavouritesFolder(String filePath) {
+    final file = File(filePath);
+    if (file.existsSync()) {
+      final folderName = file.path.split("/").last.split(".").first;
+      favouriteFolders[folderName] =
+          WallpaperList.fromJson(file.readAsStringSync());
+      notifyListeners();
     }
   }
 
