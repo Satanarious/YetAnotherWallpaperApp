@@ -1,7 +1,5 @@
-import 'dart:math';
 import 'dart:ui';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
@@ -13,6 +11,8 @@ import 'package:wallpaper_app/favourites/dialogs/rename_import_dialog.dart';
 import 'package:wallpaper_app/favourites/providers/favourites_provider.dart';
 import 'package:wallpaper_app/favourites/screens/favourite_wallpaper_grid_screen.dart';
 import 'package:wallpaper_app/favourites/storage/favourites_storage_provider.dart';
+import 'package:wallpaper_app/favourites/widgets/folder_grid_image_preview.dart';
+import 'package:wallpaper_app/favourites/widgets/folder_image_preview.dart';
 
 class FavouritesScreen extends StatelessWidget {
   const FavouritesScreen({super.key});
@@ -303,75 +303,6 @@ class _FavouriteFolderWidgetState extends State<FavouriteFolderWidget> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class FolderImagePreview extends StatelessWidget {
-  const FolderImagePreview({
-    super.key,
-    required this.top,
-    required this.right,
-    this.url,
-  });
-  final double top;
-  final double right;
-  final String? url;
-  static const itemHeight = 120.0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      top: top,
-      left: right,
-      child: Container(
-          height: itemHeight,
-          width: itemHeight,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.white60,
-            border: Border.all(color: Colors.white, width: 1),
-          ),
-          child: url == null
-              ? Container()
-              : ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: CachedNetworkImage(
-                    imageUrl: url!,
-                    fit: BoxFit.cover,
-                  ),
-                )),
-    );
-  }
-}
-
-class FolderGridImagePreview extends StatelessWidget {
-  const FolderGridImagePreview({
-    super.key,
-    this.url,
-  });
-  final String? url;
-  static const itemHeight = 70.0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: itemHeight,
-      width: itemHeight,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.white60,
-        border: Border.all(color: Colors.white, width: 1),
-      ),
-      child: url == null
-          ? Container()
-          : ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: CachedNetworkImage(
-                imageUrl: url!,
-                fit: BoxFit.cover,
-              ),
-            ),
     );
   }
 }
