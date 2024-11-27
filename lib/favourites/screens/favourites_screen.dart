@@ -210,52 +210,16 @@ class FavouriteFolderWidget extends StatefulWidget {
   State<FavouriteFolderWidget> createState() => _FavouriteFolderWidgetState();
 }
 
-class _FavouriteFolderWidgetState extends State<FavouriteFolderWidget>
-    with SingleTickerProviderStateMixin {
+class _FavouriteFolderWidgetState extends State<FavouriteFolderWidget> {
   bool showFolderOptions = false;
-  late AnimationController _controller;
-  late Animation<double> _animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 200),
-      vsync: this,
-    );
-    _animation = Tween<double>(begin: 0, end: 10).animate(_controller)
-      ..addListener(() {
-        setState(() {});
-      })
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          _controller.reverse();
-        } else if (status == AnimationStatus.dismissed) {
-          _controller.stop();
-        }
-      });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final favouritesStorageProvider =
-        Provider.of<FavouritesStorageProvider>(context, listen: false);
     return GestureDetector(
       onTap: () => Navigator.of(context).pushNamed(
           FavouriteWallpaperGridScreen.routeName,
           arguments: widget.folderTitle),
-      onLongPress: () {
-        if (widget.folderTitle == "System | All") return;
-        setState(() => showFolderOptions = !showFolderOptions);
-        _controller.forward();
-      },
       child: SizedBox(
         height: size.width / widget.crossAxisCount,
         child: LayoutBuilder(
@@ -328,113 +292,6 @@ class _FavouriteFolderWidgetState extends State<FavouriteFolderWidget>
                                 ? null
                                 : widget.wallpapersList.data[0].thumbs.large,
                           ),
-                          Positioned(
-                            top: -15,
-                            left: 0,
-                            child: Visibility(
-                              visible: showFolderOptions,
-                              child: Transform.translate(
-                                offset: Offset(
-                                    _animation.value *
-                                        sin(_controller.value * pi * 2),
-                                    0),
-                                child: IconButton(
-                                    onPressed: () =>
-                                        AnimatedPopInDialog.showCustomized(
-                                          context: context,
-                                          title: "Share",
-                                          icon: Icons.share_rounded,
-                                          description:
-                                              "Choose whether to share this folder or save it on device.",
-                                          buttonNameAndFunctionMap: {
-                                            "Cancel": Navigator.of(context).pop,
-                                            "Share": () {
-                                              Provider.of<FavouritesStorageProvider>(
-                                                      context,
-                                                      listen: false)
-                                                  .shareFavouriteFolder(
-                                                      widget.folderTitle);
-                                              Navigator.of(context).pop();
-                                            },
-                                            "Save": () async {
-                                              if (await favouritesStorageProvider
-                                                  .saveFavouritesFolderJson(
-                                                      widget.folderTitle)) {
-                                                if (context.mounted) {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                          const SnackBar(
-                                                    content: Text(
-                                                        "Saved to Downloads!!"),
-                                                  ));
-                                                }
-                                              } else {
-                                                if (context.mounted) {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                          const SnackBar(
-                                                    content: Text(
-                                                        "Failed to save to Downloads!!"),
-                                                  ));
-                                                }
-                                              }
-                                              if (context.mounted) {
-                                                Navigator.of(context).pop();
-                                              }
-                                            }
-                                          },
-                                        ),
-                                    icon: const Icon(
-                                      Icons.share_rounded,
-                                      color: Colors.white,
-                                      size: 20,
-                                    )),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                              top: -15,
-                              right: -5,
-                              child: Visibility(
-                                visible: showFolderOptions,
-                                child: Transform.translate(
-                                  offset: Offset(
-                                      _animation.value *
-                                          sin(_controller.value * pi * 2),
-                                      0),
-                                  child: IconButton(
-                                    icon: const Icon(
-                                      IconlyLight.delete,
-                                      color: Colors.white,
-                                      size: 20,
-                                    ),
-                                    onPressed: () async =>
-                                        await AnimatedPopInDialog
-                                            .showCustomized(
-                                      context: context,
-                                      title: "Warning",
-                                      icon: Icons.warning_amber_rounded,
-                                      description:
-                                          "Deleting this folder will also delete all favourited items inside it as well. Are you sure you want to delete this folder?",
-                                      buttonNameAndFunctionMap: {
-                                        "Cancel": Navigator.of(context).pop,
-                                        "Delete": () {
-                                          Provider.of<FavouritesStorageProvider>(
-                                                  context,
-                                                  listen: false)
-                                              .removeFavouriteFolder(
-                                                  widget.folderTitle);
-                                          Provider.of<FavouritesProvider>(
-                                                  context,
-                                                  listen: false)
-                                              .removeFolder(widget.folderTitle);
-                                          Navigator.of(context).pop();
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ))
                         ],
                       ),
               ),
