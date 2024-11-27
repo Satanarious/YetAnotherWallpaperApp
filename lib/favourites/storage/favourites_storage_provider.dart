@@ -76,7 +76,9 @@ class FavouritesStorageProvider with ChangeNotifier {
     if (file.existsSync()) {
       final folderName = file.path.split("/").last.split(".").first;
       // Check if folder already exists
-      if (!fetchFavourites().contains(folderName)) {
+      final favouriteFolders = jsonDecode(localStorage.getItem(_key)!) as List;
+      if (favouriteFolders.contains(folderName)) {
+        print(favouriteFolders);
         return [false, "Folder already exists!"];
       }
       localStorage.setItem("Favourites:$folderName", file.readAsStringSync());
