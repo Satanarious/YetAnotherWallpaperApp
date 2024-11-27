@@ -6,21 +6,20 @@ import 'package:provider/provider.dart';
 import 'package:wallpaper_app/favourites/providers/favourites_provider.dart';
 import 'package:wallpaper_app/favourites/storage/favourites_storage_provider.dart';
 
-class AddFolderDialog extends StatefulWidget {
-  const AddFolderDialog({super.key});
+class RenameImportDialog extends StatefulWidget {
+  const RenameImportDialog(this.filePath, {super.key});
+  final String filePath;
 
   @override
-  State<AddFolderDialog> createState() => _AddFolderDialogState();
+  State<RenameImportDialog> createState() => _RenameImportDialogState();
 }
 
-class _AddFolderDialogState extends State<AddFolderDialog> {
+class _RenameImportDialogState extends State<RenameImportDialog> {
   final _formKey = GlobalKey<FormState>();
   String? name = '';
 
   @override
   Widget build(BuildContext context) {
-    final favouritesProvider =
-        Provider.of<FavouritesProvider>(context, listen: false);
     return Dialog(
       backgroundColor: Colors.transparent,
       child: Column(
@@ -49,14 +48,11 @@ class _AddFolderDialogState extends State<AddFolderDialog> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
-                              IconlyLight.folder,
+                              Icons.warning_amber_rounded,
                               color: Colors.white,
                             ),
-                            SizedBox(
-                              width: 5,
-                            ),
                             Text(
-                              "Add Folder",
+                              "Caution",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -64,9 +60,12 @@ class _AddFolderDialogState extends State<AddFolderDialog> {
                               ),
                             ),
                           ]),
-                      const SizedBox(
-                        height: 15,
+                      const SizedBox(height: 10),
+                      const Text(
+                        "A folder with this name already exists, please enter another name",
+                        style: TextStyle(color: Colors.white),
                       ),
+                      const SizedBox(height: 10),
                       TextFormField(
                         decoration: InputDecoration(
                           focusedErrorBorder: OutlineInputBorder(
@@ -94,6 +93,9 @@ class _AddFolderDialogState extends State<AddFolderDialog> {
                         autofocus: true,
                         style: const TextStyle(color: Colors.white),
                         validator: (value) {
+                          final favouritesProvider =
+                              Provider.of<FavouritesProvider>(context,
+                                  listen: false);
                           // Check for empty string
                           if (value == null || value.isEmpty) {
                             return "Enter a valid name";
@@ -117,11 +119,16 @@ class _AddFolderDialogState extends State<AddFolderDialog> {
                           FilledButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                favouritesProvider.createFolder(name!);
+                                // Call import function with new name
                                 Provider.of<FavouritesStorageProvider>(context,
                                         listen: false)
-                                    .addFavouritesFolder(name!);
-                                Navigator.of(context).pop();
+                                    .importFavouritesFolder(
+                                        filePath: widget.filePath,
+                                        renamedFolderName: name);
+
+                                // Send success feedback
+                                Navigator.of(context)
+                                    .pop([true, "Successfully renamed!", name]);
                               }
                             },
                             style: ButtonStyle(
@@ -132,11 +139,13 @@ class _AddFolderDialogState extends State<AddFolderDialog> {
                                       .primaryColor
                                       .withAlpha(120)),
                             ),
-                            child: const Text("Add Folder"),
+                            child: const Text("Rename"),
                           ),
                           const SizedBox(width: 10),
                           FilledButton(
-                            onPressed: () => Navigator.of(context).pop(),
+                            // Send failure feedback
+                            onPressed: () => Navigator.of(context)
+                                .pop([false, "File not renamed!"]),
                             style: ButtonStyle(
                               side: WidgetStateProperty.resolveWith((states) =>
                                   const BorderSide(color: Colors.white)),

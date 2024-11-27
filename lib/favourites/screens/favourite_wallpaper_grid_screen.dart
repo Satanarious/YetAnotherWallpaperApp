@@ -16,10 +16,11 @@ class FavouriteWallpaperGridScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final title = ModalRoute.of(context)!.settings.arguments as String;
+    final isSystemFolder = title == "System | All";
     final favouritesProvider = Provider.of<FavouritesProvider>(context);
     final favouritesStorageProvider =
         Provider.of<FavouritesStorageProvider>(context, listen: false);
-    final wallpaperList = title == "System | All"
+    final wallpaperList = isSystemFolder
         ? favouritesProvider.allFavourites
         : favouritesProvider.favouriteFolders[title];
     return Scaffold(
@@ -79,42 +80,45 @@ class FavouriteWallpaperGridScreen extends StatelessWidget {
                       color: Colors.white,
                       size: 20,
                     )),
-                IconButton(
-                  icon: const Icon(
-                    IconlyLight.delete,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                  onPressed: () async {
-                    await AnimatedPopInDialog.showCustomized(
-                      context: context,
-                      title: "Warning",
-                      icon: Icons.warning_amber_rounded,
-                      description:
-                          "Deleting this folder will also delete all favourited items inside it as well. Are you sure you want to delete this folder?",
-                      buttonNameAndFunctionMap: {
-                        "Cancel": Navigator.of(context).pop,
-                        "Delete": () async {
-                          await Future.delayed(Duration.zero, () {
-                            if (context.mounted) {
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pop();
-                            }
-                          });
-                          // TODO: Fix null error on deletion
-                          if (context.mounted) {
-                            Provider.of<FavouritesStorageProvider>(context,
-                                    listen: false)
-                                .removeFavouriteFolder(title);
-                            Provider.of<FavouritesProvider>(context,
-                                    listen: false)
-                                .removeFolder(title);
-                          }
-                        }
-                      },
-                    );
-                  },
-                )
+                isSystemFolder
+                    ? const SizedBox.shrink()
+                    : IconButton(
+                        icon: const Icon(
+                          IconlyLight.delete,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                        onPressed: () async {
+                          await AnimatedPopInDialog.showCustomized(
+                            context: context,
+                            title: "Warning",
+                            icon: Icons.warning_amber_rounded,
+                            description:
+                                "Deleting this folder will also delete all favourited items inside it as well. Are you sure you want to delete this folder?",
+                            buttonNameAndFunctionMap: {
+                              "Cancel": Navigator.of(context).pop,
+                              "Delete": () async {
+                                await Future.delayed(Duration.zero, () {
+                                  if (context.mounted) {
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                  }
+                                });
+                                // TODO: Fix null error on deletion
+                                if (context.mounted) {
+                                  Provider.of<FavouritesStorageProvider>(
+                                          context,
+                                          listen: false)
+                                      .removeFavouriteFolder(title);
+                                  Provider.of<FavouritesProvider>(context,
+                                          listen: false)
+                                      .removeFolder(title);
+                                }
+                              }
+                            },
+                          );
+                        },
+                      )
               ],
               backgroundColor: Colors.transparent,
               leading: IconButton(

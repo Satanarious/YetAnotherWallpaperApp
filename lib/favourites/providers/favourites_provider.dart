@@ -91,11 +91,15 @@ class FavouritesProvider with ChangeNotifier {
     }
   }
 
-  void importFavouritesFolder(
-      String filePath, FavouritesStorageProvider favouritesStorageProvider) {
+  void importFavouritesFolder({
+    required String filePath,
+    required FavouritesStorageProvider favouritesStorageProvider,
+    String? renamedFolderName,
+  }) {
     final file = File(filePath);
     if (file.existsSync()) {
-      final folderName = file.path.split("/").last.split(".").first;
+      final folderName = renamedFolderName ??
+          file.path.split("/").last.split(".").first.substring(5);
       favouriteFolders[folderName] =
           WallpaperList.fromJson(file.readAsStringSync());
       for (var wallpaper in favouriteFolders[folderName]!.data) {

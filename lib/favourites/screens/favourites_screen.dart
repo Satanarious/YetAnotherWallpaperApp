@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:wallpaper_app/common/dialogs/animated_pop_in_dialog.dart';
 import 'package:wallpaper_app/common/models/wallpaper_list.dart';
 import 'package:wallpaper_app/favourites/dialogs/add_folder_dialog.dart';
+import 'package:wallpaper_app/favourites/dialogs/rename_import_dialog.dart';
 import 'package:wallpaper_app/favourites/providers/favourites_provider.dart';
 import 'package:wallpaper_app/favourites/screens/favourite_wallpaper_grid_screen.dart';
 import 'package:wallpaper_app/favourites/storage/favourites_storage_provider.dart';
@@ -42,6 +43,7 @@ class FavouritesScreen extends StatelessWidget {
               backgroundColor: Colors.transparent,
               actions: [
                 IconButton(
+                  tooltip: "Import Folder",
                   icon: const Icon(
                     IconlyLight.upload,
                     color: Colors.white,
@@ -55,16 +57,38 @@ class FavouritesScreen extends StatelessWidget {
                           final favouritesStorageProvider =
                               Provider.of<FavouritesStorageProvider>(context,
                                   listen: false);
-                          final result = favouritesStorageProvider
-                              .importFavouritesFolder(file.path!);
 
-                          // result is [folderCreated,message], where result[0] is bool, result[1] is String
-                          if (result.first) {
-                            favouritesProvider.importFavouritesFolder(
-                                file.path!, favouritesStorageProvider);
+                          List<dynamic> result = favouritesStorageProvider
+                              .importFavouritesFolder(filePath: file.path!);
+                          if (result.first == false &&
+                              result.last == "Rename!") {
+                            result = await AnimatedPopInDialog.showGeneral(
+                                context, RenameImportDialog(file.path!));
                           }
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(result.last)));
+
+                          // result is [folderCreated,message,renamedFolderName]
+                          // where result[0] is bool, result[1] is String and result[2] is String
+
+                          if (result.first &&
+                              result[1] == "Successfully renamed!") {
+                            favouritesProvider.importFavouritesFolder(
+                              filePath: file.path!,
+                              favouritesStorageProvider:
+                                  favouritesStorageProvider,
+                              renamedFolderName: result.last,
+                            );
+                          } else if (result.first) {
+                            favouritesProvider.importFavouritesFolder(
+                              filePath: file.path!,
+                              favouritesStorageProvider:
+                                  favouritesStorageProvider,
+                            );
+                          }
+
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(result[1])));
+                          }
                         }
                       } else {
                         if (context.mounted) {
@@ -108,29 +132,16 @@ class FavouritesScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(30),
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-              child: FloatingActionButton(
-                onPressed: () => showGeneralDialog(
-                    barrierColor: Colors.black.withOpacity(0.5),
-                    transitionBuilder: (context, a1, a2, wid) {
-                      return Transform.scale(
-                        scale: a1.value,
-                        child: Opacity(
-                          opacity: a1.value,
-                          child: const AddFolderDialog(),
-                        ),
-                      );
-                    },
-                    transitionDuration: const Duration(milliseconds: 200),
-                    barrierDismissible: true,
-                    barrierLabel: '',
-                    context: context,
-                    pageBuilder: (context, animation1, animation2) =>
-                        Container()),
-                backgroundColor: Colors.white.withAlpha(50),
-                child: const Icon(
-                  Icons.add_outlined,
-                  size: 30,
-                  color: Colors.white,
+              child: Container(
+                color: Colors.white.withAlpha(50),
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.add_outlined,
+                    size: 30,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => AnimatedPopInDialog.showGeneral(
+                      context, const AddFolderDialog()),
                 ),
               ),
             ),

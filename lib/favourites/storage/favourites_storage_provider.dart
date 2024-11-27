@@ -47,7 +47,7 @@ class FavouritesStorageProvider with ChangeNotifier {
       if (status.isGranted) {
         final folderJson = localStorage.getItem("Favourites:$folderName")!;
         final downloadsDirectory = Directory('/storage/emulated/0/Download');
-        final file = File('${downloadsDirectory.path}/$folderName.json');
+        final file = File('${downloadsDirectory.path}/YAWA-$folderName.json');
         file.writeAsString(folderJson);
         return true;
       } else {
@@ -67,19 +67,20 @@ class FavouritesStorageProvider with ChangeNotifier {
     final filePath = await getFavouritesFolderJsonPath(folderName);
     // Check if file exists
     if (filePath != null) {
-      Share.shareXFiles([XFile(filePath)], text: 'YAWA - $folderName');
+      Share.shareXFiles([XFile(filePath)], text: 'YAWA-$folderName');
     }
   }
 
-  List<dynamic> importFavouritesFolder(String filePath) {
+  List<dynamic> importFavouritesFolder(
+      {required String filePath, String? renamedFolderName}) {
     final file = File(filePath);
     if (file.existsSync()) {
-      final folderName = file.path.split("/").last.split(".").first;
+      final folderName = renamedFolderName ??
+          file.path.split("/").last.split(".").first.substring(5);
       // Check if folder already exists
       final favouriteFolders = jsonDecode(localStorage.getItem(_key)!) as List;
       if (favouriteFolders.contains(folderName)) {
-        print(favouriteFolders);
-        return [false, "Folder already exists!"];
+        return [false, "Rename!"];
       }
       localStorage.setItem("Favourites:$folderName", file.readAsStringSync());
       final folderList = jsonDecode(localStorage.getItem(_key)!) as List;
