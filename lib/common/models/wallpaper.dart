@@ -6,8 +6,8 @@ import 'package:gal/gal.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
 import 'package:wallpaper_app/common/models/thumbs.dart';
-import 'package:wallpaper_app/enums/file_type.dart';
-import 'package:wallpaper_app/enums/purity.dart';
+import 'package:wallpaper_app/common/enums/file_type.dart';
+import 'package:wallpaper_app/common/enums/purity.dart';
 import 'package:wallpaper_app/home/providers/source_provider.dart';
 
 class Wallpaper extends Equatable {

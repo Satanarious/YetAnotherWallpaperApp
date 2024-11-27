@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/common/models/wallpaper.dart';
-import 'package:wallpaper_app/enums/file_type.dart';
+import 'package:wallpaper_app/common/enums/file_type.dart';
 import 'package:wallpaper_app/favourites/widgets/favourite_button_widget.dart';
 import 'package:wallpaper_app/history/providers/history_provider.dart';
 import 'package:wallpaper_app/history/screens/history_screen.dart';

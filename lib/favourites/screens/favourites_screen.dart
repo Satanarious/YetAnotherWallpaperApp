@@ -39,6 +39,12 @@ class FavouritesScreen extends StatelessWidget {
                 style: TextStyle(color: Colors.white),
               ),
               backgroundColor: Colors.transparent,
+              actions: [
+                IconButton(
+                  icon: const Icon(IconlyLight.upload),
+                  onPressed: () {},
+                )
+              ],
               leading: IconButton(
                 icon: const Icon(
                   Icons.arrow_back,

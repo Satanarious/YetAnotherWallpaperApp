@@ -41,81 +41,86 @@ class AnimatedPopInDialog {
               opacity: a1.value,
               child: Dialog(
                 backgroundColor: Colors.transparent,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      height: 250,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          color: Colors.black.withAlpha(50),
-                          border: Border.all(
-                            color: Colors.white,
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(30)),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  icon,
-                                  color: Colors.white,
-                                ),
-                                Text(
-                                  title,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ]),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            description,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                          const SizedBox(height: 15),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: buttonNameAndFunctionMap.keys
-                                  .map((buttonName) => Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: FilledButton(
-                                          onPressed: () {
-                                            buttonNameAndFunctionMap[
-                                                buttonName]!();
-                                          },
-                                          style: ButtonStyle(
-                                            side:
-                                                WidgetStateProperty.resolveWith(
-                                                    (states) =>
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                              color: Colors.black.withAlpha(50),
+                              border: Border.all(
+                                color: Colors.white,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(30)),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      icon,
+                                      color: Colors.white,
+                                    ),
+                                    Text(
+                                      title,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ]),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                description,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                              const SizedBox(height: 10),
+                              Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: buttonNameAndFunctionMap.keys
+                                      .map((buttonName) => Padding(
+                                            padding: const EdgeInsets.all(5.0),
+                                            child: FilledButton(
+                                              onPressed: () {
+                                                buttonNameAndFunctionMap[
+                                                    buttonName]!();
+                                              },
+                                              style: ButtonStyle(
+                                                side: WidgetStateProperty
+                                                    .resolveWith((states) =>
                                                         const BorderSide(
                                                             color:
                                                                 Colors.white)),
-                                            backgroundColor:
-                                                WidgetStateProperty.resolveWith(
-                                                    (states) =>
-                                                        Theme.of(context)
-                                                            .primaryColor
-                                                            .withAlpha(120)),
-                                          ),
-                                          child: Text(buttonName),
-                                        ),
-                                      ))
-                                  .toList()),
-                        ],
+                                                backgroundColor:
+                                                    WidgetStateProperty
+                                                        .resolveWith((states) =>
+                                                            Theme.of(context)
+                                                                .primaryColor
+                                                                .withAlpha(
+                                                                    120)),
+                                              ),
+                                              child: Text(buttonName),
+                                            ),
+                                          ))
+                                      .toList()),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ));

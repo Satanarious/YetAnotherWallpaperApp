@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:wallpaper_app/enums/purity.dart';
+import 'package:wallpaper_app/common/enums/purity.dart';
 import 'package:wallpaper_app/filters/storage/filters_storage_provider.dart';
 import 'package:wallpaper_app/filters/widgets/togglable_buttons.dart';
 import 'package:wallpaper_app/home/providers/query_provider.dart';

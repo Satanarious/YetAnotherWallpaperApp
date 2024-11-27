@@ -40,96 +40,98 @@ class _DeviantArtFilterDialogState extends State<DeviantArtFilterDialog>
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: Colors.transparent,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-          child: Container(
-            decoration: BoxDecoration(
-                color: Colors.black.withAlpha(50),
-                border: Border.all(
-                  color: Colors.white,
-                  width: 1,
-                ),
-                borderRadius: BorderRadius.circular(30)),
-            padding: const EdgeInsetsDirectional.symmetric(
-                horizontal: 14, vertical: 10),
-            height: 430,
-            width: 350,
-            child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      const Text(
-                        "Filters",
-                        style: TextStyle(fontSize: 20, color: Colors.white),
-                      ),
-                      const Spacer(),
-                      Checkbox(
-                        value: matureContent,
-                        side: const BorderSide(color: Colors.white),
-                        checkColor: Theme.of(context).primaryColor,
-                        activeColor: Colors.white,
-                        onChanged: (value) => setState(() {
-                          matureContent = !matureContent;
-                        }),
-                      ),
-                      const Text(
-                        "18+",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      ),
-                    ],
-                  ),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: DefaultTabController(
-                          length: 2,
-                          child: SizedBox(
-                            height: 370,
-                            child: Column(
-                              children: [
-                                TabBar(
-                                  controller: tabController,
-                                  labelColor: Colors.white,
-                                  unselectedLabelColor: Colors.white,
-                                  dividerColor: Colors.transparent,
-                                  tabs: const [
-                                    Text(
-                                      "By Tag",
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                    Text(
-                                      "By Topic",
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                SizedBox(
-                                  height: 330,
-                                  child: TabBarView(
-                                      controller: tabController,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: TagTab(matureContent),
-                                        ),
-                                        TopicTab(matureContent),
-                                      ]),
-                                )
-                              ],
-                            ),
-                          )),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.black.withAlpha(50),
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 1,
                     ),
-                  ),
-                ]),
+                    borderRadius: BorderRadius.circular(30)),
+                padding: const EdgeInsetsDirectional.symmetric(
+                    horizontal: 14, vertical: 10),
+                width: 350,
+                child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Text(
+                            "Filters",
+                            style: TextStyle(fontSize: 20, color: Colors.white),
+                          ),
+                          const Spacer(),
+                          Checkbox(
+                            value: matureContent,
+                            side: const BorderSide(color: Colors.white),
+                            checkColor: Theme.of(context).primaryColor,
+                            activeColor: Colors.white,
+                            onChanged: (value) => setState(() {
+                              matureContent = !matureContent;
+                            }),
+                          ),
+                          const Text(
+                            "18+",
+                            style: TextStyle(fontSize: 15, color: Colors.white),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 370,
+                        child: SingleChildScrollView(
+                            child: DefaultTabController(
+                          length: 2,
+                          child: Column(
+                            children: [
+                              TabBar(
+                                controller: tabController,
+                                labelColor: Colors.white,
+                                unselectedLabelColor: Colors.white,
+                                dividerColor: Colors.transparent,
+                                tabs: const [
+                                  Text(
+                                    "By Tag",
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                  Text(
+                                    "By Topic",
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              SizedBox(
+                                height: 330,
+                                child: TabBarView(
+                                    controller: tabController,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        child: TagTab(matureContent),
+                                      ),
+                                      TopicTab(matureContent),
+                                    ]),
+                              )
+                            ],
+                          ),
+                        )),
+                      ),
+                    ]),
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

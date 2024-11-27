@@ -6,7 +6,7 @@ import 'package:iconly/iconly.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/common/models/models.dart';
-import 'package:wallpaper_app/enums/file_type.dart';
+import 'package:wallpaper_app/common/enums/file_type.dart';
 import 'package:wallpaper_app/home/providers/source_provider.dart';
 import 'package:wallpaper_app/open_image/widgets/wallpaper_action_widget.dart';
 

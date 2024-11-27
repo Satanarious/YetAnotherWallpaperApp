@@ -286,7 +286,6 @@ class _RedditFilterDialogState extends State<RedditFilterDialog>
                     Expanded(
                       child: TabBarView(
                         controller: tabController,
-                        physics: const NeverScrollableScrollPhysics(),
                         children: [
                           Column(
                             mainAxisSize: MainAxisSize.min,
