@@ -52,15 +52,16 @@ class FavouritesScreen extends StatelessWidget {
                       final file = files.files.first;
                       if (file.extension == "json") {
                         if (context.mounted) {
-                          final result = Provider.of<FavouritesStorageProvider>(
-                                  context,
-                                  listen: false)
+                          final favouritesStorageProvider =
+                              Provider.of<FavouritesStorageProvider>(context,
+                                  listen: false);
+                          final result = favouritesStorageProvider
                               .importFavouritesFolder(file.path!);
 
                           // result is [folderCreated,message], where result[0] is bool, result[1] is String
                           if (result.first) {
-                            favouritesProvider
-                                .importFavouritesFolder(file.path!);
+                            favouritesProvider.importFavouritesFolder(
+                                file.path!, favouritesStorageProvider);
                           }
                           ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text(result.last)));

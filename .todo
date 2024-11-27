@@ -57,6 +57,7 @@ FIXME:
         - Remove the loading animation
         - Add a toast
     ☐ Tags loading on info sheet eveytime sheet is opened.
+    ☐ Remove Favourites from `System | All` when deleting folder.
     
 
 Archive:

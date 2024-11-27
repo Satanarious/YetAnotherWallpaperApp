@@ -91,12 +91,20 @@ class FavouritesProvider with ChangeNotifier {
     }
   }
 
-  void importFavouritesFolder(String filePath) {
+  void importFavouritesFolder(
+      String filePath, FavouritesStorageProvider favouritesStorageProvider) {
     final file = File(filePath);
     if (file.existsSync()) {
       final folderName = file.path.split("/").last.split(".").first;
       favouriteFolders[folderName] =
           WallpaperList.fromJson(file.readAsStringSync());
+      for (var wallpaper in favouriteFolders[folderName]!.data) {
+        if (!allFavourites.data.contains(wallpaper)) {
+          allFavourites.addWallpaper(wallpaper);
+        }
+      }
+      favouritesStorageProvider.updateFavouritesFolder(
+          "System | All", allFavourites);
       notifyListeners();
     }
   }
