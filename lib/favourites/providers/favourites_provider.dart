@@ -7,6 +7,7 @@ import 'package:wallpaper_app/favourites/storage/favourites_storage_provider.dar
 class FavouritesProvider with ChangeNotifier {
   final Map<String, WallpaperList> favouriteFolders = {};
   final allFavourites = WallpaperList.emptyList();
+  static const systemFolderName = "System | All";
 
   void removeWallpaperFromFolder(String folderName, Wallpaper wallpaper) {
     favouriteFolders[folderName]!.removeWallpaper(wallpaper);
@@ -61,7 +62,7 @@ class FavouritesProvider with ChangeNotifier {
         !allFavourites.data.contains(wallpaper)) {
       addWallpaperToAllFolder(wallpaper);
       favouritesStorageProvider.updateFavouritesFolder(
-          "System | All", allFavourites);
+          FavouritesProvider.systemFolderName, allFavourites);
     }
 
     for (var folderName in favouriteFolders.keys) {
@@ -84,7 +85,7 @@ class FavouritesProvider with ChangeNotifier {
     if (selectedFavouriteFolders.isEmpty) {
       allFavourites.removeWallpaper(wallpaper);
       favouritesStorageProvider.updateFavouritesFolder(
-          "System | All", allFavourites);
+          FavouritesProvider.systemFolderName, allFavourites);
       return false;
     } else {
       return true;
@@ -108,7 +109,7 @@ class FavouritesProvider with ChangeNotifier {
         }
       }
       favouritesStorageProvider.updateFavouritesFolder(
-          "System | All", allFavourites);
+          FavouritesProvider.systemFolderName, allFavourites);
       notifyListeners();
     }
   }
@@ -118,7 +119,28 @@ class FavouritesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void removeFolder(String folderName) {
+  void removeFolder(
+      String folderName, FavouritesStorageProvider favouritesStorageProvider) {
+    bool existsInMultipleFavouritesFolder = false;
+    // Check if wallpaper exists in multiple favourites folders
+    // and remove if not, from allFavourites
+    for (var wallpaper
+        in (favouriteFolders[folderName] as WallpaperList).data) {
+      existsInMultipleFavouritesFolder = false;
+      for (var folder in favouriteFolders.keys) {
+        if (folder != folderName &&
+            favouriteFolders[folder]!.data.contains(wallpaper)) {
+          existsInMultipleFavouritesFolder = true;
+          break;
+        }
+      }
+      if (!existsInMultipleFavouritesFolder) {
+        allFavourites.data.remove(wallpaper);
+        favouritesStorageProvider.updateFavouritesFolder(
+            FavouritesProvider.systemFolderName, allFavourites);
+      }
+    }
+    // Finally remove the folder
     favouriteFolders.remove(folderName);
     notifyListeners();
   }

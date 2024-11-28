@@ -67,7 +67,7 @@ class FavouritesScreen extends StatelessWidget {
                           }
 
                           // result is [folderCreated,message,renamedFolderName]
-                          // where result[0] is bool, result[1] is String and result[2] is String
+                          // where result[0] is bool, result[1] is String and result[2] is String?
 
                           if (result.first &&
                               result[1] == "Successfully renamed!") {

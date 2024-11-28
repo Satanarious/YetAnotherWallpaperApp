@@ -33,7 +33,7 @@ class FavouriteWallpaperGridScreen extends StatelessWidget {
             filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
             child: AppBar(
               title: Text(
-                "Favourites: $title",
+                title,
                 style: const TextStyle(color: Colors.white),
               ),
               actions: [
@@ -98,21 +98,25 @@ class FavouriteWallpaperGridScreen extends StatelessWidget {
                             buttonNameAndFunctionMap: {
                               "Cancel": Navigator.of(context).pop,
                               "Delete": () async {
-                                await Future.delayed(Duration.zero, () {
-                                  if (context.mounted) {
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pop();
-                                  }
-                                });
                                 // TODO: Fix null error on deletion
                                 if (context.mounted) {
-                                  Provider.of<FavouritesStorageProvider>(
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pop();
+
+                                  final favouritesStorageProvider =
+                                      Provider.of<FavouritesStorageProvider>(
                                           context,
-                                          listen: false)
-                                      .removeFavouriteFolder(title);
-                                  Provider.of<FavouritesProvider>(context,
-                                          listen: false)
-                                      .removeFolder(title);
+                                          listen: false);
+                                  final favouritesProvider =
+                                      Provider.of<FavouritesProvider>(context,
+                                          listen: false);
+                                  Future.delayed(
+                                      const Duration(milliseconds: 100), () {
+                                    favouritesStorageProvider
+                                        .removeFavouriteFolder(title);
+                                    favouritesProvider.removeFolder(
+                                        title, favouritesStorageProvider);
+                                  });
                                 }
                               }
                             },
