@@ -8,6 +8,7 @@ class FavouritesProvider with ChangeNotifier {
   final Map<String, WallpaperList> favouriteFolders = {};
   final allFavourites = WallpaperList.emptyList();
   static const systemFolderName = "System | All";
+  var notifyFavouritesListener = true;
 
   void removeWallpaperFromFolder(String folderName, Wallpaper wallpaper) {
     favouriteFolders[folderName]!.removeWallpaper(wallpaper);
@@ -143,5 +144,9 @@ class FavouritesProvider with ChangeNotifier {
     // Finally remove the folder
     favouriteFolders.remove(folderName);
     notifyListeners();
+  }
+
+  void shouldNotifyListener(bool value) {
+    notifyFavouritesListener = value;
   }
 }

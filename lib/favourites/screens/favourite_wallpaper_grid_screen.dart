@@ -18,6 +18,12 @@ class FavouriteWallpaperGridScreen extends StatelessWidget {
     final title = ModalRoute.of(context)!.settings.arguments as String;
     final isSystemFolder = title == "System | All";
     final favouritesProvider = Provider.of<FavouritesProvider>(context);
+
+    // Condition to prevent rebuild after folder deletion
+    if (!favouritesProvider.notifyFavouritesListener) {
+      favouritesProvider.shouldNotifyListener(true);
+      return const SizedBox.shrink();
+    }
     final favouritesStorageProvider =
         Provider.of<FavouritesStorageProvider>(context, listen: false);
     final wallpaperList = isSystemFolder
@@ -98,7 +104,6 @@ class FavouriteWallpaperGridScreen extends StatelessWidget {
                             buttonNameAndFunctionMap: {
                               "Cancel": Navigator.of(context).pop,
                               "Delete": () async {
-                                // TODO: Fix null error on deletion
                                 if (context.mounted) {
                                   Navigator.of(context).pop();
                                   Navigator.of(context).pop();
@@ -114,6 +119,8 @@ class FavouriteWallpaperGridScreen extends StatelessWidget {
                                       const Duration(milliseconds: 100), () {
                                     favouritesStorageProvider
                                         .removeFavouriteFolder(title);
+                                    favouritesProvider
+                                        .shouldNotifyListener(false);
                                     favouritesProvider.removeFolder(
                                         title, favouritesStorageProvider);
                                   });

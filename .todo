@@ -57,7 +57,8 @@ FIXME:
         - Remove the loading animation
         - Add a toast
     ☐ Tags loading on info sheet eveytime sheet is opened.
-    ☐ Remove Favourites from `System | All` when deleting folder.
+    ✔ Fix FavouritesProvider recursive build null value error @done(24-11-29 22:02)
+    ✔ Add/Remove Favourites from `System | All` when deleting/importing folder. @done(24-11-28 19:33)
     
 
 Archive:
