@@ -32,11 +32,8 @@ TODO:
             ☐ Source: Saved Query/ Favourites/ Local
             ☐ Notification of wallpaper change
             ☐ Add to favorites on change (Auto-Wallpaper)
-        Favourites Screen:
-            ☐ Share folder as json
-            ☐ Import/Export folder
         Wallpaper Action Widget:
-            ☐ Add Share Wallpaper Button
+            ✘ Add Share Wallpaper Button @cancelled(24-11-29 22:24)
             Edit Wallpaper Button: 
                 ☐ Blur
                 ☐ Vigenette
@@ -57,11 +54,12 @@ FIXME:
         - Remove the loading animation
         - Add a toast
     ☐ Tags loading on info sheet eveytime sheet is opened.
-    ✔ Fix FavouritesProvider recursive build null value error @done(24-11-29 22:02)
-    ✔ Add/Remove Favourites from `System | All` when deleting/importing folder. @done(24-11-28 19:33)
     
-
 Archive:
+    ✔ Share folder as json @done(24-11-29 22:21) @project(TODO.Features.Favourites Screen)
+    ✔ Import/Export folder @done(24-11-29 22:21) @project(TODO.Features.Favourites Screen)
+    ✔ Fix FavouritesProvider recursive build null value error @done(24-11-29 22:02) @project(FIXME)
+    ✔ Add/Remove Favourites from `System | All` when deleting/importing folder. @done(24-11-28 19:33) @project(FIXME)
     ✔ Add to Favourites dialog, add preview of images @done(24-06-16 02:08) @project(TODO.Features.To Add)
     ✔ Add 'Remove folder' button @done(24-06-25 08:09) @project(TODO.Features.Favourites Screen)
     ✔ Frosted Glass Theming @done(24-06-25 08:25) @project(TODO.Chores)

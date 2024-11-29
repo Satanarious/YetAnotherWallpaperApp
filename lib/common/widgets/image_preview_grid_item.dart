@@ -62,27 +62,48 @@ class _ImagePreviewGridItemState extends State<ImagePreviewGridItem>
                     : widget.wallpaper.thumbs.original,
                 fit: BoxFit.cover,
                 errorWidget: (context, url, error) => Image.network(
-                  isGif
-                      ? widget.wallpaper.thumbs.large
-                      : widget.wallpaper.thumbs.original,
-                  fit: BoxFit.cover,
-                  filterQuality: FilterQuality.high,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress?.cumulativeBytesLoaded ==
-                        loadingProgress?.expectedTotalBytes) {
-                      return child;
-                    } else {
-                      return Center(
-                        child: Image.asset(
-                          "assets/loading.gif",
-                          height: 20,
-                        ),
-                      );
-                    }
-                  },
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Center(child: Text("Error Loading Preview")),
-                ),
+                    isGif
+                        ? widget.wallpaper.thumbs.large
+                        : widget.wallpaper.thumbs.original,
+                    fit: BoxFit.cover,
+                    filterQuality: FilterQuality.high,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress?.cumulativeBytesLoaded ==
+                          loadingProgress?.expectedTotalBytes) {
+                        return child;
+                      } else {
+                        return Center(
+                          child: Image.asset(
+                            "assets/loading.gif",
+                            height: 20,
+                          ),
+                        );
+                      }
+                    },
+                    errorBuilder: (context, error, stackTrace) => Image.network(
+                          widget.wallpaper.url,
+                          fit: BoxFit.cover,
+                          filterQuality: FilterQuality.high,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress?.cumulativeBytesLoaded ==
+                                loadingProgress?.expectedTotalBytes) {
+                              return child;
+                            } else {
+                              return Center(
+                                child: Image.asset(
+                                  "assets/loading.gif",
+                                  height: 20,
+                                ),
+                              );
+                            }
+                          },
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Center(
+                                  child: Icon(
+                            Icons.broken_image,
+                            color: Colors.grey,
+                          )),
+                        )),
                 placeholder: (context, url) => Center(
                   child: Image.asset(
                     "assets/loading.gif",
