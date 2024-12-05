@@ -27,7 +27,9 @@ class FavouritesProvider with ChangeNotifier {
       if (folders.isNotEmpty) {
         favouriteFolders[folders[0] as String]!.removeWallpaper(wallpaper);
       }
-      notifyListeners();
+      if (notifyFavouritesListener) {
+        notifyListeners();
+      }
       return false;
     } else {
       return true;
@@ -111,8 +113,19 @@ class FavouritesProvider with ChangeNotifier {
       }
       favouritesStorageProvider.updateFavouritesFolder(
           FavouritesProvider.systemFolderName, allFavourites);
-      notifyListeners();
+      if (notifyFavouritesListener) {
+        notifyListeners();
+      }
     }
+  }
+
+  void renameFavouritesFolder(String originalFolderName, String newFolderName,
+      FavouritesStorageProvider favouritesStorageProvider) {
+    favouriteFolders[newFolderName] = favouriteFolders[originalFolderName]!;
+    favouriteFolders.remove(originalFolderName);
+    favouritesStorageProvider.updateFavouritesFolder(
+        newFolderName, favouriteFolders[newFolderName]!);
+    notifyListeners();
   }
 
   void createFolder(String folderName) {

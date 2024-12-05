@@ -5,6 +5,7 @@ import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/common/dialogs/animated_pop_in_dialog.dart';
 import 'package:wallpaper_app/common/widgets/masonry_grid_widget.dart';
+import 'package:wallpaper_app/favourites/dialogs/rename_folder_dialog.dart';
 import 'package:wallpaper_app/favourites/providers/favourites_provider.dart';
 import 'package:wallpaper_app/favourites/storage/favourites_storage_provider.dart';
 
@@ -43,6 +44,17 @@ class FavouriteWallpaperGridScreen extends StatelessWidget {
                 style: const TextStyle(color: Colors.white),
               ),
               actions: [
+                isSystemFolder
+                    ? const SizedBox.shrink()
+                    : IconButton(
+                        onPressed: () => AnimatedPopInDialog.showGeneral(
+                            context, RenameFolderDialog(title)),
+                        icon: const Icon(
+                          IconlyLight.edit,
+                          color: Colors.white,
+                        ),
+                        tooltip: "Rename",
+                      ),
                 IconButton(
                     onPressed: () => AnimatedPopInDialog.showCustomized(
                           context: context,

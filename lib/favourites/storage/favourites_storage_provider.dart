@@ -108,6 +108,11 @@ class FavouritesStorageProvider with ChangeNotifier {
     localStorage.setItem(_key, jsonEncode(folderList));
   }
 
+  void renameFavouritesFolder(String originalFolderName, String newFolderName) {
+    addFavouritesFolder(newFolderName);
+    removeFavouriteFolder(originalFolderName);
+  }
+
   void removeFavouriteFolder(String folderName) {
     localStorage.removeItem("Favourites:$folderName");
     final folderList = jsonDecode(localStorage.getItem(_key)!) as List;

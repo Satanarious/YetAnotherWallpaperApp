@@ -33,7 +33,6 @@ TODO:
             ☐ Notification of wallpaper change
             ☐ Add to favorites on change (Auto-Wallpaper)
         Wallpaper Action Widget:
-            ✘ Add Share Wallpaper Button @cancelled(24-11-29 22:24)
             Edit Wallpaper Button: 
                 ☐ Blur
                 ☐ Vigenette
@@ -48,6 +47,7 @@ TODO:
         ☐ Add Logs.
         ☐ Add Undo snackbars.
         ☐ Remove Query tab and underlying logic from DeviantArt Filters.
+        ☐ Add all hardcoded values to respective config files
 
 FIXME:
     ☐ Loading when there are no more pages left. 
@@ -56,6 +56,8 @@ FIXME:
     ☐ Tags loading on info sheet eveytime sheet is opened.
     
 Archive:
+    ✔ Rename Folder button on favourites screen. @done(24-12-05 17:23) @project(TODO.Features.To Add)
+    ✘ Add Share Wallpaper Button @cancelled(24-11-29 22:24) @project(TODO.Features.Wallpaper Action Widget)
     ✔ Share folder as json @done(24-11-29 22:21) @project(TODO.Features.Favourites Screen)
     ✔ Import/Export folder @done(24-11-29 22:21) @project(TODO.Features.Favourites Screen)
     ✔ Fix FavouritesProvider recursive build null value error @done(24-11-29 22:02) @project(FIXME)
