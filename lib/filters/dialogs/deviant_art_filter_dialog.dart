@@ -342,7 +342,9 @@ class _TopicTabState extends State<TopicTab>
           ),
         ]),
         FutureBuilder(
-            future: deviantArtProvider.deviantArtAllTopics,
+            future: deviantArtProvider.deviantArtAllTopics(
+                Provider.of<DeviantArtFiltersStorageProvider>(context,
+                    listen: false)),
             builder: (context, snapshot) => snapshot.hasData
                 ? CommunityListWidget(
                     communityNameController: topicController,

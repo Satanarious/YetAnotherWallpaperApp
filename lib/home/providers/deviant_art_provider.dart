@@ -2,12 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:wallpaper_app/filters/storage/filters_storage_provider.dart';
 
 class DeviantArtProvider {
   String? _deviantArtToken;
   DateTime? _deviantArtTokenExpiry;
   List<Map<String, String>>? _deviantArtTopTopics;
-  final List<Map<String, String>> _deviantArtAllTopics = [];
+  final List<Map<String, dynamic>> _deviantArtAllTopics = [];
   // Deviant Art Singleton
   static final _singleton = DeviantArtProvider._internal();
 
@@ -86,9 +87,19 @@ class DeviantArtProvider {
     return topics;
   }
 
-  Future<List<Map<String, String>>> get deviantArtAllTopics async {
+  Future<List<Map<String, dynamic>>> deviantArtAllTopics(
+      DeviantArtFiltersStorageProvider deviantArtFiltersStorageProvider) async {
     // Case where topics already exist
-    if (_deviantArtAllTopics.isNotEmpty) return _deviantArtAllTopics;
+    if (_deviantArtAllTopics.isNotEmpty) {
+      return _deviantArtAllTopics;
+    }
+
+    final storageTopics = deviantArtFiltersStorageProvider.getAllTopics();
+    // Case where topics already exist in storage
+    if (storageTopics != null) {
+      _deviantArtAllTopics.addAll(storageTopics);
+      return _deviantArtAllTopics;
+    }
 
     var hasMore = true;
     String? offset;
@@ -129,6 +140,8 @@ class DeviantArtProvider {
       offset = data['next_offset'].toString();
       hasMore = data['has_more'];
     }
+
+    deviantArtFiltersStorageProvider.updateAllTopics(_deviantArtAllTopics);
 
     return _deviantArtAllTopics;
   }

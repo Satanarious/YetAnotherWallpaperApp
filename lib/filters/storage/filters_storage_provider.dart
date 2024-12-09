@@ -104,6 +104,7 @@ class LemmyFiltersStorageProvider with ChangeNotifier {
 
 class DeviantArtFiltersStorageProvider with ChangeNotifier {
   static const _key = 'deviant_art_filters';
+  static const _allTopicsKey = '$_key:all_topics';
 
   Map<String, dynamic> fetch() {
     final raw = localStorage.getItem(_key);
@@ -138,5 +139,20 @@ class DeviantArtFiltersStorageProvider with ChangeNotifier {
       "is_popular": isPopular,
     };
     localStorage.setItem(_key, json.encode(filters));
+  }
+
+  List<Map<String, dynamic>>? getAllTopics() {
+    final raw = localStorage.getItem(_allTopicsKey);
+    if (raw != null) {
+      final decodedList = json.decode(raw) as List<dynamic>;
+      final finalList = decodedList.cast<Map<String, dynamic>>();
+      return finalList;
+    } else {
+      return null;
+    }
+  }
+
+  void updateAllTopics(List<Map<String, dynamic>> topics) async {
+    localStorage.setItem(_allTopicsKey, json.encode(topics));
   }
 }

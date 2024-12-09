@@ -11,7 +11,7 @@ class CommunityListWidget extends StatefulWidget {
 
   final TextEditingController communityNameController;
   final TabController tabController;
-  final List<Map<String, String>> communityList;
+  final List<Map<String, dynamic>> communityList;
 
   @override
   State<CommunityListWidget> createState() => _CommunityListWidgetState();
