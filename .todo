@@ -8,6 +8,9 @@ TODO:
             ☐ Save current query
                 - Separate screen to access/remove saved queries
                 - Save Query button on home page
+            ☐ Add a way to refresh deviant art topic community list.
+            ☐ Add option to add local wallpaper to favourites.
+            ☐ Add Backup/Restore functionality.
         Local Filters:
             ☐ Resolution Filter
             ☐ Orientation Filter
@@ -54,6 +57,7 @@ FIXME:
         - Remove the loading animation
         - Add a toast
     ☐ Tags loading on info sheet eveytime sheet is opened.
+    ☐ Fix tags onPress event on infoSheet causing a black screen.
     
 Archive:
     ✔ Rename Folder button on favourites screen. @done(24-12-05 17:23) @project(TODO.Features.To Add)

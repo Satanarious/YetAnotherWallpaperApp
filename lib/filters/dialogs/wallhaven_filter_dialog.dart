@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:wallpaper_app/common/enums/purity.dart';
+import 'package:wallpaper_app/common/widgets/custom_drop_down_menu.dart';
 import 'package:wallpaper_app/filters/storage/filters_storage_provider.dart';
 import 'package:wallpaper_app/filters/widgets/togglable_buttons.dart';
 import 'package:wallpaper_app/home/providers/query_provider.dart';
@@ -302,61 +303,27 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
                             const SizedBox(
                               height: 5,
                             ),
-                            DropdownMenu(
-                              leadingIcon: Icon(Icons.sort,
-                                  color: Colors.white.withAlpha(180)),
-                              textStyle: const TextStyle(
-                                  color: Colors.white, fontSize: 14),
-                              menuStyle: MenuStyle(
-                                  backgroundColor: WidgetStateColor.resolveWith(
-                                      (states) => Colors.black.withAlpha(210)),
-                                  shape: WidgetStateProperty.resolveWith(
-                                      (states) => RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20))),
-                                  side: WidgetStateBorderSide.resolveWith(
-                                      (states) => const BorderSide(
-                                            color: Colors.white,
-                                          ))),
-                              inputDecorationTheme: InputDecorationTheme(
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide:
-                                      const BorderSide(color: Colors.white),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide:
-                                      const BorderSide(color: Colors.white),
-                                ),
-                                contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 5),
-                                constraints: BoxConstraints.tight(
-                                    const Size.fromHeight(50)),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                              ),
-                              initialSelection: sortBy,
-                              dropdownMenuEntries: sortByList
-                                  .map((item) => DropdownMenuEntry(
-                                        value: item['value'],
-                                        label: item['label'] as String,
-                                        style: ButtonStyle(
-                                          foregroundColor:
-                                              WidgetStateColor.resolveWith(
-                                                  (states) => Colors.white),
-                                        ),
-                                      ))
-                                  .toList(),
-                              onSelected: (sortType) {
-                                sortBy = (sortType as WallhavenSortingType);
-                                setState(() {
-                                  isTop =
-                                      sortType == WallhavenSortingType.toplist;
-                                });
-                              },
-                            ),
+                            CustomDropDownMenu(
+                                icon: Icons.sort,
+                                dropdownMenuEntries: sortByList
+                                    .map((item) => DropdownMenuEntry(
+                                          value: item['value'],
+                                          label: item['label'] as String,
+                                          style: ButtonStyle(
+                                            foregroundColor:
+                                                WidgetStateColor.resolveWith(
+                                                    (states) => Colors.white),
+                                          ),
+                                        ))
+                                    .toList(),
+                                initialSelection: sortBy,
+                                onSelected: (sortType) {
+                                  sortBy = (sortType as WallhavenSortingType);
+                                  setState(() {
+                                    isTop = sortType ==
+                                        WallhavenSortingType.toplist;
+                                  });
+                                }),
                             const SizedBox(
                               height: 10,
                             ),

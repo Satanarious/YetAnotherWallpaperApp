@@ -10,6 +10,29 @@ enum Sources {
   bingDaily,
 }
 
+extension SourcesExtension on Sources {
+  String get string {
+    switch (this) {
+      case Sources.wallhaven:
+        return "Wallhaven";
+      case Sources.reddit:
+        return "Reddit";
+      case Sources.deviantArt:
+        return "Deviant Art";
+      case Sources.oWalls:
+        return "OWalls";
+      case Sources.googlePixel:
+        return "Google Pixel";
+      case Sources.lemmy:
+        return "Lemmy";
+      case Sources.bingDaily:
+        return "Bing Daily";
+      default:
+        throw Exception("Source not supported yet!!");
+    }
+  }
+}
+
 const sourceMaps = [
   {
     "name": "Reddit",
