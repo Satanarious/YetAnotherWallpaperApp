@@ -25,9 +25,6 @@ TODO:
             ☐ Cache Management
             ☐ Grid layout settings (Wallflow)
             ☐ Auto wallpaper
-            ☐ Mark as viewed
-                ☐ For Session/ Thoughout sessions
-                ☐ Mark Type (Wallflow)
         Auto Wallpaper:
             ☐ Constraints: Wifi/ Charging/ Idle, Roaming
             ☐ Interval: Hours/ Minutes
@@ -60,6 +57,9 @@ FIXME:
     ☐ Fix tags onPress event on infoSheet causing a black screen.
     
 Archive:
+    ✘ Mark as viewed @cancelled(24-12-22 14:39) @project(TODO.Features.Settings Screen)
+    ✘ For Session/ Thoughout sessions @cancelled(24-12-22 14:39) @project(TODO.Features.Settings Screen)
+    ✘ Mark Type (Wallflow) @cancelled(24-12-22 14:39) @project(TODO.Features.Settings Screen)
     ✔ Rename Folder button on favourites screen. @done(24-12-05 17:23) @project(TODO.Features.To Add)
     ✘ Add Share Wallpaper Button @cancelled(24-11-29 22:24) @project(TODO.Features.Wallpaper Action Widget)
     ✔ Share folder as json @done(24-11-29 22:21) @project(TODO.Features.Favourites Screen)

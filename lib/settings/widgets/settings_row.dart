@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 
 class SettingsRow extends StatelessWidget {
-  const SettingsRow(
-      {required this.settingIcon,
-      required this.settingName,
-      required this.settingWidget,
-      super.key});
+  const SettingsRow({
+    required this.settingIcon,
+    required this.settingName,
+    required this.settingWidget,
+    this.isDisabled = false,
+    super.key,
+  });
   final IconData settingIcon;
   final String settingName;
   final Widget settingWidget;
+  final bool isDisabled;
 
   @override
   Widget build(BuildContext context) {
@@ -16,13 +19,14 @@ class SettingsRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       mainAxisSize: MainAxisSize.max,
       children: [
-        Icon(settingIcon, color: Colors.grey),
+        Icon(settingIcon, color: isDisabled ? Colors.grey : Colors.white),
         const SizedBox(
           width: 5,
         ),
         Text(
           settingName,
-          style: const TextStyle(color: Colors.white, fontSize: 16),
+          style: TextStyle(
+              color: isDisabled ? Colors.grey : Colors.white, fontSize: 16),
         ),
         const Expanded(
           child: SizedBox(

@@ -50,7 +50,9 @@ class _GridLayoutPreviewWidgetState extends State<GridLayoutPreviewWidget> {
                                 gridDelegate:
                                     SliverSimpleGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: columnSize == "Adaptive"
-                                      ? (size.width / columnWidth).toInt()
+                                      ? (size.width / columnWidth).toInt() > 0
+                                          ? (size.width / columnWidth).toInt()
+                                          : 1
                                       : columnNumber.toInt(),
                                 ),
                                 padding: const EdgeInsets.only(top: 0),
@@ -209,7 +211,6 @@ class _GridLayoutPreviewWidgetState extends State<GridLayoutPreviewWidget> {
                     child: Slider(
                       value: columnWidth,
                       allowedInteraction: SliderInteraction.tapAndSlide,
-                      divisions: 5,
                       label: "${columnWidth.toInt()} px",
                       min: size.width * 0.1,
                       max: size.width * 0.5,
@@ -238,10 +239,10 @@ class _GridLayoutPreviewWidgetState extends State<GridLayoutPreviewWidget> {
                     child: Slider(
                       value: columnNumber.toDouble(),
                       allowedInteraction: SliderInteraction.tapAndSlide,
-                      divisions: 4,
+                      divisions: 5,
                       label: "$columnNumber",
                       min: 1,
-                      max: 5,
+                      max: 6,
                       onChanged: (value) {
                         setState(() {
                           columnNumber = value.toInt();
@@ -249,7 +250,7 @@ class _GridLayoutPreviewWidgetState extends State<GridLayoutPreviewWidget> {
                       },
                     ),
                   ),
-                  const Text("5",
+                  const Text("6",
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.white,

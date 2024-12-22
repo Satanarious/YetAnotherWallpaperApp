@@ -5,6 +5,7 @@ class CustomDropDownMenu extends StatefulWidget {
     required this.dropdownMenuEntries,
     required this.initialSelection,
     required this.onSelected,
+    this.isEnabled = true,
     this.icon,
     this.height = 50,
     this.width = 200,
@@ -16,6 +17,7 @@ class CustomDropDownMenu extends StatefulWidget {
   final double height;
   final double width;
   final IconData? icon;
+  final bool isEnabled;
 
   @override
   State<CustomDropDownMenu> createState() => _CustomDropDownMenuState();
@@ -25,10 +27,12 @@ class _CustomDropDownMenuState extends State<CustomDropDownMenu> {
   @override
   Widget build(BuildContext context) {
     return DropdownMenu(
+      enabled: widget.isEnabled,
       leadingIcon: widget.icon != null
           ? Icon(widget.icon, color: Colors.white.withAlpha(180))
           : null,
-      textStyle: const TextStyle(color: Colors.white, fontSize: 14),
+      textStyle: TextStyle(
+          color: widget.isEnabled ? Colors.white : Colors.grey, fontSize: 14),
       menuStyle: MenuStyle(
           backgroundColor: WidgetStateColor.resolveWith(
               (states) => Colors.black.withAlpha(210)),
@@ -41,6 +45,10 @@ class _CustomDropDownMenuState extends State<CustomDropDownMenu> {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
           borderSide: const BorderSide(color: Colors.white),
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: const BorderSide(color: Colors.grey),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
