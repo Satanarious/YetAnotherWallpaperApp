@@ -112,31 +112,25 @@ class DeviantArtFiltersStorageProvider with ChangeNotifier {
       return json.decode(raw);
     } else {
       return {
-        "query": "",
         "topic": "",
         "tag": "",
         "page": 0,
         "mature_content": false,
-        "is_popular": true,
       };
     }
   }
 
   void update({
-    String query = "",
     String topic = "",
     String tag = "",
     required int page,
     required bool matureContent,
-    bool isPopular = true,
   }) {
     final filters = {
-      "query": query,
       "topic": topic,
       "tag": tag,
       "page": page,
       "mature_content": matureContent,
-      "is_popular": isPopular,
     };
     localStorage.setItem(_key, json.encode(filters));
   }

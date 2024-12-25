@@ -7,16 +7,27 @@ import 'package:wallpaper_app/history/providers/history_provider.dart';
 import 'package:wallpaper_app/history/storage/history_storage_provider.dart';
 import 'package:wallpaper_app/home/screens/wallpaper_grid_screen.dart';
 import 'package:wallpaper_app/home/widgets/pill_tab_bar.dart';
+import 'package:wallpaper_app/queries/providers/queries_provider.dart';
+import 'package:wallpaper_app/queries/storage/queries_storage_provider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
   static const routeName = "/Home";
 
   void initializeStorageProviders(BuildContext context) {
+    // Set Queries from Storage
+    final queryStorageProvider =
+        Provider.of<QueriesStorageProvider>(context, listen: false);
+    final queriesProvider =
+        Provider.of<QueriesProvider>(context, listen: false);
+    queriesProvider.savedQueries = queryStorageProvider.fetchSavedQueries();
+    queriesProvider.historyQueries = queryStorageProvider.fetchHistoryQueries();
+
     // Set History from Storage
     final history = Provider.of<HistoryStorageProvider>(context, listen: false)
         .fetchHistory();
     Provider.of<HistoryProvider>(context, listen: false).history = history;
+
     // Set Favourites from Storage
     final favouritesStorageProvider =
         Provider.of<FavouritesStorageProvider>(context, listen: false);

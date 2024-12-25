@@ -7,6 +7,8 @@ import 'package:wallpaper_app/filters/widgets/community_list_widget.dart';
 import 'package:wallpaper_app/filters/widgets/togglable_buttons.dart';
 import 'package:wallpaper_app/home/providers/query_provider.dart';
 import 'package:wallpaper_app/home/providers/wallpaper_list_provider.dart';
+import 'package:wallpaper_app/queries/providers/queries_provider.dart';
+import 'package:wallpaper_app/queries/storage/queries_storage_provider.dart';
 
 class RedditFilterDialog extends StatefulWidget {
   const RedditFilterDialog({super.key});
@@ -448,6 +450,18 @@ class _RedditFilterDialogState extends State<RedditFilterDialog>
                                                           RedditFiltersStorageProvider>(
                                                       context,
                                                       listen: false);
+
+                                              // Save Current Query to History
+                                              Provider.of<QueriesStorageProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .addHistoryQuery(queryProvider
+                                                      .currentQuery);
+                                              Provider.of<QueriesProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .addHistoryQuery(queryProvider
+                                                      .currentQuery);
 
                                               redditFilterStorageProvider
                                                   .update(

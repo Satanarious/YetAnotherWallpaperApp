@@ -10,6 +10,8 @@ import 'package:wallpaper_app/filters/widgets/togglable_buttons.dart';
 import 'package:wallpaper_app/home/providers/query_provider.dart';
 import 'package:wallpaper_app/home/providers/wallhaven_provider.dart';
 import 'package:wallpaper_app/home/providers/wallpaper_list_provider.dart';
+import 'package:wallpaper_app/queries/providers/queries_provider.dart';
+import 'package:wallpaper_app/queries/storage/queries_storage_provider.dart';
 
 class WallhavenFilterDialog extends StatefulWidget {
   const WallhavenFilterDialog({super.key});
@@ -452,6 +454,17 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
                                                   WallhavenFiltersStorageProvider>(
                                               context,
                                               listen: false);
+
+                                      // Save Current Query to History
+                                      Provider.of<QueriesStorageProvider>(
+                                              context,
+                                              listen: false)
+                                          .addHistoryQuery(
+                                              queryProvider.currentQuery);
+                                      Provider.of<QueriesProvider>(context,
+                                              listen: false)
+                                          .addHistoryQuery(
+                                              queryProvider.currentQuery);
 
                                       wallhavenFilterStorageProvider.update(
                                         primaryTag: tag1,

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 enum Sources {
-  wallhaven,
   reddit,
+  wallhaven,
+  lemmy,
   deviantArt,
   oWalls,
   googlePixel,
-  lemmy,
   bingDaily,
 }
 
@@ -80,12 +80,19 @@ const sourceMaps = [
 
 class SourceProvider with ChangeNotifier {
   Sources source = Sources.deviantArt;
+  bool shouldNotify = true;
+
+  void shouldNotifyListeners(bool notify) {
+    shouldNotify = notify;
+  }
 
   void changeSource(Sources newSource) {
     if (source == newSource) {
       return;
     }
     source = newSource;
-    notifyListeners();
+    if (shouldNotify) {
+      notifyListeners();
+    }
   }
 }

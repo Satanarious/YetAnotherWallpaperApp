@@ -10,6 +10,7 @@ import 'package:wallpaper_app/home/dialogs/source_selector_dialog.dart';
 import 'package:wallpaper_app/home/enums/pill_actions.dart';
 import 'package:wallpaper_app/home/providers/scroll_handling_provider.dart';
 import 'package:wallpaper_app/home/providers/source_provider.dart';
+import 'package:wallpaper_app/queries/dialogs/query_dialog.dart';
 import 'package:wallpaper_app/settings/screens/settings_screen.dart';
 
 import '../../filters/dialogs/filter_dialogs.dart';
@@ -55,6 +56,9 @@ class _PillTabBarState extends State<PillTabBar> {
         break;
       case PillAction.history:
         Navigator.of(context).pushNamed(HistoryScreen.routeName);
+        break;
+      case PillAction.queries:
+        AnimatedPopInDialog.showGeneral(context, const QueryDialog());
         break;
       case PillAction.settings:
         Navigator.of(context).pushNamed(SettingsScreen.routeName);

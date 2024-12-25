@@ -3,14 +3,11 @@ TODO:
         To Add:
             ☐ More confirmation dialogs/snackbars with undo functionality
             ☐ Deviant Art Topics loading time indication.
-            ☐ Deviant Art Save topics.
             ☐ Community List/Deviant Art Topic List, grid and list view options.
-            ☐ Save current query
-                - Separate screen to access/remove saved queries
-                - Save Query button on home page
             ☐ Add a way to refresh deviant art topic community list.
             ☐ Add option to add local wallpaper to favourites.
             ☐ Add Backup/Restore functionality.
+            ☐ Add way to add communities in reddit and lemmy
         Local Filters:
             ☐ Resolution Filter
             ☐ Orientation Filter
@@ -47,7 +44,7 @@ TODO:
         ☐ Add Logs.
         ☐ Add Undo snackbars.
         ☐ Remove Query tab and underlying logic from DeviantArt Filters.
-        ☐ Add all hardcoded values to respective config files
+        ☐ Make Snackbars better looking.
 
 FIXME:
     ☐ Loading when there are no more pages left. 
@@ -57,6 +54,13 @@ FIXME:
     ☐ Fix tags onPress event on infoSheet causing a black screen.
     
 Archive:
+    ✔ Deviant Art Save topics. @done(24-12-25 10:21) @project(TODO.Features.To Add)
+    ✔ Save current query @done(24-12-25 19:43) @project(TODO.Features.To Add)
+    ✔ Add queries to storage. @done(24-12-25 19:43) @project(TODO.Features.To Add)
+    ✔ Seperate dialog for saved/history queries. @done(24-12-24 20:38) @project(TODO.Features.To Add)
+    ✔ Way to add/remove saved queries. @done(24-12-24 20:38) @project(TODO.Features.To Add)
+    ✔ Add queries to history when a query is selected. @done(24-12-25 10:16) @project(TODO.Features.To Add)
+    ✘ Add all hardcoded values to respective config files @cancelled(24-12-24 14:25) @project(TODO.Chores)
     ✘ Mark as viewed @cancelled(24-12-22 14:39) @project(TODO.Features.Settings Screen)
     ✘ For Session/ Thoughout sessions @cancelled(24-12-22 14:39) @project(TODO.Features.Settings Screen)
     ✘ Mark Type (Wallflow) @cancelled(24-12-22 14:39) @project(TODO.Features.Settings Screen)

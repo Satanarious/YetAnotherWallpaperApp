@@ -11,6 +11,8 @@ import 'package:wallpaper_app/filters/widgets/togglable_buttons.dart';
 import 'package:wallpaper_app/home/providers/deviant_art_provider.dart';
 import 'package:wallpaper_app/home/providers/query_provider.dart';
 import 'package:wallpaper_app/home/providers/wallpaper_list_provider.dart';
+import 'package:wallpaper_app/queries/providers/queries_provider.dart';
+import 'package:wallpaper_app/queries/storage/queries_storage_provider.dart';
 
 class DeviantArtFilterDialog extends StatefulWidget {
   const DeviantArtFilterDialog({super.key});
@@ -314,10 +316,15 @@ class _TopicTabState extends State<TopicTab>
                               listen: false)
                           .fetch();
 
+                  // Save Current Query to History
+                  Provider.of<QueriesStorageProvider>(context, listen: false)
+                      .addHistoryQuery(queryProvider.currentQuery);
+                  Provider.of<QueriesProvider>(context, listen: false)
+                      .addHistoryQuery(queryProvider.currentQuery);
+
                   filterStorageProvider.update(
                     topic: topicController.text,
                     tag: savedFilters['tag'],
-                    query: savedFilters['query'],
                     page: 1,
                     matureContent: widget.matureContent,
                   );
@@ -577,10 +584,13 @@ class _TagTabState extends State<TagTab> {
                           listen: false)
                       .fetch();
 
+              // Save Current Query to History
+              Provider.of<QueriesProvider>(context, listen: false)
+                  .addHistoryQuery(queryProvider.currentQuery);
+
               filterStorageProvider.update(
                 tag: tagController.text,
                 topic: savedFilters['topic'],
-                query: savedFilters['query'],
                 page: 0,
                 matureContent: widget.matureContent,
               );

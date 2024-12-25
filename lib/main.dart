@@ -15,6 +15,8 @@ import 'package:wallpaper_app/home/providers/source_provider.dart';
 import 'package:wallpaper_app/home/providers/wallpaper_list_provider.dart';
 import 'package:wallpaper_app/home/screens/home_screen.dart';
 import 'package:wallpaper_app/open_image/screens/open_image_screen.dart';
+import 'package:wallpaper_app/queries/providers/queries_provider.dart';
+import 'package:wallpaper_app/queries/storage/queries_storage_provider.dart';
 import 'package:wallpaper_app/settings/screens/settings_screen.dart';
 import 'package:wallpaper_app/splash_screen.dart';
 
@@ -42,6 +44,8 @@ class WallpaperApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: LemmyFiltersStorageProvider()),
         ChangeNotifierProvider.value(value: WallhavenFiltersStorageProvider()),
         ChangeNotifierProvider.value(value: DeviantArtFiltersStorageProvider()),
+        ChangeNotifierProvider.value(value: QueriesProvider()),
+        ChangeNotifierProvider.value(value: QueriesStorageProvider())
       ],
       child: MaterialApp(
         routes: {
