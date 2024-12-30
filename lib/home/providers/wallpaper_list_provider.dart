@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:wallpaper_app/apis/api_client.dart';
+import 'package:wallpaper_app/apis/source_api_client.dart';
 import 'package:wallpaper_app/common/models/models.dart';
 import 'package:wallpaper_app/home/providers/source_provider.dart';
 
 class WallpaperListProvider with ChangeNotifier {
   final _wallpapers = WallpaperList.emptyList();
-  final ApiClient _apiClient = ApiClient();
+  final SourceApiClient _apiClient = SourceApiClient();
   Sources source = Sources.reddit;
 
   int? offset;

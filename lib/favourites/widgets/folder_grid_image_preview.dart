@@ -1,12 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:wallpaper_app/common/models/wallpaper.dart';
 
 class FolderGridImagePreview extends StatelessWidget {
   const FolderGridImagePreview({
     super.key,
-    this.url,
+    this.wallpaper,
   });
-  final String? url;
+  final Wallpaper? wallpaper;
   static const itemHeight = 70.0;
 
   @override
@@ -19,12 +20,12 @@ class FolderGridImagePreview extends StatelessWidget {
         color: Colors.white60,
         border: Border.all(color: Colors.white, width: 1),
       ),
-      child: url == null
+      child: wallpaper == null
           ? Container()
           : ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: CachedNetworkImage(
-                imageUrl: url!,
+                imageUrl: wallpaper!.thumbs.large,
                 fit: BoxFit.cover,
               ),
             ),

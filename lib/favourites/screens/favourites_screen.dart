@@ -58,8 +58,10 @@ class FavouritesScreen extends StatelessWidget {
                               Provider.of<FavouritesStorageProvider>(context,
                                   listen: false);
 
-                          List<dynamic> result = favouritesStorageProvider
-                              .importFavouritesFolder(filePath: file.path!);
+                          List<dynamic> result =
+                              favouritesStorageProvider.importFavouritesFolder(
+                            filePath: file.path!,
+                          );
                           if (result.first == false &&
                               result.last == "Rename!") {
                             result = await AnimatedPopInDialog.showGeneral(
@@ -238,14 +240,14 @@ class _FavouriteFolderWidgetState extends State<FavouriteFolderWidget> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               FolderGridImagePreview(
-                                url: widget.wallpapersList.data.isNotEmpty
-                                    ? widget.wallpapersList.data[0].thumbs.large
+                                wallpaper: widget.wallpapersList.data.isNotEmpty
+                                    ? widget.wallpapersList.data[0]
                                     : null,
                               ),
                               const SizedBox(width: 10),
                               FolderGridImagePreview(
-                                url: widget.wallpapersList.data.length > 1
-                                    ? widget.wallpapersList.data[1].thumbs.large
+                                wallpaper: widget.wallpapersList.data.length > 1
+                                    ? widget.wallpapersList.data[1]
                                     : null,
                               ),
                             ],
@@ -255,14 +257,14 @@ class _FavouriteFolderWidgetState extends State<FavouriteFolderWidget> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               FolderGridImagePreview(
-                                url: widget.wallpapersList.data.length > 2
-                                    ? widget.wallpapersList.data[2].thumbs.large
+                                wallpaper: widget.wallpapersList.data.length > 2
+                                    ? widget.wallpapersList.data[2]
                                     : null,
                               ),
                               const SizedBox(width: 10),
                               FolderGridImagePreview(
-                                url: widget.wallpapersList.data.length > 3
-                                    ? widget.wallpapersList.data[3].thumbs.large
+                                wallpaper: widget.wallpapersList.data.length > 3
+                                    ? widget.wallpapersList.data[3]
                                     : null,
                               ),
                             ],
@@ -274,23 +276,23 @@ class _FavouriteFolderWidgetState extends State<FavouriteFolderWidget> {
                           FolderImagePreview(
                             top: 0,
                             right: constraints.maxWidth / 4,
-                            url: widget.wallpapersList.data.length > 2
-                                ? widget.wallpapersList.data[2].thumbs.large
+                            wallpaper: widget.wallpapersList.data.length > 2
+                                ? widget.wallpapersList.data[2]
                                 : null,
                           ),
                           FolderImagePreview(
                             top: 15,
                             right: (constraints.maxWidth / 4) - 15,
-                            url: widget.wallpapersList.data.length > 1
-                                ? widget.wallpapersList.data[1].thumbs.large
+                            wallpaper: widget.wallpapersList.data.length > 1
+                                ? widget.wallpapersList.data[1]
                                 : null,
                           ),
                           FolderImagePreview(
                             top: 30,
                             right: (constraints.maxWidth / 4) - 30,
-                            url: widget.wallpapersList.data.isEmpty
+                            wallpaper: widget.wallpapersList.data.isEmpty
                                 ? null
-                                : widget.wallpapersList.data[0].thumbs.large,
+                                : widget.wallpapersList.data[0],
                           ),
                         ],
                       ),

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -6,7 +7,7 @@ import 'package:iconly/iconly.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/common/models/models.dart';
-import 'package:wallpaper_app/common/enums/file_type.dart';
+import 'package:wallpaper_app/common/enums/file_type.dart' as ft;
 import 'package:wallpaper_app/home/providers/source_provider.dart';
 import 'package:wallpaper_app/open_image/widgets/wallpaper_action_widget.dart';
 
@@ -34,7 +35,9 @@ class _OpenImageScreenState extends State<OpenImageScreen> {
       body: Stack(
         children: [
           PhotoView(
-            imageProvider: NetworkImage(wallpaper.url),
+            imageProvider: wallpaper.source == Sources.local
+                ? Image.file(File(wallpaper.localPath!)).image
+                : NetworkImage(wallpaper.url),
             initialScale: PhotoViewComputedScale.covered,
             onTapDown: (context, details, controllerValue) => setState(() {
               isInteracting = !isInteracting;
@@ -67,7 +70,7 @@ class _OpenImageScreenState extends State<OpenImageScreen> {
               return Stack(
                 children: [
                   CachedNetworkImage(
-                    imageUrl: wallpaper.fileType == FileType.gif
+                    imageUrl: wallpaper.fileType == ft.FileType.gif
                         ? wallpaper.thumbs.large
                         : wallpaper.thumbs.original,
                     fit: BoxFit.cover,

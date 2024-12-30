@@ -1,13 +1,15 @@
 import 'dart:convert';
+import 'dart:io' as io;
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gal/gal.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
-import 'package:wallpaper_app/common/models/thumbs.dart';
+
 import 'package:wallpaper_app/common/enums/file_type.dart';
 import 'package:wallpaper_app/common/enums/purity.dart';
+import 'package:wallpaper_app/common/models/thumbs.dart';
 import 'package:wallpaper_app/home/providers/source_provider.dart';
 
 class Wallpaper extends Equatable {
@@ -25,6 +27,7 @@ class Wallpaper extends Equatable {
     this.colors,
     required this.thumbs,
     this.source,
+    this.localPath,
   });
 
   factory Wallpaper.fromWallhavenJson(Map<String, dynamic> json) => Wallpaper(
@@ -143,14 +146,24 @@ class Wallpaper extends Equatable {
   }
 
   Future<void> downloadToGallery() async {
-    var response = await http.get(Uri.parse(url));
-    // Generate random uuid if title doesn't exist
-    final fileName = title ?? const Uuid().v4();
-    final hasAccess = await Gal.hasAccess();
-    await Gal.requestAccess();
-    if (hasAccess) {
-      await Gal.putImageBytes(response.bodyBytes,
-          album: "YetAnotherWallpaperApp", name: fileName);
+    if (source == Sources.local) {
+      final file = io.File(localPath!);
+      final hasAccess = await Gal.hasAccess();
+      await Gal.requestAccess();
+      if (hasAccess) {
+        await Gal.putImageBytes(file.readAsBytesSync(),
+            album: "YetAnotherWallpaperApp", name: file.path.split("/").last);
+      }
+    } else {
+      var response = await http.get(Uri.parse(url));
+      // Generate random uuid if title doesn't exist
+      final fileName = title ?? const Uuid().v4();
+      final hasAccess = await Gal.hasAccess();
+      await Gal.requestAccess();
+      if (hasAccess) {
+        await Gal.putImageBytes(response.bodyBytes,
+            album: "YetAnotherWallpaperApp", name: fileName);
+      }
     }
   }
 
@@ -167,6 +180,7 @@ class Wallpaper extends Equatable {
   final List<String>? colors;
   final Thumbs thumbs;
   final Sources? source;
+  final String? localPath;
 
   static const empty = Wallpaper(
       id: '',
@@ -183,7 +197,7 @@ class Wallpaper extends Equatable {
 
   @override
   String toString() {
-    return 'Wallpaper(title: $title, author: $author, id: $id, url: $url, postUrl: $postUrl, purity: $purity, dimensionX: $dimensionX, dimensionY: $dimensionY, fileSize: $fileSize, fileType: $fileType, colors: $colors, thumbs: $thumbs, source: $source)';
+    return 'Wallpaper(title: $title, author: $author, id: $id, url: $url, postUrl: $postUrl, purity: $purity, dimensionX: $dimensionX, dimensionY: $dimensionY, fileSize: $fileSize, fileType: $fileType, colors: $colors, thumbs: $thumbs, source: $source, localPath: $localPath)';
   }
 
   Wallpaper copyWith({
@@ -200,6 +214,7 @@ class Wallpaper extends Equatable {
     ValueGetter<List<String>?>? colors,
     Thumbs? thumbs,
     ValueGetter<Sources?>? source,
+    ValueGetter<String?>? localPath,
   }) {
     return Wallpaper(
       title: title != null ? title() : this.title,
@@ -215,6 +230,7 @@ class Wallpaper extends Equatable {
       colors: colors != null ? colors() : this.colors,
       thumbs: thumbs ?? this.thumbs,
       source: source != null ? source() : this.source,
+      localPath: localPath != null ? localPath() : this.localPath,
     );
   }
 
@@ -233,6 +249,7 @@ class Wallpaper extends Equatable {
       'colors': colors,
       'thumbs': thumbs.toMap(),
       'source': source?.index,
+      'localPath': localPath,
     };
   }
 
@@ -240,17 +257,18 @@ class Wallpaper extends Equatable {
     return Wallpaper(
       title: map['title'],
       author: map['author'],
-      id: map['id'],
-      url: map['url'],
+      id: map['id'] ?? '',
+      url: map['url'] ?? '',
       postUrl: map['postUrl'],
       purity: PurityType.values[map['purity']],
       dimensionX: map['dimensionX']?.toInt(),
       dimensionY: map['dimensionY']?.toInt(),
       fileSize: map['fileSize']?.toInt() ?? 0,
       fileType: FileType.values[map['fileType']],
-      colors: map['colors'] == null ? null : List<String>.from(map['colors']),
+      colors: map['color'] == null ? [] : List<String>.from(map['colors']),
       thumbs: Thumbs.fromMap(map['thumbs']),
-      source: map['source'] == null ? null : Sources.values[map['source']],
+      source: map['source'] != null ? Sources.values[map['source']] : null,
+      localPath: map['localPath'],
     );
   }
   String toJson() => json.encode(toMap());

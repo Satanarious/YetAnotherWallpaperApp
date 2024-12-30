@@ -1,16 +1,20 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:wallpaper_app/common/models/models.dart';
+import 'package:wallpaper_app/home/providers/source_provider.dart';
 
 class FolderImagePreview extends StatelessWidget {
   const FolderImagePreview({
     super.key,
     required this.top,
     required this.right,
-    this.url,
+    this.wallpaper,
   });
   final double top;
   final double right;
-  final String? url;
+  final Wallpaper? wallpaper;
   static const itemHeight = 120.0;
 
   @override
@@ -26,14 +30,19 @@ class FolderImagePreview extends StatelessWidget {
             color: Colors.white60,
             border: Border.all(color: Colors.white, width: 1),
           ),
-          child: url == null
+          child: wallpaper == null
               ? Container()
               : ClipRRect(
                   borderRadius: BorderRadius.circular(20),
-                  child: CachedNetworkImage(
-                    imageUrl: url!,
-                    fit: BoxFit.cover,
-                  ),
+                  child: wallpaper!.source == Sources.local
+                      ? Image.file(
+                          File(wallpaper!.localPath!),
+                          fit: BoxFit.cover,
+                        )
+                      : CachedNetworkImage(
+                          imageUrl: wallpaper!.thumbs.large,
+                          fit: BoxFit.cover,
+                        ),
                 )),
     );
   }

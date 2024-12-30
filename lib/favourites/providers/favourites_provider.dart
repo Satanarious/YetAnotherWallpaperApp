@@ -1,8 +1,16 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:uuid/uuid.dart';
+import 'package:wallpaper_app/common/enums/file_type.dart' as ft;
+import 'package:wallpaper_app/common/enums/purity.dart';
 import 'package:wallpaper_app/common/models/models.dart';
 import 'package:wallpaper_app/favourites/storage/favourites_storage_provider.dart';
+import 'package:wallpaper_app/home/providers/source_provider.dart';
 
 class FavouritesProvider with ChangeNotifier {
   final Map<String, WallpaperList> favouriteFolders = {};
@@ -20,12 +28,18 @@ class FavouritesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  bool removeWallpaperFromAllFolder(Wallpaper wallpaper) {
+  bool removeWallpaperFromAllFolder(Wallpaper wallpaper,
+      FavouritesStorageProvider favouritesStorageProvider) {
     final folders = foldersWhereWallpaperExists(wallpaper);
     if (folders.length < 2) {
       allFavourites.removeWallpaper(wallpaper);
+      favouritesStorageProvider.updateFavouritesFolder(
+          "System | All", allFavourites);
       if (folders.isNotEmpty) {
-        favouriteFolders[folders[0] as String]!.removeWallpaper(wallpaper);
+        final folderName = folders[0] as String;
+        favouriteFolders[folderName]!.removeWallpaper(wallpaper);
+        favouritesStorageProvider.updateFavouritesFolder(
+            folderName, favouriteFolders[folderName]!);
       }
       if (notifyFavouritesListener) {
         notifyListeners();
@@ -95,17 +109,84 @@ class FavouritesProvider with ChangeNotifier {
     }
   }
 
-  void importFavouritesFolder({
+  Future<bool> addLocalWallpapers({
+    required BuildContext context,
+    required bool isSystemFolder,
+    required FavouritesStorageProvider favouritesStorageProvider,
+    required String title,
+  }) async {
+    final pickedFiles = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowMultiple: true,
+      allowedExtensions: ['png', 'jpg', 'jpeg', 'webp', 'gif'],
+    );
+    if (pickedFiles != null && pickedFiles.files.isNotEmpty) {
+      final downloadsDirectory = await getDownloadsDirectory();
+      if (downloadsDirectory == null) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Failed to add to Favourites!"),
+          ));
+        }
+        return false;
+      }
+
+      for (final pickedFile in pickedFiles.files) {
+        final file = File(pickedFile.path!);
+        final newCopiedFile = await file
+            .copy("${downloadsDirectory.path}/${file.path.split("/").last}");
+        // Create a new local wallpaper
+        final newLocalWallpaper = Wallpaper(
+          id: const Uuid().v4(),
+          title: file.path.split("/").last.split(".").first,
+          source: Sources.local,
+          url: '',
+          purity: PurityType.general,
+          fileSize: 0,
+          localPath: newCopiedFile.path,
+          fileType:
+              ft.File.fromString("image/${pickedFile.path!.split(".").last}"),
+          thumbs: Thumbs.empty,
+        );
+
+        // Add the new local wallpaper to the favourites
+        addWallpaperToAllFolder(newLocalWallpaper);
+        if (!isSystemFolder) {
+          favouriteFolders[title]!.addWallpaper(newLocalWallpaper);
+        }
+      }
+
+      // Update favourites storage provider with new local Wallpapers
+      favouritesStorageProvider.updateFavouritesFolder(
+          systemFolderName, allFavourites);
+      if (!isSystemFolder) {
+        favouritesStorageProvider.updateFavouritesFolder(
+            title, favouriteFolders[title]!);
+      }
+
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Added to Favourites!"),
+        ));
+        return true;
+      }
+    }
+    return false;
+  }
+
+  Future<void> importFavouritesFolder({
     required String filePath,
     required FavouritesStorageProvider favouritesStorageProvider,
     String? renamedFolderName,
-  }) {
+  }) async {
     final file = File(filePath);
     if (file.existsSync()) {
       final folderName = renamedFolderName ??
           file.path.split("/").last.split(".").first.substring(5);
       favouriteFolders[folderName] =
           WallpaperList.fromJson(file.readAsStringSync());
+
+      // Add to favourites
       for (var wallpaper in favouriteFolders[folderName]!.data) {
         if (!allFavourites.data.contains(wallpaper)) {
           allFavourites.addWallpaper(wallpaper);
@@ -116,6 +197,59 @@ class FavouritesProvider with ChangeNotifier {
       if (notifyFavouritesListener) {
         notifyListeners();
       }
+    }
+  }
+
+  Future<File?> getFavouritesFolderJsonPath(String folderName) async {
+    try {
+      final exportWallpaperList = WallpaperList.emptyList();
+      for (var wallpaper in favouriteFolders[folderName]!.data) {
+        print(wallpaper.source);
+        if (wallpaper.source != Sources.local) {
+          exportWallpaperList.addWallpaper(wallpaper);
+        }
+      }
+      final tempDirectory = await getTemporaryDirectory();
+      final file = File('${tempDirectory.path}/$folderName.json');
+      file.writeAsString(exportWallpaperList.toJson());
+      return file;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<void> shareFavouriteFolder(String folderName) async {
+    final isFolderEmpty = favouriteFolders[folderName]!.data.isEmpty;
+    // Check if favourites folder is not empty
+    if (isFolderEmpty) {
+      return;
+    }
+    final jsonFile = await getFavouritesFolderJsonPath(folderName);
+    // Check if file exists
+    if (jsonFile != null) {
+      Share.shareXFiles([XFile(jsonFile.path)], text: 'YAWA-$folderName');
+    }
+  }
+
+  Future<bool> saveFavouritesFolderJson(String folderName) async {
+    try {
+      PermissionStatus status =
+          await Permission.manageExternalStorage.request();
+      if (status.isGranted) {
+        final downloadsDirectory = Directory('/storage/emulated/0/Download');
+        final jsonFile = await getFavouritesFolderJsonPath(folderName);
+        if (jsonFile != null) {
+          await jsonFile
+              .copy("${downloadsDirectory.path}/YAWA-$folderName.json");
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
     }
   }
 

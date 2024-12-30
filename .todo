@@ -5,7 +5,6 @@ TODO:
             ☐ Deviant Art Topics loading time indication.
             ☐ Community List/Deviant Art Topic List, grid and list view options.
             ☐ Add a way to refresh deviant art topic community list.
-            ☐ Add option to add local wallpaper to favourites.
             ☐ Add Backup/Restore functionality.
             ☐ Add way to add communities in reddit and lemmy
         Local Filters:
@@ -54,6 +53,15 @@ FIXME:
     ☐ Fix tags onPress event on infoSheet causing a black screen.
     
 Archive:
+    ✔ Add option to add local wallpaper to favourites. @done(24-12-30 20:22) @project(TODO.Features.To Add)
+    ✔ Skip exporting local wallpapers @done(24-12-30 20:21) @project(TODO.Features.To Add)
+    ✔ Add local files @done(24-12-29 01:38) @project(TODO.Features.To Add)
+    ✘ Import local files @cancelled(24-12-29 01:38) @project(TODO.Features.To Add)
+    ✘ Export local files @cancelled(24-12-29 01:38) @project(TODO.Features.To Add)
+    ✔ Preview local files @done(24-12-29 01:25) @project(TODO.Features.To Add)
+    ✔ View(open-image) local files @done(24-12-29 01:25) @project(TODO.Features.To Add)
+    ✔ Download to gallery @done(24-12-29 01:25) @project(TODO.Features.To Add)
+    ✔ Fix remove favourite from a single folder not affecting the storage @done(24-12-30 20:22) @project(FIXME)
     ✔ Deviant Art Save topics. @done(24-12-25 10:21) @project(TODO.Features.To Add)
     ✔ Save current query @done(24-12-25 19:43) @project(TODO.Features.To Add)
     ✔ Add queries to storage. @done(24-12-25 19:43) @project(TODO.Features.To Add)

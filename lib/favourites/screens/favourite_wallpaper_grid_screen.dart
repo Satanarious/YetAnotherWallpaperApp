@@ -33,6 +33,41 @@ class FavouriteWallpaperGridScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(50, 50, 50, 1),
       extendBodyBehindAppBar: true,
+      floatingActionButton: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 60,
+            width: 60,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.white, width: 1),
+              borderRadius: BorderRadius.circular(30),
+            ),
+          ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(30),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              child: Container(
+                color: Colors.white.withAlpha(50),
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.add_photo_alternate_outlined,
+                    size: 25,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => favouritesProvider.addLocalWallpapers(
+                    context: context,
+                    favouritesStorageProvider: favouritesStorageProvider,
+                    isSystemFolder: isSystemFolder,
+                    title: title,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
       appBar: PreferredSize(
         preferredSize: const Size(double.infinity, appBarHeight),
         child: ClipRect(
@@ -61,16 +96,15 @@ class FavouriteWallpaperGridScreen extends StatelessWidget {
                           title: "Share or Save",
                           icon: Icons.share_rounded,
                           description:
-                              "Choose whether to share this folder or save it on device.",
+                              "Choose whether to share this folder or save it on device. Local wallpapers will be skipped from this export. ",
                           buttonNameAndFunctionMap: {
                             "Cancel": Navigator.of(context).pop,
                             "Share": () {
-                              favouritesStorageProvider
-                                  .shareFavouriteFolder(title);
+                              favouritesProvider.shareFavouriteFolder(title);
                               Navigator.of(context).pop();
                             },
                             "Save": () async {
-                              if (await favouritesStorageProvider
+                              if (await favouritesProvider
                                   .saveFavouritesFolderJson(title)) {
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context)

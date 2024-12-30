@@ -6,7 +6,7 @@ import 'package:wallpaper_app/common/models/models.dart';
 import 'package:wallpaper_app/home/providers/deviant_art_provider.dart';
 import 'package:wallpaper_app/home/providers/source_provider.dart';
 
-class ApiClient {
+class SourceApiClient {
   // Wallpaper Source Default Base URLs and Paths
   Map<String, dynamic> getHttpParams(Sources source) {
     switch (source) {

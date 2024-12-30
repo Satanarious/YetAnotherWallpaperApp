@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -7,6 +8,7 @@ import 'package:wallpaper_app/common/models/models.dart';
 import 'package:wallpaper_app/favourites/providers/favourites_provider.dart';
 import 'package:wallpaper_app/favourites/screens/favourites_screen.dart';
 import 'package:wallpaper_app/favourites/storage/favourites_storage_provider.dart';
+import 'package:wallpaper_app/home/providers/source_provider.dart';
 
 class AddToFavouritesDialog extends StatefulWidget {
   const AddToFavouritesDialog(this.wallpaper, {super.key});
@@ -277,12 +279,22 @@ class _FavouriteFolderTileState extends State<FavouriteFolderTile> {
                     ? null
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(8),
-                        child: CachedNetworkImage(
-                          imageUrl: favourites.data[folderIndex - index].url,
-                          fit: BoxFit.cover,
-                          width: tileSize,
-                          height: tileSize,
-                        ),
+                        child: favourites.data.isEmpty
+                            ? null
+                            : favourites.data[folderIndex - index].source ==
+                                    Sources.local
+                                ? Image.file(
+                                    File(favourites
+                                        .data[folderIndex - index].localPath!),
+                                    fit: BoxFit.cover,
+                                  )
+                                : CachedNetworkImage(
+                                    imageUrl: favourites
+                                        .data[folderIndex - index].url,
+                                    fit: BoxFit.cover,
+                                    width: tileSize,
+                                    height: tileSize,
+                                  ),
                       ),
               ),
             );

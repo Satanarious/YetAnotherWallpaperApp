@@ -135,7 +135,8 @@ class _MasonryGridWidgetState extends State<MasonryGridWidget>
               //     :
               return GestureDetector(
                 onTap: () {
-                  if (wallpapers[index].url.isEmpty) return;
+                  if (wallpapers[index].url.isEmpty &&
+                      wallpapers[index].source != Sources.local) return;
                   if (widget.listNeedsNetworkLoading) {
                     final added =
                         Provider.of<HistoryProvider>(context, listen: false)

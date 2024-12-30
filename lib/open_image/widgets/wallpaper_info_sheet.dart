@@ -24,8 +24,14 @@ class WallpaperInfoSheet extends StatefulWidget {
 class _WallpaperInfoSheetState extends State<WallpaperInfoSheet> {
   @override
   Widget build(BuildContext context) {
-    final sourceInfo = sourceMaps
-        .firstWhere((source) => source['value'] == widget.wallpaper.source);
+    final sourceInfo = widget.wallpaper.source == Sources.local
+        ? {
+            "name": "Local",
+            "icon": Icons.folder,
+            "colour": Colors.white,
+          }
+        : sourceMaps
+            .firstWhere((source) => source['value'] == widget.wallpaper.source);
     final emptyRow = TableRow(children: [Container(), Container()]);
     final queryProvider = Provider.of<QueryProvider>(context, listen: false);
     final wallpaperListProvider =
@@ -199,7 +205,8 @@ class _WallpaperInfoSheetState extends State<WallpaperInfoSheet> {
                         ),
                       ],
                     ),
-                    widget.wallpaper.colors != null
+                    widget.wallpaper.colors != null &&
+                            widget.wallpaper.colors!.isNotEmpty
                         ? TableRow(children: [
                             const TableCell(child: LabelWidget("Colours")),
                             TableCell(

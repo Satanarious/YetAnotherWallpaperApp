@@ -8,6 +8,7 @@ enum Sources {
   oWalls,
   googlePixel,
   bingDaily,
+  local,
 }
 
 extension SourcesExtension on Sources {
@@ -27,6 +28,8 @@ extension SourcesExtension on Sources {
         return "Lemmy";
       case Sources.bingDaily:
         return "Bing Daily";
+      case Sources.local:
+        return "Local";
       default:
         throw Exception("Source not supported yet!!");
     }

@@ -1,14 +1,16 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/common/models/wallpaper.dart';
-import 'package:wallpaper_app/common/enums/file_type.dart';
+import 'package:wallpaper_app/common/enums/file_type.dart' as ft;
 import 'package:wallpaper_app/favourites/widgets/favourite_button_widget.dart';
 import 'package:wallpaper_app/history/providers/history_provider.dart';
 import 'package:wallpaper_app/history/screens/history_screen.dart';
 import 'package:wallpaper_app/history/storage/history_storage_provider.dart';
+import 'package:wallpaper_app/home/providers/source_provider.dart';
 
 class ImagePreviewGridItem extends StatefulWidget {
   const ImagePreviewGridItem({
@@ -44,7 +46,7 @@ class _ImagePreviewGridItemState extends State<ImagePreviewGridItem>
   Widget build(BuildContext context) {
     final showDeletButton =
         ModalRoute.of(context)!.settings.name == HistoryScreen.routeName;
-    final isGif = widget.wallpaper.fileType == FileType.gif;
+    final isGif = widget.wallpaper.fileType == ft.FileType.gif;
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) => Transform.scale(
@@ -55,33 +57,19 @@ class _ImagePreviewGridItemState extends State<ImagePreviewGridItem>
               color: Colors.black,
               height: widget.height,
               width: double.infinity,
-              child: CachedNetworkImage(
-                filterQuality: FilterQuality.high,
-                imageUrl: isGif
-                    ? widget.wallpaper.thumbs.large
-                    : widget.wallpaper.thumbs.original,
-                fit: BoxFit.cover,
-                errorWidget: (context, url, error) => Image.network(
-                    isGif
-                        ? widget.wallpaper.thumbs.large
-                        : widget.wallpaper.thumbs.original,
-                    fit: BoxFit.cover,
-                    filterQuality: FilterQuality.high,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress?.cumulativeBytesLoaded ==
-                          loadingProgress?.expectedTotalBytes) {
-                        return child;
-                      } else {
-                        return Center(
-                          child: Image.asset(
-                            "assets/loading.gif",
-                            height: 20,
-                          ),
-                        );
-                      }
-                    },
-                    errorBuilder: (context, error, stackTrace) => Image.network(
-                          widget.wallpaper.url,
+              child: widget.wallpaper.source == Sources.local
+                  ? Image.file(File(widget.wallpaper.localPath!),
+                      fit: BoxFit.cover)
+                  : CachedNetworkImage(
+                      filterQuality: FilterQuality.high,
+                      imageUrl: isGif
+                          ? widget.wallpaper.thumbs.large
+                          : widget.wallpaper.thumbs.original,
+                      fit: BoxFit.cover,
+                      errorWidget: (context, url, error) => Image.network(
+                          isGif
+                              ? widget.wallpaper.thumbs.large
+                              : widget.wallpaper.thumbs.original,
                           fit: BoxFit.cover,
                           filterQuality: FilterQuality.high,
                           loadingBuilder: (context, child, loadingProgress) {
@@ -98,19 +86,38 @@ class _ImagePreviewGridItemState extends State<ImagePreviewGridItem>
                             }
                           },
                           errorBuilder: (context, error, stackTrace) =>
-                              const Center(
-                                  child: Icon(
-                            Icons.broken_image,
-                            color: Colors.grey,
-                          )),
-                        )),
-                placeholder: (context, url) => Center(
-                  child: Image.asset(
-                    "assets/loading.gif",
-                    height: 20,
-                  ),
-                ),
-              ),
+                              Image.network(
+                                widget.wallpaper.url,
+                                fit: BoxFit.cover,
+                                filterQuality: FilterQuality.high,
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  if (loadingProgress?.cumulativeBytesLoaded ==
+                                      loadingProgress?.expectedTotalBytes) {
+                                    return child;
+                                  } else {
+                                    return Center(
+                                      child: Image.asset(
+                                        "assets/loading.gif",
+                                        height: 20,
+                                      ),
+                                    );
+                                  }
+                                },
+                                errorBuilder: (context, error, stackTrace) =>
+                                    const Center(
+                                        child: Icon(
+                                  Icons.broken_image,
+                                  color: Colors.grey,
+                                )),
+                              )),
+                      placeholder: (context, url) => Center(
+                        child: Image.asset(
+                          "assets/loading.gif",
+                          height: 20,
+                        ),
+                      ),
+                    ),
             ),
             Positioned(
               bottom: showDeletButton ? null : 5,

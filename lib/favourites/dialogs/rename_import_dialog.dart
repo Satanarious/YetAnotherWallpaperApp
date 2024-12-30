@@ -123,8 +123,9 @@ class _RenameImportDialogState extends State<RenameImportDialog> {
                                 Provider.of<FavouritesStorageProvider>(context,
                                         listen: false)
                                     .importFavouritesFolder(
-                                        filePath: widget.filePath,
-                                        renamedFolderName: name);
+                                  filePath: widget.filePath,
+                                  renamedFolderName: name,
+                                );
 
                                 // Send success feedback
                                 Navigator.of(context)
