@@ -32,7 +32,6 @@ class _WallpaperInfoSheetState extends State<WallpaperInfoSheet> {
           }
         : sourceMaps
             .firstWhere((source) => source['value'] == widget.wallpaper.source);
-    print(widget.wallpaper.source);
     final emptyRow = TableRow(children: [Container(), Container()]);
     final queryProvider = Provider.of<QueryProvider>(context, listen: false);
     final wallpaperListProvider =
@@ -106,10 +105,14 @@ class _WallpaperInfoSheetState extends State<WallpaperInfoSheet> {
                                                     .emptyWallpaperList();
                                                 scrollHandlingProvider
                                                     .resetOffsets();
-                                                Navigator.of(context).popUntil(
-                                                    (route) =>
-                                                        route.settings.name ==
-                                                        HomeScreen.routeName);
+                                                Navigator.of(context)
+                                                    .popUntil((route) {
+                                                  return route.settings.name ==
+                                                          HomeScreen
+                                                              .routeName ||
+                                                      route.settings.name ==
+                                                          null;
+                                                });
                                               },
                                               child: ClipRRect(
                                                 borderRadius:
