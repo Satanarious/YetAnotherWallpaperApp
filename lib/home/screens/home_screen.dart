@@ -5,16 +5,38 @@ import 'package:wallpaper_app/favourites/providers/favourites_provider.dart';
 import 'package:wallpaper_app/favourites/storage/favourites_storage_provider.dart';
 import 'package:wallpaper_app/history/providers/history_provider.dart';
 import 'package:wallpaper_app/history/storage/history_storage_provider.dart';
+import 'package:wallpaper_app/home/providers/source_provider.dart';
 import 'package:wallpaper_app/home/screens/wallpaper_grid_screen.dart';
 import 'package:wallpaper_app/home/widgets/pill_tab_bar.dart';
 import 'package:wallpaper_app/queries/providers/queries_provider.dart';
 import 'package:wallpaper_app/queries/storage/queries_storage_provider.dart';
+import 'package:wallpaper_app/settings/providers/settings_provider.dart';
+import 'package:wallpaper_app/settings/storage/settings_storage_provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
   static const routeName = "/Home";
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  var didNotRunOnce = true;
+
   void initializeStorageProviders(BuildContext context) {
+    // Set Settings from Storage
+    final settingsStorageProvider =
+        Provider.of<SettingsStorageProvider>(context, listen: false);
+    final settingsProvider =
+        Provider.of<SettingsProvider>(context, listen: false);
+    final sourceProvider = Provider.of<SourceProvider>(context);
+    final fetchedSettings = settingsStorageProvider.fetchSettings();
+    if (fetchedSettings.isNotEmpty) {
+      settingsProvider.fromJson(fetchedSettings);
+      sourceProvider.source = settingsProvider.defaultSource;
+    }
+
     // Set Queries from Storage
     final queryStorageProvider =
         Provider.of<QueriesStorageProvider>(context, listen: false);
@@ -41,8 +63,16 @@ class HomeScreen extends StatelessWidget {
   }
 
   @override
+  void didChangeDependencies() {
+    if (didNotRunOnce) {
+      didNotRunOnce = false;
+      initializeStorageProviders(context);
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    initializeStorageProviders(context);
     DateTime? currentBackPressTime;
     return PopScope(
       canPop: false,

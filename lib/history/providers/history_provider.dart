@@ -19,11 +19,19 @@ class HistoryProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  bool addToHistory(Wallpaper wallpaper) {
+  void fixLimit(int limit) {
+    // Remove trailing history if the current length exceeds limit
+    if (_history.data.length > limit) {
+      _history.data.removeRange(limit, history.data.length);
+    }
+  }
+
+  bool addToHistory(Wallpaper wallpaper, int limit) {
+    fixLimit(limit);
     // Ignore if wallpaper already exists in history
     if (_history.data.contains(wallpaper)) return false;
     // Remove last wallpaper if wallpaper >=100
-    if (_history.data.length >= 100) _history.data.removeLast();
+    if (_history.data.length >= limit) _history.data.removeLast();
     _history.data.insert(0, wallpaper);
     return true;
   }

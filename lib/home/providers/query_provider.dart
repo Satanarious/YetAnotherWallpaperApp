@@ -257,14 +257,13 @@ List<String> getFeatures(
 
 class QueryProvider with ChangeNotifier {
   Map<String, dynamic> _query = {};
-  bool blurNSFW = true;
   late Query currentQuery;
 
   Map<String, dynamic> get query {
     return {..._query};
   }
 
-  void switchAndSetQuery(Query query) {
+  void switchAndSetQuery(Query query, String wallhavenApiKey) {
     switch (query.source) {
       case Sources.wallhaven:
         setWallhavenQuery(
@@ -277,6 +276,7 @@ class QueryProvider with ChangeNotifier {
           sorting: query.wallhavenSortType!,
           topRange: query.wallhavenSortRange!,
           ratio: query.ratio!,
+          apiKey: wallhavenApiKey,
         );
         break;
       case Sources.reddit:
@@ -316,7 +316,8 @@ class QueryProvider with ChangeNotifier {
     _query = {};
   }
 
-  void setInitialQuery(Sources source, Map<String, dynamic> initialFilters) {
+  void setInitialQuery(Sources source, Map<String, dynamic> initialFilters,
+      String wallhavenApiKey) {
     if (_query.isEmpty) {
       switch (source) {
         case Sources.wallhaven:
@@ -356,6 +357,7 @@ class QueryProvider with ChangeNotifier {
             sorting: sorting,
             topRange: topRange,
             ratio: ratio,
+            apiKey: wallhavenApiKey,
           );
           break;
         case Sources.reddit:
@@ -508,6 +510,7 @@ class QueryProvider with ChangeNotifier {
     String? color,
     WallhavenAspectRatioType ratio = WallhavenAspectRatioType.all,
     String? pageIndex,
+    String? apiKey,
   }) {
     Map<String, String> query = {};
 
@@ -550,6 +553,9 @@ class QueryProvider with ChangeNotifier {
     }
     if (pageIndex != null) {
       query['page'] = pageIndex;
+    }
+    if (apiKey != null && apiKey.isNotEmpty) {
+      query['apikey'] = apiKey;
     }
 
     // Set current query

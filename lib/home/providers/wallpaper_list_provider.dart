@@ -41,92 +41,87 @@ class WallpaperListProvider with ChangeNotifier {
       emptyWallpaperList();
       source = newSource;
     }
-    try {
-      // Get Wallpaper from different Sources
-      switch (source) {
-        case Sources.wallhaven:
 
-          // Check for last page on wallhaven
-          if (currentPage != null && currentPage! + 1 > lastPage!) {
-            notifyListeners();
-            return;
-          }
+    // Get Wallpaper from different Sources
+    switch (source) {
+      case Sources.wallhaven:
 
-          final wallpaperList = currentPage == null
-              ? await _apiClient.wallpaperSearch(source: source, query: query)
-              : await _apiClient.wallpaperSearch(
-                  source: source,
-                  query: query,
-                  pageIndex: (currentPage! + 1).toString());
+        // Check for last page on wallhaven
+        if (currentPage != null && currentPage! + 1 > lastPage!) {
+          notifyListeners();
+          return;
+        }
+        final wallpaperList = currentPage == null
+            ? await _apiClient.wallpaperSearch(source: source, query: query)
+            : await _apiClient.wallpaperSearch(
+                source: source,
+                query: query,
+                pageIndex: (currentPage! + 1).toString());
+        _wallpapers.data.addAll(wallpaperList.data);
+        currentPage = wallpaperList
+            .meta.currentPage; // Update currentPage to value from api
+        lastPage =
+            wallpaperList.meta.lastPage; // Update lastPage to value from api
+        break;
 
-          _wallpapers.data.addAll(wallpaperList.data);
-          currentPage = wallpaperList
-              .meta.currentPage; // Update currentPage to value from api
-          lastPage =
-              wallpaperList.meta.lastPage; // Update lastPage to value from api
-          break;
+      case Sources.reddit:
+        if (after == null && before != null) {
+          return;
+        }
 
-        case Sources.reddit:
-          if (after == null && before != null) {
-            return;
-          }
+        final wallpaperList = before == null && after == null
+            ? await _apiClient.wallpaperSearch(source: source, query: query)
+            : await _apiClient.wallpaperSearch(
+                source: source, query: query, pageId: after);
 
-          final wallpaperList = before == null && after == null
-              ? await _apiClient.wallpaperSearch(source: source, query: query)
-              : await _apiClient.wallpaperSearch(
-                  source: source, query: query, pageId: after);
+        if (after == null) {
+          before = "NA"; // Set $before to non-null to avoid single page loop
+        } else {
+          before =
+              after; // Otherwise, update $before to the last value of $after
+        }
+        _wallpapers.data.addAll(wallpaperList.data);
+        after = wallpaperList
+            .meta.after; // Update $after to the value recieved from api
+        break;
 
-          if (after == null) {
-            before = "NA"; // Set $before to non-null to avoid single page loop
-          } else {
-            before =
-                after; // Otherwise, update $before to the last value of $after
-          }
-          _wallpapers.data.addAll(wallpaperList.data);
-          after = wallpaperList
-              .meta.after; // Update $after to the value recieved from api
-          break;
+      case Sources.lemmy:
+        // Check for last page on Lemmy
+        if (after == null && currentPage != null) {
+          return;
+        }
 
-        case Sources.lemmy:
-          // Check for last page on Lemmy
-          if (after == null && currentPage != null) {
-            return;
-          }
+        final wallpaperList = currentPage == null
+            ? await _apiClient.wallpaperSearch(source: source, query: query)
+            : await _apiClient.wallpaperSearch(
+                source: source,
+                query: query,
+                pageIndex: (currentPage! + 1).toString());
+        currentPage = currentPage ?? 1;
+        _wallpapers.data.addAll(wallpaperList.data);
+        currentPage = currentPage! + 1;
 
-          final wallpaperList = currentPage == null
-              ? await _apiClient.wallpaperSearch(source: source, query: query)
-              : await _apiClient.wallpaperSearch(
-                  source: source,
-                  query: query,
-                  pageIndex: (currentPage! + 1).toString());
-          currentPage = currentPage ?? 1;
-          _wallpapers.data.addAll(wallpaperList.data);
-          currentPage = currentPage! + 1;
+        after = wallpaperList
+            .meta.after; // Update after to the value recieved from api
+        break;
 
-          after = wallpaperList
-              .meta.after; // Update after to the value recieved from api
-          break;
+      case Sources.deviantArt:
+        final wallpaperList = offset == null
+            ? await _apiClient.wallpaperSearch(
+                source: source,
+                query: query,
+              )
+            : await _apiClient.wallpaperSearch(
+                source: source,
+                query: query,
+                offset: offset.toString(),
+              );
 
-        case Sources.deviantArt:
-          final wallpaperList = offset == null
-              ? await _apiClient.wallpaperSearch(
-                  source: source,
-                  query: query,
-                )
-              : await _apiClient.wallpaperSearch(
-                  source: source,
-                  query: query,
-                  offset: offset.toString(),
-                );
+        _wallpapers.data.addAll(wallpaperList.data);
+        offset = wallpaperList.meta.offset;
 
-          _wallpapers.data.addAll(wallpaperList.data);
-          offset = wallpaperList.meta.offset;
-
-        default:
-          throw Exception("Source Not supported yet");
-      }
-    } catch (e) {
-      rethrow;
+      default:
+        throw Exception("Source Not supported yet");
     }
   }
 }

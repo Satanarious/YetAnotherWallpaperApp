@@ -9,7 +9,7 @@ class Purity {
     switch (purityString) {
       case 'general':
         return PurityType.general;
-      case 'sfw':
+      case 'sketchy':
         return PurityType.sketchy;
       case 'nsfw':
         return PurityType.adult;

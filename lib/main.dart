@@ -17,10 +17,13 @@ import 'package:wallpaper_app/home/screens/home_screen.dart';
 import 'package:wallpaper_app/open_image/screens/open_image_screen.dart';
 import 'package:wallpaper_app/queries/providers/queries_provider.dart';
 import 'package:wallpaper_app/queries/storage/queries_storage_provider.dart';
+import 'package:wallpaper_app/settings/providers/settings_provider.dart';
 import 'package:wallpaper_app/settings/screens/settings_screen.dart';
+import 'package:wallpaper_app/settings/storage/settings_storage_provider.dart';
 import 'package:wallpaper_app/splash_screen.dart';
 
 Future<void> main() async {
+  // Initialize modules before running the app
   WidgetsFlutterBinding.ensureInitialized();
   await initLocalStorage();
   runApp(const WallpaperApp());
@@ -35,17 +38,19 @@ class WallpaperApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: ScrollHandlingProvider()),
         ChangeNotifierProvider.value(value: WallpaperListProvider()),
         ChangeNotifierProvider.value(value: FavouritesProvider()),
+        ChangeNotifierProvider.value(value: FavouritesStorageProvider()),
         ChangeNotifierProvider.value(value: SourceProvider()),
         ChangeNotifierProvider.value(value: QueryProvider()),
+        ChangeNotifierProvider.value(value: QueriesProvider()),
+        ChangeNotifierProvider.value(value: QueriesStorageProvider()),
         ChangeNotifierProvider.value(value: HistoryProvider()),
         ChangeNotifierProvider.value(value: HistoryStorageProvider()),
-        ChangeNotifierProvider.value(value: FavouritesStorageProvider()),
         ChangeNotifierProvider.value(value: RedditFiltersStorageProvider()),
         ChangeNotifierProvider.value(value: LemmyFiltersStorageProvider()),
         ChangeNotifierProvider.value(value: WallhavenFiltersStorageProvider()),
         ChangeNotifierProvider.value(value: DeviantArtFiltersStorageProvider()),
-        ChangeNotifierProvider.value(value: QueriesProvider()),
-        ChangeNotifierProvider.value(value: QueriesStorageProvider())
+        ChangeNotifierProvider.value(value: SettingsProvider()),
+        ChangeNotifierProvider.value(value: SettingsStorageProvider()),
       ],
       child: MaterialApp(
         routes: {

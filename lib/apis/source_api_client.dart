@@ -89,6 +89,7 @@ class SourceApiClient {
       httpsParams['path'] as String,
       query,
     );
+
     final response = await http.get(request,
         headers: source == Sources.deviantArt
             ? {HttpHeaders.authorizationHeader: 'Bearer $deviantArtToken'}

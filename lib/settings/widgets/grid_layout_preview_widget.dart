@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:provider/provider.dart';
 import 'package:wallpaper_app/common/widgets/custom_drop_down_menu.dart';
+import 'package:wallpaper_app/settings/enums/enums.dart';
+import 'package:wallpaper_app/settings/providers/settings_provider.dart';
+import 'package:wallpaper_app/settings/storage/settings_storage_provider.dart';
 import 'package:wallpaper_app/settings/widgets/settings_row.dart';
 
 class GridLayoutPreviewWidget extends StatefulWidget {
@@ -12,9 +16,11 @@ class GridLayoutPreviewWidget extends StatefulWidget {
 }
 
 class _GridLayoutPreviewWidgetState extends State<GridLayoutPreviewWidget> {
+  static const gridLayouts = ["Staggered", "Fixed"];
+  static const columnSizes = ["Adaptive", "Fixed"];
   var roundedCorners = false;
-  var gridLayout = "Staggered";
-  var columnSize = "Adaptive";
+  var gridLayout = gridLayouts[GridLayoutStyle.staggered.index];
+  var columnSize = columnSizes[ColumnSizeType.adaptive.index];
   var columnWidth = 200.0;
   var columnNumber = 2;
   @override
@@ -22,6 +28,14 @@ class _GridLayoutPreviewWidgetState extends State<GridLayoutPreviewWidget> {
     final size = MediaQuery.of(context).size;
     final previewHeight = size.height * 0.20;
     final previewWidth = size.width * 0.20;
+    final settingsProvider = Provider.of<SettingsProvider>(context);
+    final settingsStorageProvider =
+        Provider.of<SettingsStorageProvider>(context, listen: false);
+    roundedCorners = settingsProvider.roundedCorners;
+    gridLayout = gridLayouts[settingsProvider.gridLayoutStyle.index];
+    columnSize = columnSizes[settingsProvider.columnSize.index];
+    columnWidth = settingsProvider.columnWidth;
+    columnNumber = settingsProvider.columnNumber;
 
     return Column(
       children: [
@@ -49,7 +63,7 @@ class _GridLayoutPreviewWidgetState extends State<GridLayoutPreviewWidget> {
                             child: MasonryGridView.builder(
                                 gridDelegate:
                                     SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: columnSize == "Adaptive"
+                                  crossAxisCount: columnSize == columnSizes[0]
                                       ? (size.width / columnWidth).toInt() > 0
                                           ? (size.width / columnWidth).toInt()
                                           : 1
@@ -65,7 +79,7 @@ class _GridLayoutPreviewWidgetState extends State<GridLayoutPreviewWidget> {
                                       child: Container(
                                         color:
                                             const Color.fromRGBO(50, 50, 50, 1),
-                                        height: gridLayout == "Staggered"
+                                        height: gridLayout == gridLayouts[0]
                                             ? index % 7 == 0
                                                 ? previewHeight * 0.4
                                                 : previewHeight * 0.15
@@ -94,7 +108,7 @@ class _GridLayoutPreviewWidgetState extends State<GridLayoutPreviewWidget> {
                             child: MasonryGridView.builder(
                                 gridDelegate:
                                     SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: columnSize == "Adaptive"
+                                  crossAxisCount: columnSize == columnSizes[0]
                                       ? (size.height / columnWidth).toInt() > 0
                                           ? (size.height / columnWidth).toInt()
                                           : 1
@@ -110,7 +124,7 @@ class _GridLayoutPreviewWidgetState extends State<GridLayoutPreviewWidget> {
                                       child: Container(
                                         color:
                                             const Color.fromRGBO(50, 50, 50, 1),
-                                        height: gridLayout == "Staggered"
+                                        height: gridLayout == gridLayouts[0]
                                             ? index % 5 == 0
                                                 ? previewHeight * 0.4
                                                 : previewHeight * 0.15
@@ -131,11 +145,9 @@ class _GridLayoutPreviewWidgetState extends State<GridLayoutPreviewWidget> {
           settingWidget: Switch(
             value: roundedCorners,
             onChanged: (value) {
-              setState(
-                () {
-                  roundedCorners = value;
-                },
-              );
+              roundedCorners = value;
+              settingsProvider.changeRoundedCorners(value);
+              settingsStorageProvider.saveSettings(settingsProvider.toJson());
             },
           ),
         ),
@@ -146,7 +158,7 @@ class _GridLayoutPreviewWidgetState extends State<GridLayoutPreviewWidget> {
           settingWidget: CustomDropDownMenu(
             height: 40,
             width: 155,
-            dropdownMenuEntries: ["Staggered", "Fixed"]
+            dropdownMenuEntries: gridLayouts
                 .map((layout) => DropdownMenuEntry(
                       labelWidget: Text(layout,
                           style: const TextStyle(color: Colors.white)),
@@ -156,9 +168,10 @@ class _GridLayoutPreviewWidgetState extends State<GridLayoutPreviewWidget> {
                 .toList(),
             initialSelection: gridLayout,
             onSelected: (layout) {
-              setState(() {
-                gridLayout = layout;
-              });
+              gridLayout = layout;
+              settingsProvider.changeGridLayoutStyle(
+                  GridLayoutStyle.values[gridLayouts.indexOf(layout)]);
+              settingsStorageProvider.saveSettings(settingsProvider.toJson());
             },
           ),
         ),
@@ -169,7 +182,7 @@ class _GridLayoutPreviewWidgetState extends State<GridLayoutPreviewWidget> {
           settingWidget: CustomDropDownMenu(
             height: 40,
             width: 150,
-            dropdownMenuEntries: ["Adaptive", "Fixed"]
+            dropdownMenuEntries: columnSizes
                 .map((size) => DropdownMenuEntry(
                       labelWidget: Text(size,
                           style: const TextStyle(color: Colors.white)),
@@ -179,9 +192,10 @@ class _GridLayoutPreviewWidgetState extends State<GridLayoutPreviewWidget> {
                 .toList(),
             initialSelection: columnSize,
             onSelected: (size) {
-              setState(() {
-                columnSize = size;
-              });
+              columnSize = size;
+              settingsProvider.changeColumnSize(
+                  ColumnSizeType.values[columnSizes.indexOf(size)]);
+              settingsStorageProvider.saveSettings(settingsProvider.toJson());
             },
           ),
         ),
@@ -191,15 +205,15 @@ class _GridLayoutPreviewWidgetState extends State<GridLayoutPreviewWidget> {
             const Icon(Icons.view_column_outlined, color: Colors.grey),
             const SizedBox(width: 5),
             Text(
-              columnSize == "Adaptive"
-                  ? "Column width(px): "
-                  : "Number of columns: ",
+              columnSize == columnSizes[0]
+                  ? "Column width(px): ${columnWidth.toInt()}"
+                  : "Number of columns: $columnNumber",
               style: const TextStyle(fontSize: 16, color: Colors.white),
             ),
           ],
         ),
         const SizedBox(height: 5),
-        columnSize == "Adaptive"
+        columnSize == columnSizes[0]
             ? Row(
                 children: [
                   Text("${(size.width * 0.1).toInt()}",
@@ -215,9 +229,12 @@ class _GridLayoutPreviewWidgetState extends State<GridLayoutPreviewWidget> {
                       min: size.width * 0.1,
                       max: size.width * 0.5,
                       onChanged: (value) {
-                        setState(() {
-                          columnWidth = value;
-                        });
+                        settingsProvider.changeColumnWidth(value);
+                        columnWidth = value;
+                      },
+                      onChangeEnd: (value) {
+                        settingsStorageProvider
+                            .saveSettings(settingsProvider.toJson());
                       },
                     ),
                   ),
@@ -240,13 +257,15 @@ class _GridLayoutPreviewWidgetState extends State<GridLayoutPreviewWidget> {
                       value: columnNumber.toDouble(),
                       allowedInteraction: SliderInteraction.tapAndSlide,
                       divisions: 5,
-                      label: "$columnNumber",
                       min: 1,
                       max: 6,
                       onChanged: (value) {
-                        setState(() {
-                          columnNumber = value.toInt();
-                        });
+                        settingsProvider.changeColumnNumber(value.toInt());
+                        columnNumber = value.toInt();
+                      },
+                      onChangeEnd: (value) {
+                        settingsStorageProvider
+                            .saveSettings(settingsProvider.toJson());
                       },
                     ),
                   ),

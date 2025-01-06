@@ -3,9 +3,11 @@ import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/home/providers/query_provider.dart';
 import 'package:wallpaper_app/home/providers/source_provider.dart';
+import 'package:wallpaper_app/home/providers/wallpaper_list_provider.dart';
 import 'package:wallpaper_app/queries/models/query.dart';
 import 'package:wallpaper_app/queries/providers/queries_provider.dart';
 import 'package:wallpaper_app/queries/storage/queries_storage_provider.dart';
+import 'package:wallpaper_app/settings/providers/settings_provider.dart';
 
 class QueryList extends StatefulWidget {
   const QueryList(
@@ -95,12 +97,21 @@ class _QueryListState extends State<QueryList> {
                           Provider.of<SourceProvider>(context, listen: false);
                       final queryProvider =
                           Provider.of<QueryProvider>(context, listen: false);
+                      final wallhavenApiKey =
+                          Provider.of<SettingsProvider>(context, listen: false)
+                              .wallhavenApiKey;
+                      final wallpaperListProvider =
+                          Provider.of<WallpaperListProvider>(context,
+                              listen: false);
 
                       // Change source without notifying listeners
                       sourceProvider.shouldNotifyListeners(false);
                       sourceProvider.changeSource(query.source);
                       sourceProvider.shouldNotifyListeners(true);
-                      queryProvider.switchAndSetQuery(query);
+
+                      // Empty wallpaper list and switch query
+                      wallpaperListProvider.emptyWallpaperList();
+                      queryProvider.switchAndSetQuery(query, wallhavenApiKey);
 
                       // Add query to history
 

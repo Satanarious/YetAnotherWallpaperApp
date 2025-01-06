@@ -13,11 +13,16 @@ class Meta extends Equatable {
     this.offset,
   });
 
-  factory Meta.fromWallhavenJson(Map<String, dynamic> json) => Meta(
-        currentPage: json['current_page'] as int,
-        perPage: json['per_page'] as int,
-        lastPage: json['last_page'] as int,
-      );
+  factory Meta.fromWallhavenJson(Map<String, dynamic> json) {
+    return Meta(
+      currentPage: json['current_page'],
+      perPage: json['per_page'].runtimeType == String
+          ? int.parse(json['per_page'])
+          : json['per_page'],
+      lastPage: json['last_page'],
+    );
+  }
+
   factory Meta.fromRedditJson(Map<String, dynamic> json) => Meta(
         after: json['after'],
         perPage: json['dist'] as int,

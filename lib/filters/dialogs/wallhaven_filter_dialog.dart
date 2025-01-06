@@ -12,6 +12,7 @@ import 'package:wallpaper_app/home/providers/wallhaven_provider.dart';
 import 'package:wallpaper_app/home/providers/wallpaper_list_provider.dart';
 import 'package:wallpaper_app/queries/providers/queries_provider.dart';
 import 'package:wallpaper_app/queries/storage/queries_storage_provider.dart';
+import 'package:wallpaper_app/settings/providers/settings_provider.dart';
 
 class WallhavenFilterDialog extends StatefulWidget {
   const WallhavenFilterDialog({super.key});
@@ -454,6 +455,10 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
                                                   WallhavenFiltersStorageProvider>(
                                               context,
                                               listen: false);
+                                      final wallhavenApiKey =
+                                          Provider.of<SettingsProvider>(context,
+                                                  listen: false)
+                                              .wallhavenApiKey;
 
                                       // Save Current Query to History
                                       Provider.of<QueriesStorageProvider>(
@@ -480,16 +485,16 @@ class _WallhavenFilterDialogState extends State<WallhavenFilterDialog>
                                       wallpaperListProvider
                                           .emptyWallpaperList();
                                       queryProvider.setWallhavenQuery(
-                                        tag1: tag1 == "" ? null : tag1,
-                                        includeTag1: includeTag1,
-                                        tag2: tag2 == "" ? null : tag2,
-                                        includeTag2: includeTag2,
-                                        categories: categories,
-                                        purities: purities,
-                                        sorting: sortBy,
-                                        topRange: topRange,
-                                        ratio: ratio,
-                                      );
+                                          tag1: tag1 == "" ? null : tag1,
+                                          includeTag1: includeTag1,
+                                          tag2: tag2 == "" ? null : tag2,
+                                          includeTag2: includeTag2,
+                                          categories: categories,
+                                          purities: purities,
+                                          sorting: sortBy,
+                                          topRange: topRange,
+                                          ratio: ratio,
+                                          apiKey: wallhavenApiKey);
                                       Navigator.of(context).pop();
                                     },
                                     style: ButtonStyle(

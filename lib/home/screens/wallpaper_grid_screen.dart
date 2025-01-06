@@ -5,6 +5,7 @@ import 'package:wallpaper_app/filters/storage/filters_storage_provider.dart';
 import 'package:wallpaper_app/home/providers/query_provider.dart';
 import 'package:wallpaper_app/home/providers/source_provider.dart';
 import 'package:wallpaper_app/home/providers/wallpaper_list_provider.dart';
+import 'package:wallpaper_app/settings/providers/settings_provider.dart';
 
 class WallpaperGridScreen extends StatelessWidget {
   const WallpaperGridScreen({super.key});
@@ -36,8 +37,11 @@ class WallpaperGridScreen extends StatelessWidget {
         Provider.of<WallpaperListProvider>(context, listen: false);
     final source = Provider.of<SourceProvider>(context).source;
     final queryProvider = Provider.of<QueryProvider>(context);
+    final wallhavenApiKey =
+        Provider.of<SettingsProvider>(context, listen: false).wallhavenApiKey;
 
-    queryProvider.setInitialQuery(source, initialFilters(context, source));
+    queryProvider.setInitialQuery(
+        source, initialFilters(context, source), wallhavenApiKey);
 
     return FutureBuilder(
         future: wallpaperListProvider.loadMoreWallpapers(

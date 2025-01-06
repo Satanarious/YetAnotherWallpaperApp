@@ -2,9 +2,13 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:provider/provider.dart';
 import 'package:wallpaper_app/common/widgets/custom_drop_down_menu.dart';
 import 'package:wallpaper_app/home/providers/source_provider.dart';
 import 'package:wallpaper_app/open_image/widgets/wallpaper_info_sheet.dart';
+import 'package:wallpaper_app/settings/enums/auto_wallpaper_source_type.dart';
+import 'package:wallpaper_app/settings/providers/settings_provider.dart';
+import 'package:wallpaper_app/settings/storage/settings_storage_provider.dart';
 import 'package:wallpaper_app/settings/widgets/grid_layout_preview_widget.dart';
 import 'package:wallpaper_app/settings/widgets/section_container.dart';
 import 'package:wallpaper_app/settings/widgets/settings_row.dart';
@@ -20,21 +24,41 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  static const wallpaperSources = ["Query", "Favourites"];
   var blurNsfw = false;
   var blurSketchy = false;
   var addToFavouritesOnDownload = false;
-  var cacheLimit = 0.0;
   var historyLimit = 100;
+  var cacheLimitController = TextEditingController();
+  var wallhavenKeyController = TextEditingController();
   var autoWallpaper = false;
   var autoWallpaperInterval = 12;
   var dayNightMode = false;
   var dayChangeTime = const TimeOfDay(hour: 6, minute: 0);
   var nightChangeTime = const TimeOfDay(hour: 19, minute: 0);
-  var wallpaperSource = "Favourites";
+  var wallpaperSource =
+      wallpaperSources[AutoWallpaperSourceType.favourites.index];
   var defaultSource = Sources.reddit;
 
   @override
   Widget build(BuildContext context) {
+    final settingsProvider = Provider.of<SettingsProvider>(context);
+    final settingsStorageProvider =
+        Provider.of<SettingsStorageProvider>(context, listen: false);
+    blurNsfw = settingsProvider.blurNsfw;
+    blurSketchy = settingsProvider.blurSketchy;
+    addToFavouritesOnDownload = settingsProvider.addToFavouritesOnDownload;
+    cacheLimitController.text = settingsProvider.cacheLimit.toString();
+    wallhavenKeyController.text = settingsProvider.wallhavenApiKey;
+    historyLimit = settingsProvider.historyLimit;
+    autoWallpaper = settingsProvider.autoWallpaper;
+    autoWallpaperInterval = settingsProvider.autoWallpaperInterval;
+    dayNightMode = settingsProvider.dayNightMode;
+    dayChangeTime = settingsProvider.dayChangeTime;
+    nightChangeTime = settingsProvider.nightChangeTime;
+    wallpaperSource = wallpaperSources[settingsProvider.wallpaperSource.index];
+    defaultSource = settingsProvider.defaultSource;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: const Color.fromRGBO(50, 50, 50, 1),
@@ -87,8 +111,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 value: source,
                               ))
                           .toList(),
-                      initialSelection: Sources.reddit,
-                      onSelected: (source) {},
+                      initialSelection: defaultSource,
+                      onSelected: (source) {
+                        defaultSource = source;
+                        settingsProvider.changeDefaultSource(source);
+                        settingsStorageProvider
+                            .saveSettings(settingsProvider.toJson());
+                      },
                     ),
                   ),
                 ),
@@ -99,9 +128,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   settingWidget: Switch(
                     value: blurSketchy,
                     onChanged: (value) {
-                      setState(() {
-                        blurSketchy = value;
-                      });
+                      blurSketchy = value;
+                      settingsProvider.changeBlurSketchy(value);
+                      settingsStorageProvider
+                          .saveSettings(settingsProvider.toJson());
                     },
                   ),
                 ),
@@ -112,9 +142,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   settingWidget: Switch(
                     value: blurNsfw,
                     onChanged: (value) {
-                      setState(() {
-                        blurNsfw = value;
-                      });
+                      blurNsfw = value;
+                      settingsProvider.changeBlurNsfw(value);
+                      settingsStorageProvider
+                          .saveSettings(settingsProvider.toJson());
                     },
                   ),
                 ),
@@ -125,9 +156,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   settingWidget: Switch(
                     value: addToFavouritesOnDownload,
                     onChanged: (value) {
-                      setState(() {
-                        addToFavouritesOnDownload = value;
-                      });
+                      addToFavouritesOnDownload = value;
+                      settingsProvider.changeAddToFavouritesOnDownload(value);
+                      settingsStorageProvider
+                          .saveSettings(settingsProvider.toJson());
                     },
                   ),
                 ),
@@ -169,9 +201,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         min: 10,
                         max: 500,
                         onChanged: (value) {
+                          settingsProvider.changeHistoryLimit(value.toInt());
                           setState(() {
                             historyLimit = value.toInt();
                           });
+                        },
+                        onChangeEnd: (value) {
+                          settingsStorageProvider
+                              .saveSettings(settingsProvider.toJson());
                         },
                       ),
                     ),
@@ -217,8 +254,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                       style: const TextStyle(color: Colors.white),
                       keyboardType: TextInputType.number,
-                      onChanged: (value) {
-                        cacheLimit = double.tryParse(value) ?? 0.0;
+                      controller: cacheLimitController,
+                      onSubmitted: (value) {
+                        FocusScope.of(context).unfocus();
+                        settingsProvider.changeCacheLimit(
+                            double.tryParse(cacheLimitController.text) ??
+                                1024.0);
+                        settingsStorageProvider
+                            .saveSettings(settingsProvider.toJson());
                       },
                     ),
                   ),
@@ -268,8 +311,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           hintTextDirection: TextDirection.ltr,
                         ),
                         style: const TextStyle(color: Colors.white),
-                        onChanged: (value) {
-                          cacheLimit = double.tryParse(value) ?? 0.0;
+                        controller: wallhavenKeyController,
+                        onSubmitted: (value) {
+                          FocusScope.of(context).unfocus();
+                          settingsProvider.changeWallhavenApiKey(
+                              wallhavenKeyController.text);
+                          settingsStorageProvider
+                              .saveSettings(settingsProvider.toJson());
                         },
                       ),
                     ),
@@ -286,9 +334,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   settingWidget: Switch(
                       value: autoWallpaper,
                       onChanged: (value) {
-                        setState(() {
-                          autoWallpaper = value;
-                        });
+                        autoWallpaper = value;
+                        settingsProvider.changeAutoWallpaper(value);
+                        settingsStorageProvider
+                            .saveSettings(settingsProvider.toJson());
                       }),
                 ),
                 SettingsRow(
@@ -299,9 +348,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       value: dayNightMode,
                       onChanged: autoWallpaper
                           ? (value) {
-                              setState(() {
-                                dayNightMode = value;
-                              });
+                              dayNightMode = value;
+                              settingsProvider.changeDayNightMode(value);
+                              settingsStorageProvider
+                                  .saveSettings(settingsProvider.toJson());
                             }
                           : null),
                 ),
@@ -314,7 +364,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     height: 40,
                     width: 170,
                     isEnabled: autoWallpaper,
-                    dropdownMenuEntries: ["Query", "Favourites"]
+                    dropdownMenuEntries: wallpaperSources
                         .map((source) => DropdownMenuEntry(
                               labelWidget: Text(source,
                                   style: const TextStyle(color: Colors.white)),
@@ -324,9 +374,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         .toList(),
                     initialSelection: wallpaperSource,
                     onSelected: (source) {
-                      setState(() {
-                        wallpaperSource = source;
-                      });
+                      wallpaperSource = source;
+                      settingsProvider.changeWallpaperSource(
+                          AutoWallpaperSourceType
+                              .values[wallpaperSources.indexOf(source)]);
+                      settingsStorageProvider
+                          .saveSettings(settingsProvider.toJson());
                     },
                   ),
                 ),
@@ -373,13 +426,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 ),
                               ),
                         const SizedBox(height: 10),
-                        const Row(
+                        Row(
                           children: [
-                            Icon(Icons.timer_outlined, color: Colors.white),
-                            SizedBox(width: 5),
+                            const Icon(Icons.timer_outlined,
+                                color: Colors.white),
+                            const SizedBox(width: 5),
                             Text(
-                              "Interval(Hrs): ",
-                              style: TextStyle(
+                              "Interval(Hrs): $autoWallpaperInterval",
+                              style: const TextStyle(
                                 fontSize: 16,
                                 color: Colors.white,
                               ),
@@ -398,14 +452,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 value: autoWallpaperInterval.toDouble(),
                                 allowedInteraction:
                                     SliderInteraction.tapAndSlide,
-                                label: "$autoWallpaperInterval",
                                 divisions: 23,
                                 min: 1,
                                 max: 24,
                                 onChanged: (value) {
-                                  setState(() {
-                                    autoWallpaperInterval = value.toInt();
-                                  });
+                                  settingsProvider.changeAutoWallpaperInterval(
+                                      value.toInt());
+                                  autoWallpaperInterval = value.toInt();
+                                },
+                                onChangeEnd: (value) {
+                                  settingsStorageProvider
+                                      .saveSettings(settingsProvider.toJson());
                                 },
                               ),
                             ),
@@ -440,6 +497,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
                                     if (time != null) {
                                       dayChangeTime = time;
+                                      settingsProvider
+                                          .changeDayChangeTime(time);
+                                      settingsStorageProvider.saveSettings(
+                                          settingsProvider.toJson());
                                     }
                                   }
                                 : null,
@@ -474,6 +535,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
                                     if (time != null) {
                                       nightChangeTime = time;
+                                      settingsProvider
+                                          .changeNightChangeTime(time);
+                                      settingsStorageProvider.saveSettings(
+                                          settingsProvider.toJson());
                                     }
                                   }
                                 : null,
@@ -513,7 +578,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 ),
                               )
                             : SettingsRow(
-                                settingIcon: IconlyLight.document,
+                                settingIcon: Icons.favorite_outline_rounded,
                                 settingName: "Day Mode Favourites Folder",
                                 settingWidget: OutlinedButton(
                                   onPressed: autoWallpaper ? () {} : null,

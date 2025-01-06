@@ -7,25 +7,22 @@ TODO:
             ☐ Add a way to refresh deviant art topic community list.
             ☐ Add Backup/Restore functionality.
             ☐ Add way to add communities in reddit and lemmy
-        Local Filters:
-            ☐ Resolution Filter
-            ☐ Orientation Filter
-            ☐ Gif filter
         Settings Screen:
-            ☐ Blur NSFW/Sketchy wallpapers
-            ☐ Change default source
             ☐ Add to favourites on download (Downloads folder)
-            ☐ Wallhaven API key
-            ☐ Rounder Corner
-            ☐ History Limit
             ☐ Cache Management
-            ☐ Grid layout settings (Wallflow)
             ☐ Auto wallpaper
         Auto Wallpaper:
+            ☐ Day/Night Mode
+            ☐ Wallpaper Favourites Folder
+            ☐ Wallpaper Query
+            ☐ Interval: Hours
+            ☐ Day Mode Time
+            ☐ Night Mode Time
+            ☐ Day Mode Query
+            ☐ Night Mode Query
+            ☐ Day Mode Favourites Folder
+            ☐ Night Mode Favourites Folder
             ☐ Constraints: Wifi/ Charging/ Idle, Roaming
-            ☐ Interval: Hours/ Minutes
-            ☐ Day/Night: Theme based/ Time based
-            ☐ Source: Saved Query/ Favourites/ Local
             ☐ Notification of wallpaper change
             ☐ Add to favorites on change (Auto-Wallpaper)
         Wallpaper Action Widget:
@@ -51,8 +48,22 @@ FIXME:
         - Add a toast
     ☐ Tags loading on info sheet eveytime sheet is opened.
     ☐ Fix tags onPress event on infoSheet causing a black screen.
+    ☐ Fix filters showing wrong filters according to query, when query from queries is used.
     
 Archive:
+    ✘ Resolution Filter @cancelled(25-01-06 19:00) @project(TODO.Features.Local Filters)
+    ✘ Orientation Filter @cancelled(25-01-06 19:00) @project(TODO.Features.Local Filters)
+    ✘ Gif filter @cancelled(25-01-06 19:00) @project(TODO.Features.Local Filters)
+    ✔ Change default source @done(25-01-05 11:52) @project(TODO.Features.Settings Screen)
+    ✔ Blur NSFW/Sketchy wallpapers @done(25-01-05 15:06) @project(TODO.Features.Settings Screen)
+    ✔ History Limit @done(25-01-06 14:52) @project(TODO.Features.Settings Screen)
+    ✔ Rounder Corner @done(25-01-06 15:03) @project(TODO.Features.Settings Screen)
+    ✔ Grid layout Style @done(25-01-06 15:07) @project(TODO.Features.Settings Screen)
+    ✔ Column Size @done(25-01-06 15:12) @project(TODO.Features.Settings Screen)
+    ✔ Column Width @done(25-01-06 15:12) @project(TODO.Features.Settings Screen)
+    ✔ Number of Column @done(25-01-06 15:12) @project(TODO.Features.Settings Screen)
+    ✔ Wallhaven API key @done(25-01-06 10:26) @project(TODO.Features.Settings Screen)
+    ✔ Fix queries bug for same source query. @done(25-01-06 13:45) @project(FIXME)
     ✔ Add option to add local wallpaper to favourites. @done(24-12-30 20:22) @project(TODO.Features.To Add)
     ✔ Skip exporting local wallpapers @done(24-12-30 20:21) @project(TODO.Features.To Add)
     ✔ Add local files @done(24-12-29 01:38) @project(TODO.Features.To Add)

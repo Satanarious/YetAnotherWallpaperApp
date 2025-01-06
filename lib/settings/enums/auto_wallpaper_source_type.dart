@@ -1,0 +1,4 @@
+enum AutoWallpaperSourceType {
+  query,
+  favourites,
+}

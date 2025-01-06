@@ -6,6 +6,7 @@ import 'package:wallpaper_app/common/dialogs/animated_pop_in_dialog.dart';
 import 'package:wallpaper_app/common/widgets/masonry_grid_widget.dart';
 import 'package:wallpaper_app/history/providers/history_provider.dart';
 import 'package:wallpaper_app/history/storage/history_storage_provider.dart';
+import 'package:wallpaper_app/settings/providers/settings_provider.dart';
 
 class HistoryScreen extends StatelessWidget {
   const HistoryScreen({super.key});
@@ -15,6 +16,9 @@ class HistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final historyProvider = Provider.of<HistoryProvider>(context);
+    final limit =
+        Provider.of<SettingsProvider>(context, listen: false).historyLimit;
+    historyProvider.fixLimit(limit);
 
     return Scaffold(
       extendBodyBehindAppBar: true,

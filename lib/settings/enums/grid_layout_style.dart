@@ -1,0 +1,4 @@
+enum GridLayoutStyle {
+  staggered,
+  fixed,
+}

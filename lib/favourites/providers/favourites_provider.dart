@@ -204,7 +204,6 @@ class FavouritesProvider with ChangeNotifier {
     try {
       final exportWallpaperList = WallpaperList.emptyList();
       for (var wallpaper in favouriteFolders[folderName]!.data) {
-        print(wallpaper.source);
         if (wallpaper.source != Sources.local) {
           exportWallpaperList.addWallpaper(wallpaper);
         }
