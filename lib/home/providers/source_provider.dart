@@ -18,14 +18,14 @@ extension SourcesExtension on Sources {
         return "Wallhaven";
       case Sources.reddit:
         return "Reddit";
+      case Sources.lemmy:
+        return "Lemmy";
       case Sources.deviantArt:
         return "Deviant Art";
       case Sources.oWalls:
         return "OWalls";
       case Sources.googlePixel:
         return "Google Pixel";
-      case Sources.lemmy:
-        return "Lemmy";
       case Sources.bingDaily:
         return "Bing Daily";
       case Sources.local:

@@ -65,13 +65,15 @@ class _FavouriteButtonState extends State<FavouriteButton>
               favouritesStorageProvider.updateFavouritesFolder(
                   "System | All", favouritesProvider.allFavourites);
             } else {
+              final folderName = ModalRoute.of(context)!.settings.arguments;
+              if (folderName != FavouritesProvider.systemFolderName) {
+                favouritesProvider.shouldNotifyListener(false);
+              }
               // Check and remove wallpaper in a single folder
-              favouritesProvider.shouldNotifyListener(false);
               final cannotRemove =
                   favouritesProvider.removeWallpaperFromAllFolder(
                       widget.wallpaper, favouritesStorageProvider);
               favouritesProvider.shouldNotifyListener(true);
-              final folderName = ModalRoute.of(context)!.settings.arguments;
 
               // When wallpaper exists in multiple folders
               if (cannotRemove) {
@@ -95,10 +97,14 @@ class _FavouriteButtonState extends State<FavouriteButton>
               }
               // When wallpaper exists in only one folder
               else {
-                favouritesProvider.removeWallpaperFromFolder(
-                    folderName as String, widget.wallpaper);
-                favouritesStorageProvider.updateFavouritesFolder(folderName,
-                    favouritesProvider.favouriteFolders[folderName]!);
+                if (folderName == FavouritesProvider.systemFolderName ||
+                    folderName == null) {
+                } else {
+                  favouritesProvider.removeWallpaperFromFolder(
+                      folderName as String, widget.wallpaper);
+                  favouritesStorageProvider.updateFavouritesFolder(folderName,
+                      favouritesProvider.favouriteFolders[folderName]!);
+                }
               }
             }
             setState(() {});

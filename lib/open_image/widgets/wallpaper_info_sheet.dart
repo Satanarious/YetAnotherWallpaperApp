@@ -32,6 +32,7 @@ class _WallpaperInfoSheetState extends State<WallpaperInfoSheet> {
           }
         : sourceMaps
             .firstWhere((source) => source['value'] == widget.wallpaper.source);
+    print(widget.wallpaper.source);
     final emptyRow = TableRow(children: [Container(), Container()]);
     final queryProvider = Provider.of<QueryProvider>(context, listen: false);
     final wallpaperListProvider =

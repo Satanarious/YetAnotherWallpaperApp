@@ -49,8 +49,10 @@ FIXME:
     ☐ Tags loading on info sheet eveytime sheet is opened.
     ☐ Fix tags onPress event on infoSheet causing a black screen.
     ☐ Fix filters showing wrong filters according to query, when query from queries is used.
+    ☐ Fix export and save favourites folder always failing the first time.
     
 Archive:
+    ✔ Fix favourites button logic for System folder. @done(25-01-06 19:39) @project(FIXME)
     ✘ Resolution Filter @cancelled(25-01-06 19:00) @project(TODO.Features.Local Filters)
     ✘ Orientation Filter @cancelled(25-01-06 19:00) @project(TODO.Features.Local Filters)
     ✘ Gif filter @cancelled(25-01-06 19:00) @project(TODO.Features.Local Filters)

@@ -19,6 +19,7 @@ class FavouritesProvider with ChangeNotifier {
   var notifyFavouritesListener = true;
 
   void removeWallpaperFromFolder(String folderName, Wallpaper wallpaper) {
+    if (folderName == systemFolderName) return;
     favouriteFolders[folderName]!.removeWallpaper(wallpaper);
     notifyListeners();
   }
