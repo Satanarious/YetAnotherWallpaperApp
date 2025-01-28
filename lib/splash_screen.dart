@@ -15,9 +15,9 @@ class SplashScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
-            height: 150,
-            width: 150,
-            child: Image.asset("assets/logo.png"),
+            height: 200,
+            width: 200,
+            child: Image.asset("assets/logo.gif"),
           ),
           const Text(
             "YAWA",

@@ -112,9 +112,9 @@ class DeviantArtFiltersStorageProvider with ChangeNotifier {
       return json.decode(raw);
     } else {
       return {
-        "topic": "",
+        "topic": "characterillustration",
         "tag": "",
-        "page": 0,
+        "page": 1,
         "mature_content": false,
       };
     }

@@ -45,10 +45,10 @@ FIXME:
         ☐ according to query, when query from queries is used.
         ☐ according to selected tag in DeviantArt and Wallhaven.
     ☐ Fix export and save favourites folder always failing the first time.
-    ☐ Fix default source not being set on install.
-    ☐ Fix deviantArt default query.
     
 Archive:
+    ✔ Fix default source not being set on install. @done(25-01-28 17:29) @project(FIXME)
+    ✔ Fix deviantArt default query. @done(25-01-28 17:55) @project(FIXME)
     ✔ Tags loading on info sheet eveytime sheet is opened. @done(25-01-28 17:04) @project(FIXME)
     ✘ Community List/Deviant Art Topic List, grid and list view options. @cancelled(25-01-15 04:11) @project(TODO.Features.General)
     ✔ Remove Query tab and underlying logic from DeviantArt Filters. @done(25-01-07 16:01) @project(TODO.Chores)

@@ -33,8 +33,8 @@ class _DeviantArtFilterDialogState extends State<DeviantArtFilterDialog>
         Provider.of<DeviantArtFiltersStorageProvider>(context, listen: false)
             .fetch();
     matureContent = savedFilters['mature_content'] as bool;
-    tabController.animateTo(
-        duration: Duration.zero, savedFilters['page'] as int);
+    final int page = savedFilters['page'];
+    tabController.animateTo(duration: Duration.zero, page);
     super.initState();
   }
 
@@ -159,7 +159,11 @@ class _TopicTabState extends State<TopicTab>
     final savedFilters =
         Provider.of<DeviantArtFiltersStorageProvider>(context, listen: false)
             .fetch();
-    topicController = TextEditingController(text: savedFilters['topic']);
+    String? topic = savedFilters['topic'];
+    if (topic == null || topic.isEmpty) {
+      topic = "characterillustration";
+    }
+    topicController = TextEditingController(text: topic);
     tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
@@ -397,11 +401,7 @@ class _TagTabState extends State<TagTab> {
     final savedFilters =
         Provider.of<DeviantArtFiltersStorageProvider>(context, listen: false)
             .fetch();
-    String? tag = savedFilters['tag'];
-    final String? topic = savedFilters['topic'];
-    if ((tag == null && topic == null) || tag!.isEmpty && topic!.isEmpty) {
-      tag = "superheroes";
-    }
+    final String? tag = savedFilters['tag'];
     tagController = TextEditingController(text: tag);
     super.initState();
   }
