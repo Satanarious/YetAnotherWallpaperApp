@@ -78,9 +78,12 @@ class _WallpaperInfoSheetState extends State<WallpaperInfoSheet> {
                               future: widget.tags,
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
+                                  final trimmedTags = snapshot.data!.length < 11
+                                      ? snapshot.data!
+                                      : snapshot.data!.sublist(0, 9);
                                   return Wrap(
                                     alignment: WrapAlignment.center,
-                                    children: snapshot.data!
+                                    children: trimmedTags
                                         .map(
                                           (tag) => Padding(
                                             padding: const EdgeInsets.symmetric(

@@ -8,16 +8,17 @@ import 'package:provider/provider.dart';
 import 'package:wallpaper_app/common/dialogs/animated_pop_in_dialog.dart';
 import 'package:wallpaper_app/common/models/wallpaper.dart';
 import 'package:wallpaper_app/favourites/widgets/favourite_button_widget.dart';
+import 'package:wallpaper_app/home/providers/deviant_art_provider.dart';
 import 'package:wallpaper_app/home/providers/query_provider.dart';
 import 'package:wallpaper_app/home/providers/scroll_handling_provider.dart';
 import 'package:wallpaper_app/home/providers/source_provider.dart';
+import 'package:wallpaper_app/home/providers/wallhaven_provider.dart';
 import 'package:wallpaper_app/home/providers/wallpaper_list_provider.dart';
 import 'package:wallpaper_app/open_image/widgets/wallpaper_info_sheet.dart';
 
 class WallpaperActionsWidget extends StatefulWidget {
-  const WallpaperActionsWidget(this.wallpaper, this.tags, {super.key});
+  const WallpaperActionsWidget(this.wallpaper, {super.key});
   final Wallpaper wallpaper;
-  final Future<List<String>>? tags;
 
   @override
   State<WallpaperActionsWidget> createState() => _WallpaperActionsWidgetState();
@@ -34,6 +35,11 @@ class _WallpaperActionsWidgetState extends State<WallpaperActionsWidget>
     final scrollHandlingProvider =
         Provider.of<ScrollHandlingProvider>(context, listen: false);
     final size = MediaQuery.of(context).size;
+    final tags = widget.wallpaper.source == Sources.wallhaven
+        ? WallhavenProvider.getTags(widget.wallpaper.id)
+        : widget.wallpaper.source == Sources.deviantArt
+            ? DeviantArtProvider().getDeviationTags(widget.wallpaper.id)
+            : null;
     final buttons = <ActionWidget>[
       ActionWidget(
         label: "Info",
@@ -45,8 +51,7 @@ class _WallpaperActionsWidgetState extends State<WallpaperActionsWidget>
               maxWidth: 500,
             ),
             context: context,
-            builder: (context) =>
-                WallpaperInfoSheet(widget.wallpaper, widget.tags),
+            builder: (context) => WallpaperInfoSheet(widget.wallpaper, tags),
           ),
           icon: const Icon(
             IconlyLight.info_circle,
