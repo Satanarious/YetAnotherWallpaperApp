@@ -82,7 +82,7 @@ const sourceMaps = [
 ];
 
 class SourceProvider with ChangeNotifier {
-  Sources source = Sources.deviantArt;
+  Sources source = Sources.reddit;
   bool shouldNotify = true;
 
   void shouldNotifyListeners(bool notify) {

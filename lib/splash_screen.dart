@@ -11,10 +11,23 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return another_splash.FlutterSplashScreen.fadeIn(
       duration: const Duration(seconds: 2),
-      childWidget: SizedBox(
-        height: 150,
-        width: 150,
-        child: Image.asset("assets/logo_coloured.png"),
+      childWidget: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            height: 150,
+            width: 150,
+            child: Image.asset("assets/logo.png"),
+          ),
+          const Text(
+            "YAWA",
+            style: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: Color.fromRGBO(131, 184, 243, 0.8),
+            ),
+          )
+        ],
       ),
       nextScreen: const HomeScreen(),
     );

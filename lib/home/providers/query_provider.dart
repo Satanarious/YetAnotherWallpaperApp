@@ -419,7 +419,8 @@ class QueryProvider with ChangeNotifier {
       query['topic'] = topic;
       query['path'] = '/api/v1/oauth2/browse/topic';
     } else {
-      query['tag'] = "superheroes";
+      topic = "characterillustration";
+      query['topic'] = topic;
     }
     query['with_session'] = 'false';
     query['mature_content'] = matureContent.toString();
