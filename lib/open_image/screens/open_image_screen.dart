@@ -8,7 +8,9 @@ import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/common/models/models.dart';
 import 'package:wallpaper_app/common/enums/file_type.dart' as ft;
+import 'package:wallpaper_app/home/providers/deviant_art_provider.dart';
 import 'package:wallpaper_app/home/providers/source_provider.dart';
+import 'package:wallpaper_app/home/providers/wallhaven_provider.dart';
 import 'package:wallpaper_app/open_image/widgets/wallpaper_action_widget.dart';
 
 class OpenImageScreen extends StatefulWidget {
@@ -29,6 +31,11 @@ class _OpenImageScreenState extends State<OpenImageScreen> {
         ModalRoute.of(context)!.settings.arguments as Wallpaper;
     final source = Provider.of<SourceProvider>(context, listen: false).source;
     var progressString = '';
+    final tags = wallpaper.source == Sources.wallhaven
+        ? WallhavenProvider.getTags(wallpaper.id)
+        : wallpaper.source == Sources.deviantArt
+            ? DeviantArtProvider().getDeviationTags(wallpaper.id)
+            : null;
 
     return Scaffold(
       backgroundColor: Colors.black87,
@@ -140,7 +147,7 @@ class _OpenImageScreenState extends State<OpenImageScreen> {
               left: 0,
               right: 0,
               bottom: isInteracting ? -80 : 0,
-              child: WallpaperActionsWidget(wallpaper)),
+              child: WallpaperActionsWidget(wallpaper, tags)),
         ],
       ),
     );

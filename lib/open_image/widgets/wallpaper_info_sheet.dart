@@ -5,17 +5,16 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:wallpaper_app/common/models/wallpaper.dart';
-import 'package:wallpaper_app/home/providers/deviant_art_provider.dart';
 import 'package:wallpaper_app/home/providers/query_provider.dart';
 import 'package:wallpaper_app/home/providers/scroll_handling_provider.dart';
 import 'package:wallpaper_app/home/providers/source_provider.dart';
-import 'package:wallpaper_app/home/providers/wallhaven_provider.dart';
 import 'package:wallpaper_app/home/providers/wallpaper_list_provider.dart';
 import 'package:wallpaper_app/home/screens/home_screen.dart';
 
 class WallpaperInfoSheet extends StatefulWidget {
-  const WallpaperInfoSheet(this.wallpaper, {super.key});
+  const WallpaperInfoSheet(this.wallpaper, this.tags, {super.key});
   final Wallpaper wallpaper;
+  final Future<List<String>>? tags;
 
   @override
   State<WallpaperInfoSheet> createState() => _WallpaperInfoSheetState();
@@ -76,12 +75,7 @@ class _WallpaperInfoSheetState extends State<WallpaperInfoSheet> {
                           child: SizedBox(
                             width: double.infinity,
                             child: FutureBuilder(
-                              future: widget.wallpaper.source ==
-                                      Sources.wallhaven
-                                  ? WallhavenProvider.getTags(
-                                      widget.wallpaper.id)
-                                  : DeviantArtProvider()
-                                      .getDeviationTags(widget.wallpaper.id),
+                              future: widget.tags,
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   return Wrap(

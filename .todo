@@ -41,13 +41,15 @@ FIXME:
     ☐ Loading when there are no more pages left. 
         - Remove the loading animation
         - Add a toast
-    ☐ Tags loading on info sheet eveytime sheet is opened.
-    ☐ Fix filters showing wrong filters according to query, when query from queries is used.
+    ☐ Fix filters showing wrong filters:
+        ☐ according to query, when query from queries is used.
+        ☐ according to selected tag in DeviantArt and Wallhaven.
     ☐ Fix export and save favourites folder always failing the first time.
     ☐ Fix default source not being set on install.
     ☐ Fix deviantArt default query.
     
 Archive:
+    ✔ Tags loading on info sheet eveytime sheet is opened. @done(25-01-28 17:04) @project(FIXME)
     ✘ Community List/Deviant Art Topic List, grid and list view options. @cancelled(25-01-15 04:11) @project(TODO.Features.General)
     ✔ Remove Query tab and underlying logic from DeviantArt Filters. @done(25-01-07 16:01) @project(TODO.Chores)
     ✔ Fix tags onPress event on infoSheet causing a black screen. @done(25-01-06 20:14) @project(FIXME)

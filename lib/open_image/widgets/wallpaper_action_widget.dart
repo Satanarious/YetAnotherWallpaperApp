@@ -15,8 +15,9 @@ import 'package:wallpaper_app/home/providers/wallpaper_list_provider.dart';
 import 'package:wallpaper_app/open_image/widgets/wallpaper_info_sheet.dart';
 
 class WallpaperActionsWidget extends StatefulWidget {
-  const WallpaperActionsWidget(this.wallpaper, {super.key});
+  const WallpaperActionsWidget(this.wallpaper, this.tags, {super.key});
   final Wallpaper wallpaper;
+  final Future<List<String>>? tags;
 
   @override
   State<WallpaperActionsWidget> createState() => _WallpaperActionsWidgetState();
@@ -44,7 +45,8 @@ class _WallpaperActionsWidgetState extends State<WallpaperActionsWidget>
               maxWidth: 500,
             ),
             context: context,
-            builder: (context) => WallpaperInfoSheet(widget.wallpaper),
+            builder: (context) =>
+                WallpaperInfoSheet(widget.wallpaper, widget.tags),
           ),
           icon: const Icon(
             IconlyLight.info_circle,
