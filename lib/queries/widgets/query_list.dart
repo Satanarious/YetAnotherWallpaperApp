@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
+import 'package:wallpaper_app/filters/storage/filters_storage_provider.dart';
 import 'package:wallpaper_app/home/providers/query_provider.dart';
 import 'package:wallpaper_app/home/providers/source_provider.dart';
 import 'package:wallpaper_app/home/providers/wallpaper_list_provider.dart';
@@ -114,11 +115,42 @@ class _QueryListState extends State<QueryList> {
                       queryProvider.switchAndSetQuery(query, wallhavenApiKey);
 
                       // Add query to history
-
                       queriesStorageProvider
                           .addHistoryQuery(queryProvider.currentQuery);
                       Provider.of<QueriesProvider>(context, listen: false)
                           .addHistoryQuery(queryProvider.currentQuery);
+
+                      Provider.of<FiltersStorageProvider>(context,
+                              listen: false)
+                          .updateFilters(
+                              query.source,
+                              query.matureContent,
+                              query.tag,
+                              query.topic,
+                              query.communityName,
+                              query.subredditName,
+                              query.wallhavenSortType,
+                              query.wallhavenSortRange,
+                              query.purities,
+                              query.redditSortType,
+                              query.redditSortRange,
+                              query.lemmySortType,
+                              query.tag1,
+                              query.tag2,
+                              query.includeTag1,
+                              query.includeTag2,
+                              query.categories,
+                              query.ratio,
+                              Provider.of<RedditFiltersStorageProvider>(context,
+                                  listen: false),
+                              Provider.of<WallhavenFiltersStorageProvider>(
+                                  context,
+                                  listen: false),
+                              Provider.of<LemmyFiltersStorageProvider>(context,
+                                  listen: false),
+                              Provider.of<DeviantArtFiltersStorageProvider>(
+                                  context,
+                                  listen: false));
 
                       Navigator.of(context).pop();
                     },

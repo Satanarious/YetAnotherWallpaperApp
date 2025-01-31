@@ -2,6 +2,79 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:wallpaper_app/common/enums/purity.dart';
+import 'package:wallpaper_app/home/providers/query_provider.dart';
+import 'package:wallpaper_app/home/providers/source_provider.dart';
+
+class FiltersStorageProvider with ChangeNotifier {
+  void updateFilters(
+    final Sources source,
+    final bool matureContent,
+    final String? tag,
+    final String? topic,
+    final String? communityName,
+    final String? subredditName,
+    final WallhavenSortingType? wallhavenSortType,
+    final WallhavenTopRange? wallhavenSortRange,
+    final List<PurityType>? purities,
+    final RedditSortType? redditSortType,
+    final RedditSortRange? redditSortRange,
+    final LemmySortType? lemmySortType,
+    final String? tag1,
+    final String? tag2,
+    final bool? includeTag1,
+    final bool? includeTag2,
+    final List<WallhavenCategory>? categories,
+    final WallhavenAspectRatioType? ratio,
+    final RedditFiltersStorageProvider redditFiltersStorageProvider,
+    final WallhavenFiltersStorageProvider wallhavenFiltersStorageProvider,
+    final LemmyFiltersStorageProvider lemmyFiltersStorageProvider,
+    final DeviantArtFiltersStorageProvider deviantArtFiltersStorageProvider,
+  ) {
+    switch (source) {
+      case Sources.reddit:
+        redditFiltersStorageProvider.update(
+            subreddit: subredditName!,
+            sortType: redditSortType!.index,
+            sortRange: redditSortRange!.index);
+        break;
+      case Sources.wallhaven:
+        wallhavenFiltersStorageProvider.update(
+          category: WallhavenCategory.values
+              .map((category) => categories!.contains(category))
+              .toList(),
+          includeTag1: includeTag1 ?? true,
+          includeTag2: includeTag2 ?? true,
+          primaryTag: tag1 ?? "",
+          secondaryTag: tag2 ?? "",
+          sort: wallhavenSortType!.index,
+          purity: PurityType.values
+              .map((purity) => purities!.contains(purity))
+              .toList(),
+          ratio: ratio!.index,
+          topRange: wallhavenSortRange!.index,
+        );
+
+        break;
+      case Sources.lemmy:
+        lemmyFiltersStorageProvider.update(
+          community: communityName!,
+          sortType: lemmySortType!.index,
+        );
+        break;
+      case Sources.deviantArt:
+        deviantArtFiltersStorageProvider.update(
+          tag: tag ?? "",
+          topic: topic ?? "",
+          page: tag != null ? 0 : 1,
+          matureContent: matureContent,
+        );
+        break;
+      default:
+        throw Exception("!!Source not implemented yet!!");
+    }
+  }
+}
 
 class RedditFiltersStorageProvider with ChangeNotifier {
   static const _key = 'reddit_filters';

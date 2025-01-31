@@ -42,7 +42,7 @@ FIXME:
         - Remove the loading animation
         - Add a toast
     ☐ Fix filters showing wrong filters:
-        ☐ according to query, when query from queries is used.
+        ✔ according to query, when query from queries is used. @done(25-01-31 15:53)
         ☐ according to selected tag in DeviantArt and Wallhaven.
     ☐ Fix export and save favourites folder always failing the first time.
     
