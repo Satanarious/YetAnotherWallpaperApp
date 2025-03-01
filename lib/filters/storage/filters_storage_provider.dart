@@ -7,39 +7,39 @@ import 'package:wallpaper_app/home/providers/query_provider.dart';
 import 'package:wallpaper_app/home/providers/source_provider.dart';
 
 class FiltersStorageProvider with ChangeNotifier {
-  void updateFilters(
-    final Sources source,
-    final bool matureContent,
-    final String? tag,
-    final String? topic,
-    final String? communityName,
-    final String? subredditName,
-    final WallhavenSortingType? wallhavenSortType,
-    final WallhavenTopRange? wallhavenSortRange,
-    final List<PurityType>? purities,
-    final RedditSortType? redditSortType,
-    final RedditSortRange? redditSortRange,
-    final LemmySortType? lemmySortType,
-    final String? tag1,
-    final String? tag2,
-    final bool? includeTag1,
-    final bool? includeTag2,
-    final List<WallhavenCategory>? categories,
-    final WallhavenAspectRatioType? ratio,
-    final RedditFiltersStorageProvider redditFiltersStorageProvider,
-    final WallhavenFiltersStorageProvider wallhavenFiltersStorageProvider,
-    final LemmyFiltersStorageProvider lemmyFiltersStorageProvider,
-    final DeviantArtFiltersStorageProvider deviantArtFiltersStorageProvider,
-  ) {
+  void updateFilters({
+    required Sources source,
+    required bool matureContent,
+    String? tag,
+    String? topic,
+    String? communityName,
+    String? subredditName,
+    WallhavenSortingType? wallhavenSortType,
+    WallhavenTopRange? wallhavenSortRange,
+    List<PurityType>? purities,
+    RedditSortType? redditSortType,
+    RedditSortRange? redditSortRange,
+    LemmySortType? lemmySortType,
+    String? tag1,
+    String? tag2,
+    bool? includeTag1,
+    bool? includeTag2,
+    List<WallhavenCategory>? categories,
+    WallhavenAspectRatioType? ratio,
+    RedditFiltersStorageProvider? redditFiltersStorageProvider,
+    WallhavenFiltersStorageProvider? wallhavenFiltersStorageProvider,
+    LemmyFiltersStorageProvider? lemmyFiltersStorageProvider,
+    DeviantArtFiltersStorageProvider? deviantArtFiltersStorageProvider,
+  }) {
     switch (source) {
       case Sources.reddit:
-        redditFiltersStorageProvider.update(
+        redditFiltersStorageProvider!.update(
             subreddit: subredditName!,
             sortType: redditSortType!.index,
             sortRange: redditSortRange!.index);
         break;
       case Sources.wallhaven:
-        wallhavenFiltersStorageProvider.update(
+        wallhavenFiltersStorageProvider!.update(
           category: WallhavenCategory.values
               .map((category) => categories!.contains(category))
               .toList(),
@@ -57,13 +57,13 @@ class FiltersStorageProvider with ChangeNotifier {
 
         break;
       case Sources.lemmy:
-        lemmyFiltersStorageProvider.update(
+        lemmyFiltersStorageProvider!.update(
           community: communityName!,
           sortType: lemmySortType!.index,
         );
         break;
       case Sources.deviantArt:
-        deviantArtFiltersStorageProvider.update(
+        deviantArtFiltersStorageProvider!.update(
           tag: tag ?? "",
           topic: topic ?? "",
           page: tag != null ? 0 : 1,

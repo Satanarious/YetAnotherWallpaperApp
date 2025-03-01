@@ -123,34 +123,40 @@ class _QueryListState extends State<QueryList> {
                       Provider.of<FiltersStorageProvider>(context,
                               listen: false)
                           .updateFilters(
-                              query.source,
-                              query.matureContent,
-                              query.tag,
-                              query.topic,
-                              query.communityName,
-                              query.subredditName,
-                              query.wallhavenSortType,
-                              query.wallhavenSortRange,
-                              query.purities,
-                              query.redditSortType,
-                              query.redditSortRange,
-                              query.lemmySortType,
-                              query.tag1,
-                              query.tag2,
-                              query.includeTag1,
-                              query.includeTag2,
-                              query.categories,
-                              query.ratio,
-                              Provider.of<RedditFiltersStorageProvider>(context,
-                                  listen: false),
-                              Provider.of<WallhavenFiltersStorageProvider>(
-                                  context,
-                                  listen: false),
-                              Provider.of<LemmyFiltersStorageProvider>(context,
-                                  listen: false),
-                              Provider.of<DeviantArtFiltersStorageProvider>(
-                                  context,
-                                  listen: false));
+                              source: query.source,
+                              matureContent: query.matureContent,
+                              tag: query.tag,
+                              topic: query.topic,
+                              communityName: query.communityName,
+                              subredditName: query.subredditName,
+                              wallhavenSortType: query.wallhavenSortType,
+                              wallhavenSortRange: query.wallhavenSortRange,
+                              purities: query.purities,
+                              redditSortType: query.redditSortType,
+                              redditSortRange: query.redditSortRange,
+                              lemmySortType: query.lemmySortType,
+                              tag1: query.tag1,
+                              tag2: query.tag2,
+                              includeTag1: query.includeTag1,
+                              includeTag2: query.includeTag2,
+                              categories: query.categories,
+                              ratio: query.ratio,
+                              redditFiltersStorageProvider:
+                                  Provider.of<RedditFiltersStorageProvider>(
+                                      context,
+                                      listen: false),
+                              wallhavenFiltersStorageProvider:
+                                  Provider.of<WallhavenFiltersStorageProvider>(
+                                      context,
+                                      listen: false),
+                              lemmyFiltersStorageProvider:
+                                  Provider.of<LemmyFiltersStorageProvider>(
+                                      context,
+                                      listen: false),
+                              deviantArtFiltersStorageProvider:
+                                  Provider.of<DeviantArtFiltersStorageProvider>(
+                                      context,
+                                      listen: false));
 
                       Navigator.of(context).pop();
                     },

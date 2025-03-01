@@ -2,19 +2,24 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 import 'package:wallpaper_app/common/models/wallpaper.dart';
+import 'package:wallpaper_app/common/models/wallpaper_list.dart';
 import 'package:wallpaper_app/home/providers/query_provider.dart';
 import 'package:wallpaper_app/home/providers/scroll_handling_provider.dart';
 import 'package:wallpaper_app/home/providers/source_provider.dart';
 import 'package:wallpaper_app/home/providers/wallpaper_list_provider.dart';
-import 'package:wallpaper_app/home/screens/home_screen.dart';
+import 'package:wallpaper_app/open_image/widgets/label_widget.dart';
+import 'package:wallpaper_app/open_image/widgets/link_widget.dart';
+import 'package:wallpaper_app/open_image/widgets/more_like_this_widget.dart';
+import 'package:wallpaper_app/open_image/widgets/tag_widget.dart';
+import 'package:wallpaper_app/open_image/widgets/text_widget.dart';
 
 class WallpaperInfoSheet extends StatefulWidget {
-  const WallpaperInfoSheet(this.wallpaper, this.tags, {super.key});
+  const WallpaperInfoSheet(this.wallpaper, this.tags, this.moreLikeThis,
+      {super.key});
   final Wallpaper wallpaper;
   final Future<List<String>>? tags;
+  final Future<List<WallpaperList>> moreLikeThis;
 
   @override
   State<WallpaperInfoSheet> createState() => _WallpaperInfoSheetState();
@@ -74,101 +79,9 @@ class _WallpaperInfoSheetState extends State<WallpaperInfoSheet> {
                           duration: const Duration(milliseconds: 100),
                           child: SizedBox(
                             width: double.infinity,
-                            child: FutureBuilder(
-                              future: widget.tags,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  final trimmedTags = snapshot.data!.length < 11
-                                      ? snapshot.data!
-                                      : snapshot.data!.sublist(0, 9);
-                                  return Wrap(
-                                    alignment: WrapAlignment.center,
-                                    children: trimmedTags
-                                        .map(
-                                          (tag) => Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 3, horizontal: 5),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                widget.wallpaper.source ==
-                                                        Sources.wallhaven
-                                                    ? queryProvider
-                                                        .setWallhavenQuery(
-                                                            tag1: tag)
-                                                    : queryProvider
-                                                        .setDeviantArtQuery(
-                                                            tag: tag);
-                                                wallpaperListProvider
-                                                    .emptyWallpaperList();
-                                                scrollHandlingProvider
-                                                    .resetOffsets();
-                                                Navigator.of(context)
-                                                    .popUntil((route) {
-                                                  return route.settings.name ==
-                                                          HomeScreen
-                                                              .routeName ||
-                                                      route.settings.name ==
-                                                          null;
-                                                });
-                                              },
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                child: Container(
-                                                  padding:
-                                                      const EdgeInsets.all(8),
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                      color: Colors.white,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    color: Colors.black
-                                                        .withAlpha(50),
-                                                  ),
-                                                  child: Text(
-                                                    "#$tag",
-                                                    style: const TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 14),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                        .toList(),
-                                  );
-                                } else {
-                                  return Wrap(
-                                    alignment: WrapAlignment.center,
-                                    children: List.generate(8, (index) => index)
-                                        .map(
-                                          (e) => Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 3, horizontal: 5),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              child: Shimmer.fromColors(
-                                                enabled: true,
-                                                baseColor:
-                                                    Colors.grey.withAlpha(80),
-                                                highlightColor: Colors.white70,
-                                                child: Container(
-                                                  height: 38,
-                                                  width: 70,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                        .toList(),
-                                  );
-                                }
-                              },
+                            child: TagWidget(
+                              tags: widget.tags,
+                              wallpaper: widget.wallpaper,
                             ),
                           ),
                         ),
@@ -288,76 +201,10 @@ class _WallpaperInfoSheetState extends State<WallpaperInfoSheet> {
                           ])
                         : emptyRow,
                   ],
-                )
+                ),
+                MoreLikeThisWidget(widget.wallpaper, widget.moreLikeThis),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class LabelWidget extends StatelessWidget {
-  const LabelWidget(this.label, {super.key});
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Text(
-        label,
-        style: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontSize: 15,
-        ),
-      ),
-    );
-  }
-}
-
-class TextWidget extends StatelessWidget {
-  const TextWidget(this.text, {super.key});
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Text(
-        text,
-        overflow: TextOverflow.ellipsis,
-        maxLines: 3,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 14,
-        ),
-      ),
-    );
-  }
-}
-
-class LinkWidget extends StatelessWidget {
-  const LinkWidget(this.link, {super.key});
-  final String link;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: GestureDetector(
-        onTap: () async => launchUrlString(link),
-        child: Text(
-          link,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            decoration: TextDecoration.underline,
-            decorationColor: Colors.white,
-            decorationStyle: TextDecorationStyle.solid,
-            color: Colors.white,
-            fontSize: 14,
           ),
         ),
       ),

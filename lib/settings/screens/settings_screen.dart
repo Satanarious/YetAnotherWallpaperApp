@@ -5,7 +5,7 @@ import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/common/widgets/custom_drop_down_menu.dart';
 import 'package:wallpaper_app/home/providers/source_provider.dart';
-import 'package:wallpaper_app/open_image/widgets/wallpaper_info_sheet.dart';
+import 'package:wallpaper_app/open_image/widgets/link_widget.dart';
 import 'package:wallpaper_app/settings/enums/auto_wallpaper_source_type.dart';
 import 'package:wallpaper_app/settings/providers/settings_provider.dart';
 import 'package:wallpaper_app/settings/storage/settings_storage_provider.dart';

@@ -40,6 +40,8 @@ class _WallpaperActionsWidgetState extends State<WallpaperActionsWidget>
         : widget.wallpaper.source == Sources.deviantArt
             ? DeviantArtProvider().getDeviationTags(widget.wallpaper.id)
             : null;
+    final moreLikeThis =
+        DeviantArtProvider().getDeviationMoreLikeThis(widget.wallpaper.id);
     final buttons = <ActionWidget>[
       ActionWidget(
         label: "Info",
@@ -51,7 +53,8 @@ class _WallpaperActionsWidgetState extends State<WallpaperActionsWidget>
               maxWidth: 500,
             ),
             context: context,
-            builder: (context) => WallpaperInfoSheet(widget.wallpaper, tags),
+            builder: (context) =>
+                WallpaperInfoSheet(widget.wallpaper, tags, moreLikeThis),
           ),
           icon: const Icon(
             IconlyLight.info_circle,

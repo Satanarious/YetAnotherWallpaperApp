@@ -3,7 +3,6 @@ TODO:
         Deviant Art:
             ☐ Deviant Art Topics loading time indication.
             ☐ Add a way to refresh deviant art topic community list.
-            ☐ Add more like this previews and onTap to open the image.
         Reddit:
             ☐ Add way to add subreddits.
         Lemmy:
@@ -41,12 +40,11 @@ FIXME:
     ☐ Loading when there are no more pages left. 
         - Remove the loading animation
         - Add a toast
-    ☐ Fix filters showing wrong filters:
-        ✔ according to query, when query from queries is used. @done(25-01-31 15:53)
-        ☐ according to selected tag in DeviantArt and Wallhaven.
     ☐ Fix export and save favourites folder always failing the first time.
     
 Archive:
+    ✔ Add more like this previews and onTap to open the image. @done(25-03-01 10:01) @project(TODO.Add Feature(s).Deviant Art)
+    ✔ Fix filters showing wrong filters: @done(25-01-31 21:10) @project(FIXME)
     ✔ Fix default source not being set on install. @done(25-01-28 17:29) @project(FIXME)
     ✔ Fix deviantArt default query. @done(25-01-28 17:55) @project(FIXME)
     ✔ Tags loading on info sheet eveytime sheet is opened. @done(25-01-28 17:04) @project(FIXME)

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:wallpaper_app/common/models/models.dart';
 import 'package:wallpaper_app/filters/storage/filters_storage_provider.dart';
 
 class DeviantArtProvider {
@@ -144,6 +145,31 @@ class DeviantArtProvider {
     deviantArtFiltersStorageProvider.updateAllTopics(_deviantArtAllTopics);
 
     return _deviantArtAllTopics;
+  }
+
+  Future<List<WallpaperList>> getDeviationMoreLikeThis(
+      String deviationId) async {
+    final topicURI = Uri.https(
+      "www.deviantart.com",
+      "/api/v1/oauth2/browse/morelikethis/preview",
+      {'seed': deviationId},
+    );
+    final token = await checkAndRefreshDeviantArtToken();
+    final response = await http.get(topicURI,
+        headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
+    if (response.statusCode != 200) {
+      throw Exception(
+        'Request failed with status: ${response.statusCode}',
+      );
+    }
+    final data = jsonDecode(response.body) as Map<String, dynamic>;
+    final moreFromArtistRaw = data['more_from_artist'] as List;
+    final moreFromDARaw = data['more_from_da'] as List;
+    final moreFromArtist = WallpaperList.fromDeviantArtJson(
+        {'results': moreFromArtistRaw}, Meta.empty);
+    final moreFromDA = WallpaperList.fromDeviantArtJson(
+        {'results': moreFromDARaw}, Meta.empty);
+    return [moreFromArtist, moreFromDA];
   }
 
   Future<String> checkAndRefreshDeviantArtToken() async {
