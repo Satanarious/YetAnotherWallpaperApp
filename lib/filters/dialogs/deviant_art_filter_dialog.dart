@@ -153,6 +153,7 @@ class _TopicTabState extends State<TopicTab>
   late TabController tabController;
   late List<Map<String, dynamic>> topics;
   late List<bool> topicSelected;
+  bool refreshList = false;
 
   @override
   void initState() {
@@ -354,28 +355,81 @@ class _TopicTabState extends State<TopicTab>
         ]),
         FutureBuilder(
             future: deviantArtProvider.deviantArtAllTopics(
-                Provider.of<DeviantArtFiltersStorageProvider>(context,
-                    listen: false)),
-            builder: (context, snapshot) => snapshot.hasData
-                ? CommunityListWidget(
-                    communityNameController: topicController,
-                    tabController: tabController,
-                    communityList: snapshot.data!)
-                : ListView.builder(
-                    itemBuilder: (context, index) => Shimmer.fromColors(
-                      enabled: true,
-                      baseColor: Colors.grey.withAlpha(80),
-                      highlightColor: Colors.white70,
-                      child: Card(
-                        child: Container(
-                          margin: const EdgeInsets.all(3),
-                          height: 60,
-                          color: Colors.black,
+                deviantArtFiltersStorageProvider:
+                    Provider.of<DeviantArtFiltersStorageProvider>(context,
+                        listen: false),
+                refreshList: refreshList),
+            builder: (context, snapshot) {
+              if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                return CommunityListWidget(
+                  communityNameController: topicController,
+                  tabController: tabController,
+                  communityList: snapshot.data!,
+                  canRefresh: true,
+                  refreshMethod: () {
+                    setState(() {
+                      refreshList = true;
+                    });
+                  },
+                );
+              } else {
+                return Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Shimmer.fromColors(
+                            enabled: true,
+                            baseColor: Colors.grey.withAlpha(80),
+                            highlightColor: Colors.white70,
+                            child: Card(
+                              child: Container(
+                                margin: const EdgeInsets.all(3),
+                                height: 40,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
                         ),
+                        Shimmer.fromColors(
+                          enabled: true,
+                          baseColor: Colors.grey.withAlpha(80),
+                          highlightColor: Colors.white70,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                  color: Colors.black, shape: BoxShape.circle),
+                              margin: const EdgeInsets.all(3),
+                              width: 45,
+                              height: 45,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemBuilder: (context, index) => Shimmer.fromColors(
+                          enabled: true,
+                          baseColor: Colors.grey.withAlpha(80),
+                          highlightColor: Colors.white70,
+                          child: Card(
+                            child: Container(
+                              margin: const EdgeInsets.all(3),
+                              height: 60,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        itemCount: 5,
+                        padding: const EdgeInsets.only(top: 5),
                       ),
                     ),
-                    itemCount: 5,
-                  ))
+                  ],
+                );
+              }
+            })
       ],
     );
   }

@@ -7,11 +7,15 @@ class CommunityListWidget extends StatefulWidget {
     required this.communityNameController,
     required this.tabController,
     required this.communityList,
+    this.canRefresh = false,
+    this.refreshMethod,
   });
 
   final TextEditingController communityNameController;
   final TabController tabController;
   final List<Map<String, dynamic>> communityList;
+  final bool canRefresh;
+  final dynamic refreshMethod;
 
   @override
   State<CommunityListWidget> createState() => _CommunityListWidgetState();
@@ -55,37 +59,60 @@ class _CommunityListWidgetState extends State<CommunityListWidget> {
       SliverFillRemaining(
         child: Column(
           children: [
-            Expanded(
-              flex: 0,
-              child: TextField(
-                style: const TextStyle(color: Colors.white, fontSize: 14),
-                onChanged: (value) {
-                  setState(() {
-                    searchQuery = value;
-                  });
-                },
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: const BorderSide(color: Colors.white),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: const BorderSide(color: Colors.white),
-                  ),
-                  prefixIcon: const Icon(
-                    Icons.search,
-                    color: Colors.white,
-                  ),
-                  hintText: "Search by name",
-                  contentPadding: const EdgeInsetsDirectional.symmetric(
-                      horizontal: 10, vertical: 2),
-                  hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    style: const TextStyle(color: Colors.white, fontSize: 14),
+                    onChanged: (value) {
+                      setState(() {
+                        searchQuery = value;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(color: Colors.white),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(color: Colors.white),
+                      ),
+                      prefixIcon: const Icon(
+                        Icons.search,
+                        color: Colors.white,
+                      ),
+                      hintText: "Search by name",
+                      contentPadding: const EdgeInsetsDirectional.symmetric(
+                          horizontal: 10, vertical: 2),
+                      hintStyle:
+                          const TextStyle(color: Colors.grey, fontSize: 14),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                SizedBox(
+                  width: widget.canRefresh ? 5 : 0,
+                ),
+                widget.canRefresh
+                    ? Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white, width: 1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: IconButton(
+                          tooltip: "Refresh",
+                          icon: const Icon(
+                            Icons.refresh_rounded,
+                            color: Colors.white,
+                          ),
+                          onPressed: widget.refreshMethod,
+                        ),
+                      )
+                    : const SizedBox.shrink()
+              ],
             ),
             const SizedBox(
               height: 10,

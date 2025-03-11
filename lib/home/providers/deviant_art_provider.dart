@@ -89,19 +89,21 @@ class DeviantArtProvider {
   }
 
   Future<List<Map<String, dynamic>>> deviantArtAllTopics(
-      DeviantArtFiltersStorageProvider deviantArtFiltersStorageProvider) async {
+      {required DeviantArtFiltersStorageProvider
+          deviantArtFiltersStorageProvider,
+      bool refreshList = false}) async {
     // Case where topics already exist
-    if (_deviantArtAllTopics.isNotEmpty) {
+    if (_deviantArtAllTopics.isNotEmpty && !refreshList) {
       return _deviantArtAllTopics;
     }
-
     final storageTopics = deviantArtFiltersStorageProvider.getAllTopics();
     // Case where topics already exist in storage
-    if (storageTopics != null) {
+    if (storageTopics != null && !refreshList) {
       _deviantArtAllTopics.addAll(storageTopics);
       return _deviantArtAllTopics;
     }
 
+    _deviantArtAllTopics.clear();
     var hasMore = true;
     String? offset;
 
