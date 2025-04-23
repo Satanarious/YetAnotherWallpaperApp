@@ -6,6 +6,7 @@ import 'package:wallpaper_app/favourites/screens/favourite_wallpaper_grid_screen
 import 'package:wallpaper_app/favourites/screens/favourites_screen.dart';
 import 'package:wallpaper_app/favourites/storage/favourites_storage_provider.dart';
 import 'package:wallpaper_app/filters/storage/filters_storage_provider.dart';
+import 'package:wallpaper_app/filters/storage/user_communities_storage.dart';
 import 'package:wallpaper_app/history/providers/history_provider.dart';
 import 'package:wallpaper_app/history/screens/history_screen.dart';
 import 'package:wallpaper_app/history/storage/history_storage_provider.dart';
@@ -47,7 +48,9 @@ class WallpaperApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: HistoryStorageProvider()),
         ChangeNotifierProvider.value(value: FiltersStorageProvider()),
         ChangeNotifierProvider.value(value: RedditFiltersStorageProvider()),
+        ChangeNotifierProvider.value(value: RedditUserCommunitiesStorage()),
         ChangeNotifierProvider.value(value: LemmyFiltersStorageProvider()),
+        ChangeNotifierProvider.value(value: LemmyUserCommunitiesStorage()),
         ChangeNotifierProvider.value(value: WallhavenFiltersStorageProvider()),
         ChangeNotifierProvider.value(value: DeviantArtFiltersStorageProvider()),
         ChangeNotifierProvider.value(value: SettingsProvider()),

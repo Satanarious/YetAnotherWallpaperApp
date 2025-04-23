@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/filters/storage/filters_storage_provider.dart';
+import 'package:wallpaper_app/filters/storage/user_communities_storage.dart';
 import 'package:wallpaper_app/filters/widgets/community_list_widget.dart';
 import 'package:wallpaper_app/filters/widgets/togglable_buttons.dart';
 import 'package:wallpaper_app/home/providers/query_provider.dart';
@@ -323,10 +324,13 @@ class _LemmyFilterDialogState extends State<LemmyFilterDialog>
                         ],
                       ),
                       CommunityListWidget(
-                        communityNameController: communityNameController,
-                        tabController: tabController,
-                        communityList: communityList,
-                      ),
+                          communityNameController: communityNameController,
+                          tabController: tabController,
+                          communityList: communityList,
+                          height: 300,
+                          communityStorage:
+                              Provider.of<LemmyUserCommunitiesStorage>(context,
+                                  listen: false)),
                     ],
                   ),
                 )

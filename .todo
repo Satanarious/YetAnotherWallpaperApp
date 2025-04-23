@@ -2,12 +2,6 @@ TODO:
     Add Feature(s):
         Deviant Art:
             ☐ Deviant Art Topics loading time indication.
-            ☐ Add a way to refresh deviant art topic community list.
-        Reddit:
-            ☐ Add way to add subreddits.
-            ☐ Add subreddits with gifs.
-        Lemmy:
-            ☐ Add way to add community.
         General:
             ☐ Add reset button in all filter dialogs.
             ☐ More confirmation dialogs/snackbars with undo functionality
@@ -42,6 +36,10 @@ FIXME:
     ☐ Fix export and save favourites folder always failing the first time.
     
 Archive:
+    ✔ Add way to add subreddits. @done(25-04-23 05:25) @project(TODO.Add Feature(s).Reddit)
+    ✘ Add subreddits with gifs. @project(TODO.Add Feature(s).Reddit)
+    ✔ Add way to add community. @done(25-04-23 05:25) @project(TODO.Add Feature(s).Lemmy)
+    ✔ Add a way to refresh deviant art topic community list. @done(25-03-11 18:03) @project(TODO.Add Feature(s).Deviant Art)
     ✔ Blur NSFW in More Like This. @done(25-03-06 14:40) @project(TODO.Add Feature(s).Deviant Art)
     ✔ Add more like this previews and onTap to open the image. @done(25-03-01 10:01) @project(TODO.Add Feature(s).Deviant Art)
     ✔ Fix filters showing wrong filters: @done(25-01-31 21:10) @project(FIXME)

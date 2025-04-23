@@ -365,7 +365,6 @@ class _TopicTabState extends State<TopicTab>
                   communityNameController: topicController,
                   tabController: tabController,
                   communityList: snapshot.data!,
-                  canRefresh: true,
                   refreshMethod: () {
                     setState(() {
                       refreshList = true;
