@@ -1,0 +1,1 @@
+flutter build apk --target=lib/main.dart --release --split-per-abi --dart-define-from-file=env.json

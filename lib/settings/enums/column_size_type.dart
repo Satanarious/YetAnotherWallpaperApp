@@ -1,0 +1,4 @@
+enum ColumnSizeType {
+  adaptive,
+  fixed,
+}

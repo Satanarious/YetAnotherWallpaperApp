@@ -1,0 +1,142 @@
+TODO:
+    Add Feature(s):
+        Deviant Art:
+            ☐ Deviant Art Topics loading time indication.
+        General:
+            ☐ Add reset button in all filter dialogs.
+            ☐ More confirmation dialogs/snackbars with undo functionality
+            ☐ Add Backup/Restore functionality.
+            ☐ Add better loading animations(lottie).
+        Settings Screen:
+            ☐ Add to favourites on download (Downloads folder)
+            ☐ Cache Management
+            ☐ Auto wallpaper
+        Auto Wallpaper:
+            ☐ Day/Night Mode
+            ☐ Wallpaper Favourites Folder
+            ☐ Wallpaper Query
+            ☐ Interval: Hours
+            ☐ Day Mode Time
+            ☐ Night Mode Time
+            ☐ Day Mode Query
+            ☐ Night Mode Query
+            ☐ Day Mode Favourites Folder
+            ☐ Night Mode Favourites Folder
+            ☐ Constraints: Wifi/ Charging/ Idle, Roaming
+            ☐ Notification of wallpaper change
+            ☐ Add to favorites on change (Auto-Wallpaper)
+    Chore(s):
+        ☐ Add Logs.
+        ☐ Make Snackbars better looking.
+
+FIXME:
+    ☐ Loading when there are no more pages left. 
+        - Remove the loading animation
+        - Add a toast
+    ☐ Fix export and save favourites folder always failing the first time.
+    
+Archive:
+    ✔ Add way to add subreddits. @done(25-04-23 05:25) @project(TODO.Add Feature(s).Reddit)
+    ✘ Add subreddits with gifs. @project(TODO.Add Feature(s).Reddit)
+    ✔ Add way to add community. @done(25-04-23 05:25) @project(TODO.Add Feature(s).Lemmy)
+    ✔ Add a way to refresh deviant art topic community list. @done(25-03-11 18:03) @project(TODO.Add Feature(s).Deviant Art)
+    ✔ Blur NSFW in More Like This. @done(25-03-06 14:40) @project(TODO.Add Feature(s).Deviant Art)
+    ✔ Add more like this previews and onTap to open the image. @done(25-03-01 10:01) @project(TODO.Add Feature(s).Deviant Art)
+    ✔ Fix filters showing wrong filters: @done(25-01-31 21:10) @project(FIXME)
+    ✔ Fix default source not being set on install. @done(25-01-28 17:29) @project(FIXME)
+    ✔ Fix deviantArt default query. @done(25-01-28 17:55) @project(FIXME)
+    ✔ Tags loading on info sheet eveytime sheet is opened. @done(25-01-28 17:04) @project(FIXME)
+    ✘ Community List/Deviant Art Topic List, grid and list view options. @cancelled(25-01-15 04:11) @project(TODO.Features.General)
+    ✔ Remove Query tab and underlying logic from DeviantArt Filters. @done(25-01-07 16:01) @project(TODO.Chores)
+    ✔ Fix tags onPress event on infoSheet causing a black screen. @done(25-01-06 20:14) @project(FIXME)
+    ✔ Fix favourites button logic for System folder. @done(25-01-06 19:39) @project(FIXME)
+    ✘ Resolution Filter @cancelled(25-01-06 19:00) @project(TODO.Features.Local Filters)
+    ✘ Orientation Filter @cancelled(25-01-06 19:00) @project(TODO.Features.Local Filters)
+    ✘ Gif filter @cancelled(25-01-06 19:00) @project(TODO.Features.Local Filters)
+    ✔ Change default source @done(25-01-05 11:52) @project(TODO.Features.Settings Screen)
+    ✔ Blur NSFW/Sketchy wallpapers @done(25-01-05 15:06) @project(TODO.Features.Settings Screen)
+    ✔ History Limit @done(25-01-06 14:52) @project(TODO.Features.Settings Screen)
+    ✔ Rounder Corner @done(25-01-06 15:03) @project(TODO.Features.Settings Screen)
+    ✔ Grid layout Style @done(25-01-06 15:07) @project(TODO.Features.Settings Screen)
+    ✔ Column Size @done(25-01-06 15:12) @project(TODO.Features.Settings Screen)
+    ✔ Column Width @done(25-01-06 15:12) @project(TODO.Features.Settings Screen)
+    ✔ Number of Column @done(25-01-06 15:12) @project(TODO.Features.Settings Screen)
+    ✔ Wallhaven API key @done(25-01-06 10:26) @project(TODO.Features.Settings Screen)
+    ✔ Fix queries bug for same source query. @done(25-01-06 13:45) @project(FIXME)
+    ✔ Add option to add local wallpaper to favourites. @done(24-12-30 20:22) @project(TODO.Features.To Add)
+    ✔ Skip exporting local wallpapers @done(24-12-30 20:21) @project(TODO.Features.To Add)
+    ✔ Add local files @done(24-12-29 01:38) @project(TODO.Features.To Add)
+    ✘ Import local files @cancelled(24-12-29 01:38) @project(TODO.Features.To Add)
+    ✘ Export local files @cancelled(24-12-29 01:38) @project(TODO.Features.To Add)
+    ✔ Preview local files @done(24-12-29 01:25) @project(TODO.Features.To Add)
+    ✔ View(open-image) local files @done(24-12-29 01:25) @project(TODO.Features.To Add)
+    ✔ Download to gallery @done(24-12-29 01:25) @project(TODO.Features.To Add)
+    ✔ Fix remove favourite from a single folder not affecting the storage @done(24-12-30 20:22) @project(FIXME)
+    ✔ Deviant Art Save topics. @done(24-12-25 10:21) @project(TODO.Features.To Add)
+    ✔ Save current query @done(24-12-25 19:43) @project(TODO.Features.To Add)
+    ✔ Add queries to storage. @done(24-12-25 19:43) @project(TODO.Features.To Add)
+    ✔ Seperate dialog for saved/history queries. @done(24-12-24 20:38) @project(TODO.Features.To Add)
+    ✔ Way to add/remove saved queries. @done(24-12-24 20:38) @project(TODO.Features.To Add)
+    ✔ Add queries to history when a query is selected. @done(24-12-25 10:16) @project(TODO.Features.To Add)
+    ✘ Add all hardcoded values to respective config files @cancelled(24-12-24 14:25) @project(TODO.Chores)
+    ✘ Mark as viewed @cancelled(24-12-22 14:39) @project(TODO.Features.Settings Screen)
+    ✘ For Session/ Thoughout sessions @cancelled(24-12-22 14:39) @project(TODO.Features.Settings Screen)
+    ✘ Mark Type (Wallflow) @cancelled(24-12-22 14:39) @project(TODO.Features.Settings Screen)
+    ✔ Rename Folder button on favourites screen. @done(24-12-05 17:23) @project(TODO.Features.To Add)
+    ✘ Add Share Wallpaper Button @cancelled(24-11-29 22:24) @project(TODO.Features.Wallpaper Action Widget)
+    ✔ Share folder as json @done(24-11-29 22:21) @project(TODO.Features.Favourites Screen)
+    ✔ Import/Export folder @done(24-11-29 22:21) @project(TODO.Features.Favourites Screen)
+    ✔ Fix FavouritesProvider recursive build null value error @done(24-11-29 22:02) @project(FIXME)
+    ✔ Add/Remove Favourites from `System | All` when deleting/importing folder. @done(24-11-28 19:33) @project(FIXME)
+    ✔ Add to Favourites dialog, add preview of images @done(24-06-16 02:08) @project(TODO.Features.To Add)
+    ✔ Add 'Remove folder' button @done(24-06-25 08:09) @project(TODO.Features.Favourites Screen)
+    ✔ Frosted Glass Theming @done(24-06-25 08:25) @project(TODO.Chores)
+    ✔ Clear All History @done(24-06-25 08:24) @project(TODO.Chores)
+    ✔ Favourites Add @done(24-06-14 03:04) @project(TODO.Chores)
+    ✔ New Favourites Folder @done(24-06-14 02:55) @project(TODO.Chores)
+    ✔ Save Favourites @done(24-05-02 09:40) @project(TODO.Chores)
+    ✔ Save Filters @done(24-05-01 19:23) @project(TODO.Chores)
+    ✔ Save History @done(24-05-01 13:27) @project(TODO.Chores)
+    ✔ Deviant Art Topic not working. (notify user to change filter) @done(24-06-11 19:04) @project(FIXME)
+    ✔ Wallpapers repeating @high @done(24-05-24 20:10) @project(FIXME)
+    ✔ Wallhaven, same page repeating again and again, on page change. @done(24-05-20 15:50) @project(FIXME)
+    ✔ Adding same page to the list twice, from 2nd page onwards. @done(24-05-24 20:10) @project(FIXME)
+    ✔ Add Delete Button @done(24-03-09 10:33) @project(TODO.Features.History Screen)
+    ✔ Create history screen @done(24-03-06 21:37) @project(TODO.Features.History Screen)
+    ✔ Maintain history in a provider @done(24-03-06 21:51) @project(TODO.Features.History Screen)
+    ✔ Limit history to x wallpapers @done(24-03-06 21:51) @project(TODO.Features.History Screen)
+    ✔ Add All folder for all favourites @done(24-03-02 05:23) @project(TODO.Features.Favourites Screen)
+    ✔ Create favourites folder screen @started(24-03-03 06:57) @done(24-03-03 07:20) @lasted(23m29s) @project(TODO.Features.Favourites Screen.Open Favourite Folder Screen)
+    ✔ Show/Hide widget on touch @started(24-03-01 07:26) @done(24-03-01 13:16) @lasted(5h50m12s) @project(TODO.Features.Wallpaper Action Widget)
+    ✔ Remove draggability @done(24-03-01 08:17) @project(TODO.Features.Wallpaper Action Widget)
+    ✔ Multi-Gesture response @done(24-03-02 06:41) @project(TODO.Features.Wallpaper Action Widget.Favourites Button)
+    ✔ Single-tap to add to "All" folder @done(24-03-01 13:50) @project(TODO.Features.Wallpaper Action Widget.Favourites Button)
+    ✔ Hold to open favourites dialog @done(24-03-02 11:17) @project(TODO.Features.Wallpaper Action Widget.Favourites Button)
+    ✔ Create Bottom Sheet @done(24-03-04 09:01) @project(TODO.Features.Wallpaper Action Widget.Wallpaper Info Button)
+    ✔ Source @done(24-03-05 12:54) @project(TODO.Features.Wallpaper Action Widget.Wallpaper Info Button)
+    ✔ Title @done(24-03-05 12:53) @project(TODO.Features.Wallpaper Action Widget.Wallpaper Info Button)
+    ✔ Colours (Click to search) @done(24-03-05 12:54) @project(TODO.Features.Wallpaper Action Widget.Wallpaper Info Button)
+    ✔ Post URL (Click to open) @done(24-03-05 12:54) @project(TODO.Features.Wallpaper Action Widget.Wallpaper Info Button)
+    ✔ Image URL (Click to open) @done(24-03-05 12:54) @project(TODO.Features.Wallpaper Action Widget.Wallpaper Info Button)
+    ✔ Resolution @done(24-03-05 12:56) @project(TODO.Features.Wallpaper Action Widget.Wallpaper Info Button)
+    ✔ Size @done(24-03-05 13:13) @project(TODO.Features.Wallpaper Action Widget.Wallpaper Info Button)
+    ✔ Tags @done(24-03-06 21:03) @project(TODO.Features.Wallpaper Action Widget.Wallpaper Info Button)
+    ✘ Uploader Info (Click to search) @started(24-03-06 21:04) @cancelled(24-03-06 21:14) @wasted(10m19s) @project(TODO.Features.Wallpaper Action Widget.Wallpaper Info Button)
+    ✔ Dynamic minimum width @done(24-03-11 21:42) @project(TODO.Features.Wallpaper Action Widget.Wallpaper Info Button)
+    ✘ Shift Buttons to Top in filters(use icon buttons). @cancelled(24-03-11 21:56) @project(TODO.Chores)
+    ✔ Increase favourite button size @started(24-03-11 11:05) @done(24-03-11 11:12) @lasted(7m19s) @project(TODO.Chores)
+    ✔ Change Delete button icon @started(24-03-11 11:12) @done(24-03-11 11:26) @lasted(14m11s) @project(TODO.Chores)
+    ✔ Create clear all history button @started(24-03-11 11:26) @done(24-03-11 11:36) @lasted(10m37s) @project(TODO.Chores)
+    ✘ Search for random endpoints. @cancelled(24-03-10 20:05) @project(TODO.Chores)
+    ✘ Make app bar scrollable in History/Favourites @started(24-03-09 10:37) @cancelled(24-03-09 10:55) @wasted(18m45s) @project(TODO.Chores)
+    ✔ Add Favourite Button on Grid Item @done(24-03-09 00:05) @project(TODO.Chores)
+    ✔ Change masonry grid view to display list without network @started(24-03-03 05:55) @done(24-03-03 06:37) @lasted(42m58s) @project(TODO.Chores)
+    ✔ Unfavouriting wallpaper from folder shows "Attention: Remove wallpaper from all folders". @done(24-03-10 20:48) @project(FIXME)
+    ✔ If images don't fill screen, load more doesn't work. @done(24-03-11 21:00) @project(FIXME.Bug)
+    ✔ On wallpaper unfavourite, wallpaper appears in grid & folder (Favourite Screen) @started(24-03-03 08:13) @done(24-03-03 08:23) @lasted(10m3s) @project(FIXME.Bug)
+    ✔ Favourites Dialog Ok/Remove button not animating @done(24-03-05 18:42) @project(FIXME.Bug)
+    ✔ Clear All button is favourites not working. @done(24-03-05 18:35) @project(FIXME.Bug)
+    ✔ Clicking a tag in history or favourite screen doesn't return to home screen. @done(24-03-10 00:50) @project(FIXME.Bug)
+    ✔ Grid layout responsiveness @done(24-03-11 01:08) @project(FIXME.Responsiveness)
+    ✔ Favourites folder icon responsiveness @done(24-03-11 01:23) @project(FIXME.Responsiveness)
+    ✘ Make widget and dialog sizes responsive @cancelled(24-03-11 01:08) @project(FIXME.Responsiveness)
