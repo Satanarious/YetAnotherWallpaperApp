@@ -7,6 +7,8 @@ import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/common/dialogs/animated_pop_in_dialog.dart';
 import 'package:wallpaper_app/common/models/wallpaper.dart';
+import 'package:wallpaper_app/favourites/providers/favourites_provider.dart';
+import 'package:wallpaper_app/favourites/storage/favourites_storage_provider.dart';
 import 'package:wallpaper_app/favourites/widgets/favourite_button_widget.dart';
 import 'package:wallpaper_app/home/providers/deviant_art_provider.dart';
 import 'package:wallpaper_app/home/providers/query_provider.dart';
@@ -15,6 +17,7 @@ import 'package:wallpaper_app/home/providers/source_provider.dart';
 import 'package:wallpaper_app/home/providers/wallhaven_provider.dart';
 import 'package:wallpaper_app/home/providers/wallpaper_list_provider.dart';
 import 'package:wallpaper_app/open_image/widgets/wallpaper_info_sheet.dart';
+import 'package:wallpaper_app/settings/providers/settings_provider.dart';
 
 class WallpaperActionsWidget extends StatefulWidget {
   const WallpaperActionsWidget(this.wallpaper, {super.key});
@@ -243,6 +246,23 @@ class _DownloadButtonState extends State<DownloadButton>
                   setState(() {
                     isDownloading = false;
                     downloadingComplete = true;
+                    final settingsProvider =
+                        Provider.of<SettingsProvider>(context, listen: false);
+
+                    if (settingsProvider.addToFavouritesOnDownload) {
+                      // Add wallpaper to Favourites on download
+                      final favouritesProvider =
+                          Provider.of<FavouritesProvider>(context,
+                              listen: false);
+                      favouritesProvider.allFavourites
+                          .addWallpaper(widget.wallpaper);
+                      final favouritesStorageProvider =
+                          Provider.of<FavouritesStorageProvider>(context,
+                              listen: false);
+                      favouritesStorageProvider.updateFavouritesFolder(
+                          "System | All", favouritesProvider.allFavourites);
+                    }
+
                     _controller.forward();
                   });
                 },
