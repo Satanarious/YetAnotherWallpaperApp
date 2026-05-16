@@ -3,12 +3,9 @@ TODO:
         Deviant Art:
             ☐ Deviant Art Topics loading time indication.
         General:
-            ☐ Add reset button in all filter dialogs.
-            ☐ More confirmation dialogs/snackbars with undo functionality
             ☐ Add Backup/Restore functionality.
             ☐ Add better loading animations(lottie).
         Settings Screen:
-            ☐ Add to favourites on download (Downloads folder)
             ☐ Cache Management
             ☐ Auto wallpaper
         Auto Wallpaper:
@@ -36,6 +33,9 @@ FIXME:
     ☐ Fix export and save favourites folder always failing the first time.
     
 Archive:
+    ✘ Add reset button in all filter dialogs. @cancelled(26-05-16 20:01) @project(TODO.Add Feature(s).General)
+    ✘ More confirmation dialogs/snackbars with undo functionality @cancelled(26-05-16 21:30) @project(TODO.Add Feature(s).General)
+    ✔ Add to favourites on download (Downloads folder) @done(26-02-04 07:44) @project(TODO.Add Feature(s).Settings Screen)
     ✔ Add way to add subreddits. @done(25-04-23 05:25) @project(TODO.Add Feature(s).Reddit)
     ✘ Add subreddits with gifs. @project(TODO.Add Feature(s).Reddit)
     ✔ Add way to add community. @done(25-04-23 05:25) @project(TODO.Add Feature(s).Lemmy)
