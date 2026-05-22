@@ -10,6 +10,7 @@ import 'package:wallpaper_app/home/screens/wallpaper_grid_screen.dart';
 import 'package:wallpaper_app/home/widgets/pill_tab_bar.dart';
 import 'package:wallpaper_app/queries/providers/queries_provider.dart';
 import 'package:wallpaper_app/queries/storage/queries_storage_provider.dart';
+import 'package:wallpaper_app/settings/cache_manager_helper.dart';
 import 'package:wallpaper_app/settings/providers/settings_provider.dart';
 import 'package:wallpaper_app/settings/storage/settings_storage_provider.dart';
 
@@ -60,6 +61,16 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     favouriteProvider.allFavourites.data.addAll(
         favouritesStorageProvider.getFavouriteFolder("System | All").data);
+  }
+
+  @override
+  initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final maxCacheLimit =
+          Provider.of<SettingsProvider>(context, listen: false).cacheLimit;
+      await CacheManagerHelper.clearCache(maxCacheLimit);
+    });
   }
 
   @override

@@ -6,7 +6,6 @@ TODO:
             ☐ Add Backup/Restore functionality.
             ☐ Add better loading animations(lottie).
         Settings Screen:
-            ☐ Cache Management
             ☐ Auto wallpaper
         Auto Wallpaper:
             ☐ Day/Night Mode
@@ -33,6 +32,7 @@ FIXME:
     ☐ Fix export and save favourites folder always failing the first time.
     
 Archive:
+    ✔ Cache Management @done(26-05-23 02:11) @project(TODO.Add Feature(s).Settings Screen)
     ✘ Add reset button in all filter dialogs. @cancelled(26-05-16 20:01) @project(TODO.Add Feature(s).General)
     ✘ More confirmation dialogs/snackbars with undo functionality @cancelled(26-05-16 21:30) @project(TODO.Add Feature(s).General)
     ✔ Add to favourites on download (Downloads folder) @done(26-02-04 07:44) @project(TODO.Add Feature(s).Settings Screen)

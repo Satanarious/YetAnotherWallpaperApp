@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper_app/common/widgets/custom_drop_down_menu.dart';
 import 'package:wallpaper_app/home/providers/source_provider.dart';
